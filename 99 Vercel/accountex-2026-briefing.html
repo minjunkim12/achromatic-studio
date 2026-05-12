@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accountex 2026 — 민준 사전 브리핑</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --toss-blue: #0064FF;
+      --toss-blue-dark: #1b64da;
+      --toss-blue-light: #EFF6FF;
+      --grey-900: #0F172A;
+      --grey-700: #334155;
+      --grey-600: #475569;
+      --grey-500: #64748B;
+      --grey-400: #94A3B8;
+      --grey-300: #CBD5E1;
+      --grey-200: #E2E8F0;
+      --grey-100: #F1F5F9;
+      --grey-50:  #F8FAFC;
+      --shadow-card: 0 4px 24px rgba(0,0,0,0.07);
+      --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --color-must: #0064FF;
+      --color-candidate: #059669;
+      --color-skip: #94A3B8;
+    }
+
+    body {
+      font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      color: var(--grey-900);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* Nav */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--grey-100);
+      transition: box-shadow 0.2s;
+    }
+    .nav-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--grey-900);
+      text-decoration: none;
+    }
+    .nav-badge {
+      background: var(--toss-blue);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Container */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 60px 0 48px;
+      background: var(--grey-50);
+    }
+    .hero-label {
+      color: var(--toss-blue);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--grey-900);
+      margin-bottom: 14px;
+    }
+    @media (max-width: 639px) {
+      .hero-title { font-size: 26px; }
+    }
+    .hero-desc {
+      font-size: 16px;
+      color: var(--grey-600);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-chip {
+      background: #fff;
+      border: 1px solid var(--grey-200);
+      border-radius: var(--radius-full);
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--grey-700);
+    }
+    .meta-chip span {
+      color: var(--toss-blue);
+      font-weight: 700;
+    }
+
+    /* Section */
+    .section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--grey-100);
+    }
+    .section-label {
+      color: var(--toss-blue);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--grey-900);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--grey-500);
+      margin-bottom: 28px;
+    }
+
+    /* Knowledge Cards */
+    .knowledge-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .know-card {
+      background: var(--grey-50);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      border-left: 3px solid var(--toss-blue);
+    }
+    .know-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--grey-900);
+      margin-bottom: 8px;
+    }
+    .know-card-body {
+      font-size: 14px;
+      color: var(--grey-600);
+      line-height: 1.6;
+    }
+    .know-card-body strong {
+      color: var(--grey-900);
+      font-weight: 600;
+    }
+    .know-card.green { border-left-color: #059669; }
+    .know-card.orange { border-left-color: #F59E0B; }
+    .know-card.purple { border-left-color: #7C3AED; }
+
+    /* Key Numbers */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+    @media (max-width: 499px) {
+      .stat-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-box {
+      background: var(--toss-blue-light);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--toss-blue);
+      display: block;
+    }
+    .stat-desc {
+      font-size: 12px;
+      color: var(--grey-600);
+      margin-top: 4px;
+    }
+
+    /* Venue */
+    .venue-card {
+      background: #000;
+      color: #fff;
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      margin-bottom: 16px;
+    }
+    .venue-card-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      margin-bottom: 8px;
+    }
+    .venue-card-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .venue-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .venue-step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .step-num {
+      background: var(--toss-blue);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .step-text {
+      font-size: 14px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+    .step-text strong { color: #fff; }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 499px) {
+      .tips-grid { grid-template-columns: 1fr; }
+    }
+    .tip-card {
+      background: var(--grey-50);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+    }
+    .tip-emoji { font-size: 20px; margin-bottom: 6px; display: block; }
+    .tip-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--grey-900);
+      margin-bottom: 4px;
+    }
+    .tip-body {
+      font-size: 12px;
+      color: var(--grey-600);
+      line-height: 1.5;
+    }
+
+    /* Schedule */
+    .day-header {
+      background: var(--grey-900);
+      color: #fff;
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      margin-bottom: 16px;
+    }
+    .day-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      margin-bottom: 6px;
+    }
+    .day-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .day-desc {
+      font-size: 13px;
+      color: var(--grey-400);
+      margin-top: 4px;
+    }
+
+    .time-block {
+      margin-bottom: 16px;
+    }
+    .time-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--grey-400);
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .session-card {
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .session-card.must {
+      background: var(--toss-blue-light);
+      border: 1.5px solid #b3d4ff;
+    }
+    .session-card.candidate {
+      background: #f0fdf4;
+      border: 1.5px solid #a7f3d0;
+    }
+    .session-card.conflict {
+      background: #fff7ed;
+      border: 1.5px solid #fcd34d;
+    }
+    .session-card.skip {
+      background: var(--grey-50);
+      border: 1.5px solid var(--grey-200);
+      opacity: 0.65;
+    }
+    .session-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      margin-bottom: 8px;
+    }
+    .badge-must { background: var(--toss-blue); color: #fff; }
+    .badge-candidate { background: #059669; color: #fff; }
+    .badge-conflict { background: #D97706; color: #fff; }
+    .badge-skip { background: var(--grey-400); color: #fff; }
+
+    .session-theatre {
+      font-size: 11px;
+      color: var(--grey-500);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 4px;
+    }
+    .session-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--grey-900);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .session-speaker {
+      font-size: 13px;
+      color: var(--grey-500);
+    }
+    .session-speaker strong { color: var(--grey-700); font-weight: 600; }
+    .session-why {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      font-size: 13px;
+      color: var(--grey-700);
+      line-height: 1.5;
+    }
+    .session-why::before {
+      content: "💡 ";
+    }
+
+    .conflict-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #D97706;
+      margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    /* Recommended pick box */
+    .pick-box {
+      background: var(--toss-blue);
+      color: #fff;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .pick-box::before { content: "✅ 최종 선택: "; }
+
+    /* Day 2 Run Club */
+    .run-club-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+      border-radius: var(--radius-lg);
+      padding: 24px 22px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    .run-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      margin-bottom: 8px;
+    }
+    .run-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .run-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .run-chip {
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--radius-full);
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    /* LinkedIn plan */
+    .linkedin-card {
+      background: #0077B5;
+      border-radius: var(--radius-lg);
+      padding: 24px 22px;
+      color: #fff;
+    }
+    .linkedin-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 8px;
+    }
+    .linkedin-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    .linkedin-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .linkedin-points li {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.5;
+      padding-left: 20px;
+      position: relative;
+    }
+    .linkedin-points li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #7dd3fc;
+      font-weight: 700;
+    }
+
+    /* Intro phrase */
+    .intro-card {
+      background: var(--grey-900);
+      border-radius: var(--radius-lg);
+      padding: 24px 22px;
+      margin: 20px 0;
+    }
+    .intro-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--grey-400);
+      margin-bottom: 10px;
+    }
+    .intro-phrase {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.5;
+    }
+    .intro-phrase em {
+      color: var(--toss-blue);
+      font-style: normal;
+    }
+    .intro-why {
+      font-size: 13px;
+      color: var(--grey-400);
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    /* Fade up */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 40px 20px;
+      text-align: center;
+      background: var(--grey-50);
+    }
+    .footer p {
+      font-size: 12px;
+      color: var(--grey-400);
+    }
+
+    /* Divider */
+    .or-divider {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--grey-400);
+      margin: 6px 0;
+    }
+
+    /* Tags */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .tag {
+      background: var(--grey-100);
+      color: var(--grey-600);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .alert-box {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #92400e;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .alert-box strong { color: #78350f; }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Accountex 2026 브리핑</a>
+    <span class="nav-badge">D-1</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <p class="hero-label">Accountex London 2026 · 민준 전용</p>
+    <h1 class="hero-title">내일 행사,<br>이것만 알고 가면 된다</h1>
+    <p class="hero-desc">배경지식 · 동선 · Day 1/2 스케줄 · 강연 추천 — 출발 전에 다 읽을 수 있게 정리했다.</p>
+    <div class="hero-meta">
+      <span class="meta-chip">📅 <span>5/13(수) ~ 5/14(목)</span></span>
+      <span class="meta-chip">📍 <span>ExCeL London</span></span>
+      <span class="meta-chip">🎟 <span>KI245434</span></span>
+      <span class="meta-chip">🏃 <span>Run Club D-2 07:00</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- BACKGROUND KNOWLEDGE -->
+<section class="section fade-up">
+  <div class="container">
+    <p class="section-label">배경지식</p>
+    <h2 class="section-title">행사 전에 알아야 할 UK 핀테크 핵심</h2>
+    <p class="section-subtitle">이 5개만 머릿속에 넣고 가면 강연 90% 이해된다</p>
+
+    <div class="knowledge-grid">
+
+      <div class="know-card">
+        <div class="know-card-title">① Direct Debit — UK 결제의 기본값</div>
+        <div class="know-card-body">
+          한국에서 카드가 기본인 것처럼, UK에서는 <strong>계좌이체 자동납부(Direct Debit)</strong>가 먼저 자리잡았다. 구독·임대·공과금 모두 DD 기반. <strong>GoCardless</strong>는 이 인프라를 API로 SaaS화해 전 세계에 파는 회사다. "Bacs" = UK 중앙은행 정산 네트워크, D+3 정산. "Faster Payments" = 즉시이체, D+0.
+          <div class="tag-list"><span class="tag">GoCardless</span><span class="tag">Bacs</span><span class="tag">Faster Payments</span></div>
+        </div>
+      </div>
+
+      <div class="know-card green">
+        <div class="know-card-title">② Open Banking — UK가 세계 최초</div>
+        <div class="know-card-body">
+          2018년 CMA(경쟁시장청)가 9대 은행(CMA9)에 API 공개를 의무화. 한국은 2019년 뒤따랐다. 핵심 개념: <strong>Pay by Bank</strong> = 계좌에서 직접 결제, 카드 수수료 없음. <strong>VRP(Variable Recurring Payments)</strong> = 오픈뱅킹 기반 자동납부, Direct Debit 대체 가능성. 강연에서 "open banking" "A2A"가 나오면 이 얘기다.
+          <div class="tag-list"><span class="tag">TrueLayer</span><span class="tag">Yapily</span><span class="tag">Plaid</span><span class="tag">A2A</span></div>
+        </div>
+      </div>
+
+      <div class="know-card orange">
+        <div class="know-card-title">③ MTD — Making Tax Digital, 세금 의무화</div>
+        <div class="know-card-body">
+          HMRC(국세청)가 추진하는 <strong>세금 신고 디지털 전환 의무화</strong>. VAT는 이미 완료. 2026년 4월부터 <strong>MTD for ITSA(소득세)</strong>가 연수입 £50K 이상 자영업자·임대인에 적용됐다. 오늘 강연의 절반이 이 얘기다. 한국 전자세금계산서 의무화와 구조가 비슷하다. "MTD 덕분에 소프트웨어 수요가 강제 발생한다" = B2B SaaS의 핵심 기회.
+          <div class="tag-list"><span class="tag">HMRC</span><span class="tag">ITSA</span><span class="tag">Xero</span><span class="tag">QuickBooks</span></div>
+        </div>
+      </div>
+
+      <div class="know-card purple">
+        <div class="know-card-title">④ Embedded Finance — 경계가 사라진다</div>
+        <div class="know-card-body">
+          Shopify가 결제를 제공하고, Xero가 대출을 내준다. "금융 기능을 비금융 서비스에 끼워 넣는 것" = Embedded Finance. 강연에서 "BaaS(Banking as a Service)", "Modulr", "Railsr" 같은 단어가 나오면 이 영역. 토스페이먼츠의 결제 API도 본질적으로 embedded finance다.
+          <div class="tag-list"><span class="tag">Embedded Finance</span><span class="tag">BaaS</span><span class="tag">Modulr</span></div>
+        </div>
+      </div>
+
+      <div class="know-card">
+        <div class="know-card-title">⑤ 이 행사에서의 B2B SaaS 마케팅 공식</div>
+        <div class="know-card-body">
+          모든 부스의 공통 언어: <strong>"당신의 문제(Pain) = X다, 우리가 해결한다."</strong> 회계사(Accountant)를 채널로 쓰는 B2B SaaS의 파트너십 전략이 핵심이다. 회계사 → 클라이언트 추천 경로. GoCardless·Xero·QuickBooks 모두 이 루트. 마케터 관점: 의무화(MTD)가 만드는 수요는 Push 마케팅이 필요없다 — Pull이 자동 발생한다.
+          <div class="tag-list"><span class="tag">B2B SaaS</span><span class="tag">파트너십</span><span class="tag">채널 전략</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stat-row" style="margin-top:24px">
+      <div class="stat-box">
+        <span class="stat-num">300+</span>
+        <span class="stat-desc">출품사</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">8,000+</span>
+        <span class="stat-desc">참관객</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">200+</span>
+        <span class="stat-desc">세션</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENUE -->
+<section class="section fade-up">
+  <div class="container">
+    <p class="section-label">행사 동선</p>
+    <h2 class="section-title">ExCeL London 가는 법</h2>
+    <p class="section-subtitle">DLR 타면 된다. 헷갈릴 게 없다.</p>
+
+    <div class="venue-card">
+      <div class="venue-card-label">이동 경로</div>
+      <div class="venue-card-title">DLR → Prince Regent → South Entrance</div>
+      <div class="venue-steps">
+        <div class="venue-step">
+          <div class="step-num">1</div>
+          <div class="step-text">DLR (Docklands Light Railway) 탑승. Bank 또는 Stratford에서 환승 가능.</div>
+        </div>
+        <div class="venue-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Prince Regent 역</strong> 하차. ExCeL 입장에 가장 가까운 역이다.</div>
+        </div>
+        <div class="venue-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>South Entrance</strong>로 진입. 확인 번호 <strong>KI245434</strong> 또는 QR코드 준비.</div>
+        </div>
+        <div class="venue-step">
+          <div class="step-num">4</div>
+          <div class="step-text">입장 후 <strong>홀 북쪽 = Orbit/Horizon Keynote</strong>, 남쪽 = FD Show · AI Theatre. 지도 앱 열어서 확인.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <span class="tip-emoji">🔋</span>
+        <div class="tip-title">충전기 필수</div>
+        <div class="tip-body">하루 종일 녹음 + Tiro 메모 + 사진. 배터리팩 챙기거나 부스 충전소 선점.</div>
+      </div>
+      <div class="tip-card">
+        <span class="tip-emoji">☕</span>
+        <div class="tip-title">무료 커피</div>
+        <div class="tip-body">스폰서 부스에서 대부분 제공. GoCardless, Xero 부스 찾아가면 된다.</div>
+      </div>
+      <div class="tip-card">
+        <span class="tip-emoji">💷</span>
+        <div class="tip-title">하루 예산 £20~25</div>
+        <div class="tip-body">식비 위주. ExCeL 내 카페는 비싼 편 — 부스 무료 음식 적극 활용.</div>
+      </div>
+      <div class="tip-card">
+        <span class="tip-emoji">🎙</span>
+        <div class="tip-title">Tiro 녹음</div>
+        <div class="tip-body">강연 전 컨텍스트 입력 후 시작. 조용한 자리 선점이 음질에 중요.</div>
+      </div>
+    </div>
+
+    <div class="intro-card">
+      <div class="intro-label">현장 자기소개 — 1문장 버전</div>
+      <div class="intro-phrase">
+        "I worked in <em>merchant onboarding at Toss Payments</em> — visited 152 merchants in-person. Now I'm here to understand how UK fintech handles the payment infrastructure side."
+      </div>
+      <div class="intro-why">
+        토스페이먼츠 → 현장 152곳이라는 숫자가 즉시 신뢰를 만든다. "핀테크 탐방 중인 한국 대학생"보다 훨씬 구체적. GoCardless 직원들이 "interesting" 반응 보일 것.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 1 -->
+<section class="section fade-up">
+  <div class="container">
+    <p class="section-label">Day 1 스케줄</p>
+    <h2 class="section-title">5/13 (수) — 세션 집중일</h2>
+    <p class="section-subtitle">GoCardless 3번 + MTD 2번 + AI in Finance 2번. 동선 짜면 충분히 다 소화된다.</p>
+
+    <div class="day-header">
+      <div class="day-tag">Day 1 전략</div>
+      <div class="day-title">결제 인프라 + AI in Finance 집중</div>
+      <div class="day-desc">오전: MTD 기초 다지기 → 오후: GoCardless 연타 → 마무리: MTD 총정리</div>
+    </div>
+
+    <div class="alert-box">
+      <strong>Masterclass 주의:</strong> 현장 선착순 등록. 10:20 시작이면 9:40~50분까지 해당 홀 앞에 줄 서야 한다. MTD 강연 vs. Masterclass 중 하나만 선택 가능하다.
+    </div>
+
+    <!-- 10:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕙 10:20 — 11:00</div>
+
+      <div class="conflict-label">⚡ 충돌 구간 — 2개 추천 세션이 겹친다</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">Tax & Compliance</div>
+        <div class="session-title">MTD for Income Tax: The first year in numbers</div>
+        <div class="session-speaker"><strong>Andy North</strong> · HMRC</div>
+        <div class="session-why">HMRC가 직접 발표하는 MTD ITSA 1년 성적표. 실수치 공개 가능성. 오후 16:20 MTD 세션보다 더 기초적인 데이터 중심 내용이다. 이걸 먼저 들어야 오후 세션이 깊어진다.</div>
+      </div>
+
+      <div class="or-divider">↕ OR (선착순 성공 시)</div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">Masterclasses — 선착순 !</div>
+        <div class="session-title">How to close the confidence gap: Better support for small businesses</div>
+        <div class="session-speaker"><strong>Stuart Miller / Tara Askham / Grace Hardy</strong> · Xero / TKA / Hardy Accounting</div>
+        <div class="session-why">Xero가 SME 지원 전략을 실무자 3인 패널로 다룬다. B2B SaaS의 채널 전략 관점에서 유용. 단, 선착순이라 확보 불확실.</div>
+      </div>
+
+      <div class="pick-box">MTD for Income Tax (HMRC) — 데이터가 먼저다</div>
+    </div>
+
+    <!-- 11:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕚 11:20 — 12:00</div>
+
+      <div class="conflict-label">⚡ 충돌 구간 — 2개 추천 세션이 겹친다</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">Orbit Keynote Stage</div>
+        <div class="session-title">AI is not the future — it's the present: What accountants must do now</div>
+        <div class="session-speaker"><strong>Ashley Price</strong> · Bright</div>
+        <div class="session-why">키노트 스테이지라 큰 홀, 자리 확보 쉬움. "현재진행형" 프레임이 흥미롭다. LinkedIn 포스트 소재로도 쓰기 좋은 메시지.</div>
+      </div>
+
+      <div class="or-divider">↕ OR</div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">AI Theatre</div>
+        <div class="session-title">Large language models in accounting: Real use cases, not just hype</div>
+        <div class="session-speaker"><strong>Alan Kennedy</strong> · Inflo</div>
+        <div class="session-why">실제 사례 중심이라 구체성은 이쪽이 높다. Inflo는 AI 감사 솔루션 회사.</div>
+      </div>
+
+      <div class="pick-box">Orbit Keynote (Ashley Price) — 키노트는 분위기가 다르다</div>
+    </div>
+
+    <!-- 12:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕛 12:20 — 13:00 (점심 전후)</div>
+
+      <div class="conflict-label">⚡ 충돌 구간 — GoCardless vs Embedded Finance</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">Orbit Keynote Stage</div>
+        <div class="session-title">How open banking is reshaping SME finance</div>
+        <div class="session-speaker"><strong>Barry Saitch</strong> · GoCardless</div>
+        <div class="session-why">GoCardless가 직접 설명하는 오픈뱅킹 현황. SME 대출·결제 흐름 변화. 13:20, 14:20에도 GoCardless 세션이 있으니 여기서 기초 잡기.</div>
+      </div>
+
+      <div class="or-divider">↕ OR</div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">Horizon Keynote Stage</div>
+        <div class="session-title">The rise of embedded finance: What it means for accounting practices</div>
+        <div class="session-speaker"><strong>Alexis Kingsbury</strong> · AirManual</div>
+        <div class="session-why">Embedded Finance 프레임워크. 토스페이먼츠의 방향성과 맞닿는 주제.</div>
+      </div>
+
+      <div class="pick-box">GoCardless (Barry Saitch) — 이후 2개 GoCardless 세션의 기반</div>
+    </div>
+
+    <!-- 13:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕐 13:20 — 14:00</div>
+
+      <div class="conflict-label">⚡ 가장 치열한 충돌 구간 — 4개 추천 세션</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">App Advisory</div>
+        <div class="session-title">Payments apps compared: What you need to know before recommending</div>
+        <div class="session-speaker"><strong>Barry Saitch</strong> · GoCardless</div>
+        <div class="session-why">GoCardless가 경쟁사(Stripe, SumUp 등)와 직접 비교하는 세션. 마케터 관점 최고. 어떻게 차별화를 설명하는지 → 토스 JD 준비에 직결.</div>
+      </div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">Horizon Keynote Stage</div>
+        <div class="session-title">Open banking in 2026: The state of play and what's next</div>
+        <div class="session-speaker"><strong>Ben Avery</strong> · GoCardless</div>
+        <div class="session-why">더 거시적 뷰. App Advisory 세션이 실용, 이쪽이 전략적 맥락. 둘 중 하나만 선택 필요.</div>
+      </div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">AI Theatre</div>
+        <div class="session-title">Automating the month-end close: From 5 days to 5 hours</div>
+        <div class="session-speaker"><strong>Alexis Kingsbury</strong> · Silverfin</div>
+        <div class="session-why">구체적인 숫자가 있는 세션. AI 자동화 사례. 강연 메모 → Tiro 소재.</div>
+      </div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">FD Show 1</div>
+        <div class="session-title">Deepfakes, data breaches and delusions: The AI risks you need to know about</div>
+        <div class="session-speaker"><strong>Jake Moore</strong> · ESET</div>
+        <div class="session-why">토스페이먼츠 보안 교육 연장선. 금융보안 리스크 현황 파악. 면접 때 "AI 보안 리스크 인식" 포인트로 활용 가능.</div>
+      </div>
+
+      <div class="pick-box">App Advisory — GoCardless 경쟁 포지셔닝 실전 관찰</div>
+    </div>
+
+    <!-- 14:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕑 14:20 — 15:00</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">Orbit Keynote Stage</div>
+        <div class="session-title">Payments innovation and what it means for your clients</div>
+        <div class="session-speaker"><strong>Ami Copeland</strong> · GoCardless</div>
+        <div class="session-why">GoCardless 세 번째 세션. 발표자가 다르고, 이번엔 "클라이언트에게 어떻게 설명하는가" 관점. 동일 회사의 다른 화자 → 브랜딩 일관성 vs. 개인 스타일 비교 관찰.</div>
+      </div>
+
+      <div class="pick-box">GoCardless (Ami Copeland) — 발표자 비교 관찰이 목적</div>
+    </div>
+
+    <!-- 15:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕒 15:20 — 16:00</div>
+
+      <div class="conflict-label">⚡ 충돌 구간</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">FD Show 1</div>
+        <div class="session-title">E-invoicing is coming: How finance teams can prepare now</div>
+        <div class="session-speaker"><strong>Mohammed Sidat</strong> · Wolters Kluwer</div>
+        <div class="session-why">UK E-invoicing 의무화 준비 현황. 한국 전자세금계산서와 비교 프레임. LinkedIn 시리즈 편 소재로 직접 쓸 수 있다.</div>
+      </div>
+
+      <div class="or-divider">↕ OR</div>
+
+      <div class="session-card candidate">
+        <span class="session-badge badge-candidate">후보</span>
+        <div class="session-theatre">Horizon Keynote Stage</div>
+        <div class="session-title">Fintech for accountants: Separating hype from reality</div>
+        <div class="session-speaker"><strong>Andrew James</strong> · Fintech Magazine</div>
+        <div class="session-why">미디어 관점의 핀테크 현황 정리. Tiro 캠퍼스리더 AI 강의 소재로도 좋다.</div>
+      </div>
+
+      <div class="pick-box">E-invoicing (Wolters Kluwer) — LinkedIn 소재 직결</div>
+    </div>
+
+    <!-- 16:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕓 16:20 — 17:00</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">Orbit Keynote Stage</div>
+        <div class="session-title">MTD: Lessons from year one — what worked and what didn't</div>
+        <div class="session-speaker"><strong>Andy North</strong> · HMRC</div>
+        <div class="session-why">오전 MTD 세션이 "숫자"였다면, 이건 "교훈"이다. HMRC가 직접 실패를 인정하는 자리라면 흥미롭다. 오전 10:20 세션 같은 발표자 → 대비 관찰.</div>
+      </div>
+
+      <div class="pick-box">MTD 총정리 (HMRC) — 오전 세션과 한 쌍</div>
+    </div>
+
+    <!-- 17:20 -->
+    <div class="time-block fade-up">
+      <div class="time-label">🕔 17:20 — 18:00 (마지막 세션)</div>
+
+      <div class="session-card must">
+        <span class="session-badge badge-must">⭐ 필수</span>
+        <div class="session-theatre">FD Show 1</div>
+        <div class="session-title">From back office to brand asset: Why payment behaviour is now a CFO's reputation play</div>
+        <div class="session-speaker"><strong>Terry Corby</strong> · Good Business Pays</div>
+        <div class="session-why">"결제 행동이 브랜드 자산이 된다"는 프레임은 독특하다. Good Business Pays = 납기 준수 기업 인증 캠페인. B2B 마케터로서 가장 관심 가는 각도. 하루 마지막 인사이트로 최적.</div>
+      </div>
+
+    </div>
+
+    <!-- Day 1 Summary -->
+    <div style="background:var(--grey-50);border-radius:var(--radius-lg);padding:24px 22px;margin-top:24px">
+      <div style="font-size:14px;font-weight:700;color:var(--grey-900);margin-bottom:12px">Day 1 최종 동선 요약</div>
+      <div style="font-size:13px;color:var(--grey-600);line-height:1.8">
+        <strong style="color:var(--grey-900)">10:20</strong> MTD for Income Tax (HMRC) →
+        <strong style="color:var(--grey-900)"> 11:20</strong> AI is not the future (Orbit Keynote) →
+        <strong style="color:var(--grey-900)"> 12:20</strong> Open banking reshaping SME (GoCardless) →
+        <strong style="color:var(--grey-900)"> 13:20</strong> Payments apps compared (GoCardless, App Advisory) →
+        <strong style="color:var(--grey-900)"> 14:20</strong> Payments innovation (GoCardless, Orbit) →
+        <strong style="color:var(--grey-900)"> 15:20</strong> E-invoicing is coming (Wolters Kluwer) →
+        <strong style="color:var(--grey-900)"> 16:20</strong> MTD year one lessons (HMRC) →
+        <strong style="color:var(--grey-900)"> 17:20</strong> Payment behaviour as brand asset (Good Business Pays)
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--grey-400)">세션 사이 15~20분은 부스 스캔 + 명함 교환 + Tiro 메모 정리 시간.</div>
+    </div>
+  </div>
+</section>
+
+<!-- DAY 2 -->
+<section class="section fade-up">
+  <div class="container">
+    <p class="section-label">Day 2 스케줄</p>
+    <h2 class="section-title">5/14 (목) — 부스 + Run Club</h2>
+    <p class="section-subtitle">오전 Run Club으로 시작. 오후는 부스 중심으로 직접 대화.</p>
+
+    <div class="run-club-card">
+      <div class="run-label">아침 Run Club</div>
+      <div class="run-title">🏃‍♂️ Sunborn Hotel, 5km 런</div>
+      <div class="run-details">
+        <span class="run-chip">📍 Sunborn Hotel (ExCeL 인근)</span>
+        <span class="run-chip">⏰ 07:00 ~ 07:30 출발</span>
+        <span class="run-chip">👕 티셔츠 L ✅ 신청 완료</span>
+        <span class="run-chip">📏 5km</span>
+      </div>
+      <div style="margin-top:14px;font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5">
+        런 끝나고 샤워·환복 → 9:00~9:30 ExCeL 입장. 오전 세션 일부 놓칠 수 있으니 Day 2는 부스 중심으로 계획.
+      </div>
+    </div>
+
+    <div class="day-header" style="background:#0F172A">
+      <div class="day-tag">Day 2 전략</div>
+      <div class="day-title">부스 직접 공략</div>
+      <div class="day-desc">GoCardless · TrueLayer · Pleo · Allica Bank · Xero — 직접 대화가 세션보다 값지다</div>
+    </div>
+
+    <div class="knowledge-grid">
+      <div class="know-card" style="border-left-color:#0064FF">
+        <div class="know-card-title">🎯 GoCardless 부스 — 최우선</div>
+        <div class="know-card-body">
+          전날 세션 3개를 들은 상태. "Yesterday I attended your three sessions — I had a question about VRP timeline." 이렇게 시작하면 된다. <strong>물어볼 것:</strong> VRP의 실제 SME 도입률, 한국 시장 파트너십 계획 여부, 채용 공고.
+        </div>
+      </div>
+
+      <div class="know-card green">
+        <div class="know-card-title">💳 Pleo / Payhawk / Soldo — B2B 지출관리</div>
+        <div class="know-card-body">
+          법인카드 자동화 영역. "스타트업 경비 관리를 어떻게 자동화했는가" → 한국 토스 비즈니스카드와 비교 프레임으로 질문.
+        </div>
+      </div>
+
+      <div class="know-card orange">
+        <div class="know-card-title">🏦 Allica Bank / Tide — 챌린저 뱅크</div>
+        <div class="know-card-body">
+          SME 전문 은행. Allica는 특히 £1M~£50M 규모 중소기업 타깃. 기존 대형 은행과의 차별화 전략 직접 물어보기.
+        </div>
+      </div>
+
+      <div class="know-card">
+        <div class="know-card-title">📊 Xero / Sage — 회계 소프트웨어</div>
+        <div class="know-card-body">
+          MTD 의무화로 수혜를 가장 크게 받는 회사들. "MTD 이후 신규 고객 증가율이 어떻게 되냐" — 대답을 들을 수 있으면 LinkedIn 소재로 직접 쓴다.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LINKEDIN PLAN -->
+<section class="section fade-up">
+  <div class="container">
+    <p class="section-label">LinkedIn 시리즈</p>
+    <h2 class="section-title">포스트 소재 — 현장에서 챙길 것</h2>
+
+    <div class="linkedin-card">
+      <div class="linkedin-label">LinkedIn Series — 런던 핀테크 탐방 편</div>
+      <div class="linkedin-title">"회계 박람회에서 핀테크 마케터가 배운 것"</div>
+      <ul class="linkedin-points">
+        <li>모든 부스의 공통 언어: "당신의 문제 = XX, 우리가 해결" → 이 패턴 몇 번 등장하는지 세기</li>
+        <li>GoCardless가 경쟁사를 어떻게 포지셔닝하는지 — App Advisory 세션에서 캡처</li>
+        <li>MTD 의무화 = 강제 수요 발생 메커니즘 → 한국 전자세금계산서와 비교</li>
+        <li>회계사를 B2B 채널로 쓰는 파트너십 전략 — 직접 물어본 내용 포함</li>
+        <li>현장 인터뷰: 부스 직원에게 "한국 vs UK 결제 환경 차이" 1문장 답변 요청</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Accountex London 2026 · 김민준 × Achromatic. × 런던 핀테크 탐방</p>
+  <p style="margin-top:6px">ExCeL London, Royal Docks, E16 1XL · DLR: Prince Regent → South Entrance</p>
+  <p style="margin-top:6px;color:#cbd5e1">Made by Claude · 2026-05-12</p>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 20 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
