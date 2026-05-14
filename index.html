@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Achromatic." />
+  <title>Achromatic. Studio</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue: #0064FF;
+      --blue-bg: #eaf1ff;
+      --tx-900: #0f172a;
+      --tx-700: #334155;
+      --tx-500: #64748b;
+      --tx-400: #94a3b8;
+      --bg-0: #ffffff;
+      --bg-50: #f8fafc;
+      --bg-100: #f1f5f9;
+      --line: #e2e8f0;
+      --radius: 14px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --tx-900: #f1f5f9;
+        --tx-700: #cbd5e1;
+        --tx-500: #94a3b8;
+        --tx-400: #64748b;
+        --bg-0: #0f172a;
+        --bg-50: #1e293b;
+        --bg-100: #334155;
+        --line: #1e293b;
+        --shadow: 0 2px 12px rgba(0,0,0,0.3);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      background: var(--bg-50);
+      color: var(--tx-900);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: var(--bg-0);
+      border-bottom: 1px solid var(--line);
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--tx-900);
+      letter-spacing: -0.3px;
+    }
+
+    .logo span {
+      color: var(--blue);
+    }
+
+    .count-badge {
+      font-size: 13px;
+      color: var(--tx-500);
+      background: var(--bg-100);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--tx-400);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--bg-0);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 16px 18px;
+      gap: 14px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+    }
+
+    @media (hover: hover) {
+      .card:hover {
+        box-shadow: 0 4px 20px rgba(0,100,255,0.1);
+        border-color: var(--blue);
+      }
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--blue-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+
+    .card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--tx-900);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+
+    .card-meta {
+      font-size: 12px;
+      color: var(--tx-500);
+    }
+
+    .card-arrow {
+      color: var(--tx-400);
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--tx-500);
+    }
+
+    .empty-state p {
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--tx-400);
+      font-size: 14px;
+    }
+
+    .error-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--tx-500);
+      font-size: 14px;
+      background: var(--bg-0);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">Achromatic<span>.</span></div>
+      <div class="count-badge" id="count-badge">로딩 중</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="section-label">Claude 결과물</div>
+    <div class="card-list" id="card-list">
+      <div class="loading">불러오는 중...</div>
+    </div>
+  </main>
+
+  <script>
+    const ICONS = {
+      report: '📊',
+      presentation: '📑',
+      analysis: '🔍',
+      landing: '🌐',
+      portfolio: '💼',
+      default: '📄'
+    };
+
+    function getIcon(tags) {
+      if (!tags || tags.length === 0) return ICONS.default;
+      const tag = tags[0].toLowerCase();
+      return ICONS[tag] || ICONS.default;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      const now = new Date();
+      const diff = now - d;
+      const days = Math.floor(diff / 86400000);
+      if (days === 0) return '오늘';
+      if (days === 1) return '어제';
+      if (days < 7) return `${days}일 전`;
+      return d.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+    }
+
+    async function loadFiles() {
+      const list = document.getElementById('card-list');
+      const badge = document.getElementById('count-badge');
+
+      try {
+        const res = await fetch('./manifest.json?t=' + Date.now());
+        if (!res.ok) throw new Error('manifest not found');
+        const data = await res.json();
+        const files = data.files || [];
+
+        badge.textContent = `${files.length}개`;
+
+        if (files.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div style="font-size:40px">📂</div>
+              <p>아직 결과물이 없어.<br>Claude에게 파일 만들어달라고 해봐.</p>
+            </div>`;
+          return;
+        }
+
+        // 최신순 정렬
+        const sorted = [...files].sort((a, b) =>
+          new Date(b.date || 0) - new Date(a.date || 0)
+        );
+
+        list.innerHTML = sorted.map(f => `
+          <a class="card" href="./${f.path}" target="_blank">
+            <div class="card-icon">${getIcon(f.tags)}</div>
+            <div class="card-body">
+              <div class="card-title">${f.title}</div>
+              <div class="card-meta">${formatDate(f.date)}${f.description ? ' · ' + f.description : ''}</div>
+            </div>
+            <div class="card-arrow">›</div>
+          </a>
+        `).join('');
+
+      } catch (e) {
+        badge.textContent = '0개';
+        list.innerHTML = `
+          <div class="error-state">
+            manifest.json을 찾을 수 없어.<br>
+            Claude에게 파일을 추가해달라고 해봐.
+          </div>`;
+      }
+    }
+
+    loadFiles();
+  </script>
+
+</body>
+</html>

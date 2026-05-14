@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Achromatic." />
+  <title>Achromatic. Studio</title>
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue: #0064FF;
+      --blue-bg: #eaf1ff;
+      --blue-light: #f0f5ff;
+      --tx-900: #0f172a;
+      --tx-700: #334155;
+      --tx-500: #64748b;
+      --tx-400: #94a3b8;
+      --bg-0: #ffffff;
+      --bg-50: #f8fafc;
+      --bg-100: #f1f5f9;
+      --line: #e2e8f0;
+      --radius: 16px;
+      --shadow: 0 1px 6px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.09);
+    }
+    [data-theme="dark"] {
+      --tx-900: #f1f5f9;
+      --tx-700: #cbd5e1;
+      --tx-500: #94a3b8;
+      --tx-400: #64748b;
+      --bg-0: #0f172a;
+      --bg-50: #1e293b;
+      --bg-100: #334155;
+      --line: #1e293b;
+      --shadow: 0 1px 6px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-50);
+      color: var(--tx-900);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg-0);
+      border-bottom: 1px solid var(--line);
+      height: 60px;
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 28px; height: 100%;
+      display: flex; align-items: center; gap: 24px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none; flex-shrink: 0; cursor: pointer;
+    }
+    .logo img { width: 26px; height: 26px; border-radius: 7px; }
+    .logo-text {
+      font-size: 17px; font-weight: 800; color: var(--tx-900);
+      letter-spacing: -0.4px;
+    }
+    .logo-text em { color: var(--blue); font-style: normal; }
+    .desktop-nav { display: flex; align-items: center; gap: 2px; flex: 1; }
+    .nav-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 500;
+      color: var(--tx-500); padding: 7px 14px; border-radius: 8px;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { background: var(--bg-50); color: var(--tx-900); }
+    .nav-btn.active { color: var(--blue); font-weight: 700; }
+    .header-actions { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+    .icon-btn {
+      width: 36px; height: 36px; border: none; background: none;
+      cursor: pointer; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--tx-500); transition: all 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg-50); color: var(--tx-900); }
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 28px 100px;
+    }
+    .tab-panel { display: none; padding-top: 44px; }
+    .tab-panel.active { display: block; }
+
+    /* ── HERO CARD ── */
+    .hero-card {
+      background: var(--bg-0);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      min-height: 400px;
+      margin-bottom: 64px;
+    }
+    .hero-img {
+      position: relative;
+      background: linear-gradient(145deg, #0f2d6b 0%, #0d47cc 40%, #3b82f6 70%, #93c5fd 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 32px; overflow: hidden;
+    }
+    .hero-img::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 70% 25%, rgba(255,255,255,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 20% 70%, rgba(255,255,255,0.07) 0%, transparent 45%);
+    }
+    .hero-img-deco {
+      position: absolute; top: 20px; right: 20px;
+      font-size: 88px; opacity: 0.15; line-height: 1;
+      pointer-events: none; user-select: none;
+    }
+    .hero-label {
+      position: relative;
+      font-size: 12px; font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.8px; text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      position: relative;
+      font-size: 26px; font-weight: 800;
+      color: #ffffff; line-height: 1.3;
+      letter-spacing: -0.5px; margin-bottom: 10px;
+    }
+    .hero-sub {
+      position: relative;
+      font-size: 14px; color: rgba(255,255,255,0.7);
+    }
+    .hero-body {
+      padding: 36px 40px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hero-text {
+      font-size: 15px; color: var(--tx-700); line-height: 1.8;
+    }
+    .hero-text p { margin-bottom: 16px; }
+    .hero-text p:last-child { margin-bottom: 0; }
+    .hero-hl { color: #0d9488; }
+    .hero-h2 {
+      font-size: 18px; font-weight: 700; color: var(--tx-900);
+      margin: 20px 0 8px;
+    }
+    .hero-cta { margin-top: 28px; }
+    .btn-dark {
+      display: inline-block;
+      background: var(--tx-900); color: var(--bg-0);
+      border: none; border-radius: 10px;
+      padding: 12px 26px;
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .btn-dark:hover { opacity: 0.78; }
+
+    /* ── SECTION ── */
+    .section { margin-bottom: 60px; }
+    .section-hd { margin-bottom: 28px; }
+    .section-title {
+      font-size: 22px; font-weight: 700; color: var(--tx-900);
+      letter-spacing: -0.3px; margin-bottom: 4px;
+    }
+    .section-sub { font-size: 14px; color: var(--tx-500); }
+
+    /* ── SERIES GRID ── */
+    .series-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .series-card {
+      background: var(--bg-0);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      animation: fadeUp 0.35s ease both;
+    }
+    .series-card:nth-child(1) { animation-delay: .05s; }
+    .series-card:nth-child(2) { animation-delay: .10s; }
+    .series-card:nth-child(3) { animation-delay: .15s; }
+    .series-card:nth-child(4) { animation-delay: .20s; }
+    .series-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .series-cover {
+      aspect-ratio: 1 / 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px;
+      position: relative; overflow: hidden;
+    }
+    .series-cover-emoji {
+      position: relative; z-index: 1;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+    }
+    .series-body { padding: 16px 18px 18px; }
+    .series-title {
+      font-size: 16px; font-weight: 700; color: var(--tx-900);
+      margin-bottom: 6px; line-height: 1.4;
+    }
+    .series-desc {
+      font-size: 13px; color: var(--tx-500); line-height: 1.55;
+      margin-bottom: 12px;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .badge {
+      display: inline-block; font-size: 12px; font-weight: 500;
+      color: var(--tx-500); background: var(--bg-100);
+      padding: 3px 10px; border-radius: 20px;
+    }
+    .badge-blue { color: var(--blue); background: var(--blue-bg); }
+    .btn-outline {
+      display: block; margin: 28px auto 0;
+      background: none; border: 1.5px solid var(--line);
+      color: var(--tx-700); font-family: inherit;
+      font-size: 14px; font-weight: 600;
+      padding: 10px 28px; border-radius: 100px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--tx-400); color: var(--tx-900); }
+
+    /* ── POMODORO ── */
+    .pomo-wrap {
+      max-width: 460px; margin: 0 auto; text-align: center;
+    }
+    .pomo-modes {
+      display: inline-flex; background: var(--bg-100);
+      border-radius: 100px; padding: 4px; gap: 2px; margin-bottom: 48px;
+    }
+    .pomo-mode-btn {
+      background: none; border: none; font-family: inherit;
+      font-size: 14px; font-weight: 500; color: var(--tx-500);
+      padding: 8px 18px; border-radius: 100px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pomo-mode-btn.active {
+      background: var(--bg-0); color: var(--tx-900); font-weight: 600;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .pomo-ring-wrap {
+      position: relative; width: 220px; height: 220px;
+      margin: 0 auto 28px;
+    }
+    .pomo-ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .ring-bg { fill: none; stroke: var(--line); stroke-width: 7; }
+    .ring-prog {
+      fill: none; stroke: var(--blue); stroke-width: 7;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear, stroke 0.4s;
+    }
+    .pomo-center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .pomo-time {
+      font-size: 52px; font-weight: 800; color: var(--tx-900);
+      letter-spacing: -2.5px; line-height: 1;
+    }
+    .pomo-mode-lbl {
+      font-size: 13px; color: var(--tx-400); margin-top: 6px; font-weight: 500;
+    }
+    .pomo-dots {
+      display: flex; gap: 6px; justify-content: center; margin-bottom: 28px;
+    }
+    .pomo-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--line); transition: background 0.3s;
+    }
+    .pomo-dot.done { background: var(--blue); }
+    .pomo-btns { display: flex; gap: 10px; justify-content: center; margin-bottom: 32px; }
+    .btn-primary {
+      background: var(--blue); color: white; border: none;
+      border-radius: 12px; padding: 14px 36px;
+      font-family: inherit; font-size: 16px; font-weight: 600;
+      cursor: pointer; min-width: 130px; transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-secondary {
+      background: var(--bg-100); color: var(--tx-700); border: none;
+      border-radius: 12px; padding: 14px 22px;
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-secondary:hover { background: var(--line); }
+    .pomo-tip {
+      background: var(--blue-light); border-radius: 12px;
+      padding: 16px 20px; text-align: left;
+    }
+    .pomo-tip-lbl {
+      font-size: 11px; font-weight: 700; color: var(--blue);
+      letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .pomo-tip-txt { font-size: 14px; color: var(--tx-700); line-height: 1.55; }
+
+    /* ── RESULTS ── */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .result-card {
+      background: var(--bg-0);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden; text-decoration: none; display: block;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      animation: fadeUp 0.35s ease both;
+    }
+    .result-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(0,100,255,0.12);
+      border-color: var(--blue);
+    }
+    .result-cover {
+      aspect-ratio: 16 / 9;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px;
+    }
+    .result-body { padding: 14px 16px 16px; }
+    .result-title {
+      font-size: 15px; font-weight: 700; color: var(--tx-900);
+      margin-bottom: 5px; line-height: 1.4;
+    }
+    .result-desc {
+      font-size: 12px; color: var(--tx-500); line-height: 1.5; margin-bottom: 10px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .result-meta { font-size: 11px; color: var(--tx-400); }
+    .empty-state {
+      text-align: center; padding: 80px 20px;
+      color: var(--tx-500); font-size: 15px; grid-column: 1/-1;
+    }
+    .empty-icon { font-size: 44px; margin-bottom: 12px; }
+
+    /* ── BOTTOM NAV (mobile) ── */
+    .bottom-nav {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: var(--bg-0); border-top: 1px solid var(--line);
+      padding: 8px 0 max(10px, env(safe-area-inset-bottom));
+    }
+    .bottom-nav-inner { display: flex; justify-content: space-around; }
+    .tab-btn {
+      flex: 1; background: none; border: none; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 4px 0; font-family: inherit; color: var(--tx-400);
+      transition: all 0.15s;
+    }
+    .tab-btn svg { width: 22px; height: 22px; }
+    .tab-btn-lbl { font-size: 10px; font-weight: 500; color: var(--tx-400); }
+    .tab-btn.active { color: var(--blue); }
+    .tab-btn.active .tab-btn-lbl { color: var(--blue); font-weight: 700; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .series-grid { grid-template-columns: repeat(2, 1fr); }
+      .results-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .desktop-nav { display: none; }
+      .bottom-nav { display: block; }
+      main { padding: 0 16px 90px; }
+      .header-inner { padding: 0 16px; }
+      .tab-panel { padding-top: 28px; }
+
+      .hero-card {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .hero-img { min-height: 240px; padding: 24px; }
+      .hero-img-deco { font-size: 64px; }
+      .hero-title { font-size: 22px; }
+      .hero-body { padding: 24px 20px; }
+
+      .series-grid {
+        grid-template-columns: repeat(4, 190px);
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin: 0 -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .series-grid::-webkit-scrollbar { display: none; }
+      .series-card { min-width: 190px; }
+
+      .results-grid { grid-template-columns: 1fr; }
+      .result-cover { aspect-ratio: 2 / 1; }
+
+      .pomo-ring-wrap { width: 190px; height: 190px; }
+      .pomo-time { font-size: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <a class="logo" onclick="switchTab('newsletter')">
+      <img src="./apple-touch-icon.png" alt="Achromatic.">
+      <span class="logo-text">Achromatic<em>.</em></span>
+    </a>
+
+    <nav class="desktop-nav">
+      <button class="nav-btn active" data-tab="newsletter" onclick="switchTab('newsletter')">뉴스레터</button>
+      <button class="nav-btn" data-tab="portfolio" onclick="switchTab('portfolio')">포모도로</button>
+      <button class="nav-btn" data-tab="results" onclick="switchTab('results')">결과물</button>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleDark()" title="다크모드">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ════════ TAB 1: 뉴스레터 ════════ -->
+  <div id="tab-newsletter" class="tab-panel active">
+
+    <div class="hero-card">
+      <div class="hero-img">
+        <div class="hero-img-deco">🏦</div>
+        <div class="hero-label">이 주의 콘텐츠</div>
+        <div class="hero-title">Accountex 2026,<br>런던 핀테크의 현장</div>
+        <div class="hero-sub">핀테크 중심에서 직접 보고 들은 것들</div>
+      </div>
+      <div class="hero-body">
+        <div class="hero-text">
+          <p>Accountex 2026은 단순한 전시회가 아니었다. 회계·결제·세금 자동화가 어떻게 금융의 언어를 바꾸는지 확인하는 자리였다. <span class="hero-hl">오픈 뱅킹 API, AI 기반 세금 신고, 실시간 정산 인프라</span>가 한 자리에 모였다.</p>
+          <p>토스가 한국에서 만들어낸 변화를 유럽에서 어떻게 이식하는지, 현장에서 직접 파악했다.</p>
+          <div class="hero-h2">핀테크가 금융을 어떻게 바꾸는가</div>
+          <p style="color:var(--tx-400)">Stripe, Yapily, GoCardless… 글로벌 결제 인프라의 현재가 궁금하다면 아래 리포트를 확인해봐.</p>
+        </div>
+        <div class="hero-cta">
+          <a href="./accountex-2026-briefing.html" target="_blank" class="btn-dark">이어서 보기</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-hd">
+        <div class="section-title">오리지널 시리즈</div>
+        <div class="section-sub">Achromatic. 이 직접 기록하는 콘텐츠</div>
+      </div>
+      <div class="series-grid">
+
+        <div class="series-card">
+          <div class="series-cover" style="background:linear-gradient(145deg,#1e3a8a,#3b82f6)">
+            <span class="series-cover-emoji">🇬🇧</span>
+          </div>
+          <div class="series-body">
+            <div class="series-title">런던 핀테크 탐방</div>
+            <div class="series-desc">2026년 5월, 런던 핀테크 생태계를 발로 뛰며 기록. Accountex부터 Level39 RegTech까지.</div>
+            <span class="badge">아티클 5편 예정</span>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-cover" style="background:linear-gradient(145deg,#78350f,#f97316)">
+            <span class="series-cover-emoji">📊</span>
+          </div>
+          <div class="series-body">
+            <div class="series-title">마케팅 케이스 회고</div>
+            <div class="series-desc">샤롯데 CTR 0.98→2.4%, 갤럭시 릴스 1,080만. 데이터가 담지 못한 현장의 디테일.</div>
+            <span class="badge">아티클 3편 예정</span>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-cover" style="background:linear-gradient(145deg,#064e3b,#10b981)">
+            <span class="series-cover-emoji">💻</span>
+          </div>
+          <div class="series-body">
+            <div class="series-title">HTML/CSS 학습 일지</div>
+            <div class="series-desc">Claude와 페어 코딩하며 배운 것들. 토스피드 클론부터 Vercel 배포까지 입문기.</div>
+            <span class="badge badge-blue">연재 중</span>
+          </div>
+        </div>
+
+        <div class="series-card">
+          <div class="series-cover" style="background:linear-gradient(145deg,#1e293b,#475569)">
+            <span class="series-cover-emoji">🔧</span>
+          </div>
+          <div class="series-body">
+            <div class="series-title">디지털 도구 실험기</div>
+            <div class="series-desc">구독 절감, AI 자동화, Notion+Vercel 스택으로 1인 크리에이터 운영 최적화.</div>
+            <span class="badge">아티클 2편 예정</span>
+          </div>
+        </div>
+
+      </div>
+      <button class="btn-outline">전체 시리즈 보기</button>
+    </div>
+
+  </div>
+
+  <!-- ════════ TAB 2: 포모도로 ════════ -->
+  <div id="tab-portfolio" class="tab-panel">
+    <div class="pomo-wrap">
+
+      <div class="pomo-modes">
+        <button class="pomo-mode-btn active" id="modeWork"      onclick="setMode('work')">집중</button>
+        <button class="pomo-mode-btn"        id="modeBreak"     onclick="setMode('break')">휴식</button>
+        <button class="pomo-mode-btn"        id="modeLongBreak" onclick="setMode('longBreak')">긴 휴식</button>
+      </div>
+
+      <div class="pomo-ring-wrap">
+        <svg class="pomo-ring-svg" viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="88"/>
+          <circle class="ring-prog" id="ringProg" cx="100" cy="100" r="88"/>
+        </svg>
+        <div class="pomo-center">
+          <div class="pomo-time" id="timerTxt">25:00</div>
+          <div class="pomo-mode-lbl" id="modeTxt">집중 시간</div>
+        </div>
+      </div>
+
+      <div class="pomo-dots" id="pomoDots">
+        <div class="pomo-dot"></div>
+        <div class="pomo-dot"></div>
+        <div class="pomo-dot"></div>
+        <div class="pomo-dot"></div>
+      </div>
+
+      <div class="pomo-btns">
+        <button class="btn-secondary" onclick="resetTimer()">초기화</button>
+        <button class="btn-primary"   id="startBtn" onclick="toggleTimer()">시작하기</button>
+      </div>
+
+      <div class="pomo-tip">
+        <div class="pomo-tip-lbl">포모도로 기법</div>
+        <div class="pomo-tip-txt">25분 집중 → 5분 휴식. 4세션 완료 후 15분 긴 휴식. 집중력을 지키면서 번아웃을 막는 검증된 방법.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════ TAB 3: 결과물 ════════ -->
+  <div id="tab-results" class="tab-panel">
+    <div class="section-hd" style="margin-bottom:24px">
+      <div class="section-title">Claude 결과물</div>
+      <div class="section-sub">Claude와 함께 만든 것들</div>
+    </div>
+    <div class="results-grid" id="resultsGrid">
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        불러오는 중...
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── BOTTOM NAV (mobile) ── -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="tab-btn active" data-tab="newsletter" onclick="switchTab('newsletter')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      <span class="tab-btn-lbl">뉴스레터</span>
+    </button>
+    <button class="tab-btn" data-tab="portfolio" onclick="switchTab('portfolio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span class="tab-btn-lbl">포모도로</span>
+    </button>
+    <button class="tab-btn" data-tab="results" onclick="switchTab('results')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      <span class="tab-btn-lbl">결과물</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+// ── TABS ──
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('[data-tab="' + id + '"]').forEach(b => b.classList.add('active'));
+  if (id === 'results') loadResults();
+}
+
+// ── DARK MODE ──
+const html = document.documentElement;
+function applyTheme(dark) {
+  html.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('sunIcon').style.display  = dark ? 'none' : '';
+  document.getElementById('moonIcon').style.display = dark ? '' : 'none';
+}
+function toggleDark() {
+  const dark = html.getAttribute('data-theme') !== 'dark';
+  localStorage.setItem('achromatic-theme', dark ? 'dark' : 'light');
+  applyTheme(dark);
+}
+const savedTheme = localStorage.getItem('achromatic-theme') ||
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+applyTheme(savedTheme === 'dark');
+
+// ── POMODORO ──
+const C = 2 * Math.PI * 88; // circumference ≈ 552.9
+const MODES = {
+  work:      { label: '집중 시간', sec: 25*60, color: '#0064FF' },
+  break:     { label: '휴식 시간', sec:  5*60, color: '#10b981' },
+  longBreak: { label: '긴 휴식',   sec: 15*60, color: '#8b5cf6' }
+};
+let mode = 'work', total = MODES.work.sec, remain = total;
+let running = false, iv = null, sessions = 0;
+
+const ring   = document.getElementById('ringProg');
+const timerT = document.getElementById('timerTxt');
+const modeT  = document.getElementById('modeTxt');
+const startB = document.getElementById('startBtn');
+ring.style.strokeDasharray = C;
+
+function setMode(m) {
+  if (running) return;
+  mode = m; total = MODES[m].sec; remain = total;
+  document.querySelectorAll('.pomo-mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
+  modeT.textContent = MODES[m].label;
+  ring.style.stroke = MODES[m].color;
+  render();
+}
+
+function render() {
+  const m = String(Math.floor(remain/60)).padStart(2,'0');
+  const s = String(remain%60).padStart(2,'0');
+  timerT.textContent = m + ':' + s;
+  ring.style.strokeDashoffset = C * (1 - remain/total);
+}
+
+function toggleTimer() {
+  if (running) {
+    clearInterval(iv); running = false; startB.textContent = '계속하기';
+  } else {
+    running = true; startB.textContent = '일시정지';
+    iv = setInterval(() => {
+      if (remain <= 0) {
+        clearInterval(iv); running = false; startB.textContent = '시작하기';
+        if (mode === 'work') {
+          sessions = Math.min(sessions + 1, 4);
+          updateDots();
+          setMode(sessions >= 4 ? 'longBreak' : 'break');
+          if (sessions >= 4) sessions = 0;
+        } else {
+          setMode('work');
+        }
+        return;
+      }
+      remain--; render();
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(iv); running = false; remain = total;
+  startB.textContent = '시작하기'; render();
+}
+
+function updateDots() {
+  document.querySelectorAll('#pomoDots .pomo-dot').forEach((d, i) => {
+    d.className = 'pomo-dot' + (i < sessions ? ' done' : '');
+  });
+}
+
+// init ring
+ring.style.stroke = MODES.work.color;
+ring.style.strokeDashoffset = 0;
+render();
+
+// ── RESULTS ──
+const ICONS = { report:'📊', presentation:'📑', analysis:'🔍', landing:'🌐', portfolio:'💼', default:'📄' };
+const COVERS = {
+  report:       'linear-gradient(145deg,#1e3a8a,#3b82f6)',
+  presentation: 'linear-gradient(145deg,#6d28d9,#a78bfa)',
+  analysis:     'linear-gradient(145deg,#064e3b,#34d399)',
+  landing:      'linear-gradient(145deg,#92400e,#fbbf24)',
+  portfolio:    'linear-gradient(145deg,#1e293b,#64748b)',
+  default:      'linear-gradient(145deg,#334155,#94a3b8)'
+};
+
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'T00:00:00'), now = new Date();
+  const diff = Math.floor((now - dt) / 86400000);
+  if (diff === 0) return '오늘';
+  if (diff === 1) return '어제';
+  if (diff < 7)  return diff + '일 전';
+  return dt.toLocaleDateString('ko-KR', { month:'short', day:'numeric' });
+}
+
+let loaded = false;
+async function loadResults() {
+  if (loaded) return;
+  const g = document.getElementById('resultsGrid');
+  try {
+    const r = await fetch('./manifest.json?t=' + Date.now());
+    if (!r.ok) throw 0;
+    const { files = [] } = await r.json();
+    const sorted = [...files].sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
+    if (!sorted.length) {
+      g.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div>아직 결과물이 없어.</div>';
+      return;
+    }
+    g.innerHTML = sorted.map((f, i) => {
+      const tag = (f.tags?.[0] || 'default').toLowerCase();
+      return `<a class="result-card" href="./${f.path}" target="_blank" style="animation-delay:${i*0.06}s">
+        <div class="result-cover" style="background:${COVERS[tag]||COVERS.default}">
+          <span style="filter:drop-shadow(0 3px 8px rgba(0,0,0,.25))">${ICONS[tag]||ICONS.default}</span>
+        </div>
+        <div class="result-body">
+          <div class="result-title">${f.title}</div>
+          <div class="result-desc">${f.description||''}</div>
+          <div class="result-meta">${fmtDate(f.date)}${f.tags?.length ? ' · ' + f.tags[0] : ''}</div>
+        </div>
+      </a>`;
+    }).join('');
+    loaded = true;
+  } catch {
+    g.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div>파일 목록을 불러올 수 없어.</div>';
+  }
+}
+
+loadResults();
+</script>
+</body>
+</html>

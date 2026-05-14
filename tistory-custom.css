@@ -1,0 +1,309 @@
+/* ============================================================
+   Achromatic. × Toss Style — 티스토리 Odyssey 커스텀 CSS
+   적용 방법: 스킨 편집 > CSS 탭 > 파일 맨 아래에 붙여넣기 > [적용] 클릭
+   선택자는 2026-05-09 실사 기반. 스킨 업데이트 시 재확인 필요.
+   ============================================================ */
+
+/* ── 0. Pretendard 폰트 ──────────────────────────────────── */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+
+body, button, input, textarea {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif !important;
+}
+
+
+/* ── 1. 티스토리 플로팅 아이콘 제거 (우상단 :::) ─────────── */
+/* 실사 확인 선택자: DIV#menubar_wrapper.btn_tool */
+#menubar_wrapper {
+  display: none !important;
+}
+
+
+/* ── 2. 홈 카드 스타일 — 토스 느낌 ──────────────────────── */
+
+/* 카드 hover 효과 */
+.list-type-default .item {
+  border-radius: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.list-type-default .item:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  transform: translateY(-2px);
+}
+
+/* 카테고리 태그 — 토스 블루 */
+.list-type-default .link-category {
+  color: #0064FF !important;
+  font-size: 12px;
+  font-weight: 600;
+  background: #eaf1ff;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* 글 제목 */
+.list-type-default .title-article {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.4;
+  letter-spacing: -0.3px;
+}
+
+/* 날짜/메타 텍스트 */
+.list-type-default .info-article {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+
+/* ── 3. 게시글 본문 타이포그래피 ────────────────────────── */
+/* 실사 확인 선택자: DIV#article-view, .tt_article_useless_p_margin */
+
+/* 본문 wrap — 읽기 최적 너비 */
+#article-view {
+  max-width: 720px;
+}
+
+/* 본문 텍스트 */
+.tt_article_useless_p_margin,
+.entry-content {
+  font-size: 17px;
+  line-height: 1.85;
+  color: #334155;
+  word-break: keep-all;
+  letter-spacing: -0.2px;
+}
+
+/* 게시글 제목 (H2.title) */
+.article-header h2.title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+/* 게시글 날짜/작성자 메타 */
+.article-header .info-article,
+.article-header .date {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* 본문 내 H2/H3 */
+.tt_article_useless_p_margin h2,
+.entry-content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 48px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tt_article_useless_p_margin h3,
+.entry-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 36px;
+  margin-bottom: 8px;
+}
+
+/* 인용구 — 토스 스타일 */
+.tt_article_useless_p_margin blockquote,
+.entry-content blockquote {
+  border-left: 3px solid #0064FF;
+  margin: 24px 0;
+  padding: 12px 20px;
+  background: #f3f6ff;
+  border-radius: 0 8px 8px 0;
+  color: #334155;
+  font-style: normal;
+}
+
+/* 코드 블록 */
+.tt_article_useless_p_margin pre,
+.entry-content pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+.tt_article_useless_p_margin code,
+.entry-content code {
+  background: #f1f5f9;
+  color: #0064FF;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* 이미지 — 둥근 모서리 */
+.tt_article_useless_p_margin img,
+.entry-content img {
+  border-radius: 10px;
+  max-width: 100%;
+}
+
+
+/* ── 4. 헤더 ─────────────────────────────────────────────── */
+header.header {
+  border-bottom: 1px solid #f1f5f9;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* 블로그 제목 */
+header.header .link-blog-title,
+header.header .tit-blog {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a !important;
+  letter-spacing: -0.3px;
+}
+
+
+/* ── 5. 사이드바 프로필 텍스트 정리 ─────────────────────── */
+/* "achromatic-archive 님의 블로그입니다." — 블로그 소개로 교체 전까지 숨김 */
+.area-aside .desc-blog {
+  display: none;
+}
+
+/* 사이드바 프로필 이름 */
+.area-aside .tit-blog {
+  font-weight: 700;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+
+/* ── 6. 푸터 ─────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid #f1f5f9;
+  padding: 32px 0;
+}
+
+footer .inner-foot {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* 티스토리 로고 링크 숨기기 (존재 시) */
+.link_tistory_logo,
+.ico_tistory_bi,
+.area-footer .link-tistory {
+  display: none !important;
+}
+
+
+/* ── 7. 모바일 반응형 강화 (max-width: 768px) ───────────── */
+@media (max-width: 768px) {
+
+  /* 사이드바 숨기기 */
+  .area-aside {
+    display: none !important;
+  }
+
+  /* 본문 영역 풀 너비 */
+  .area-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 컨테이너 패딩 */
+  .inner-wrap,
+  .wrap-article,
+  .area-article {
+    padding: 0 20px !important;
+    box-sizing: border-box;
+  }
+
+  /* 게시글 제목 */
+  .article-header h2.title {
+    font-size: 22px;
+  }
+
+  /* 본문 폰트 */
+  .tt_article_useless_p_margin,
+  .entry-content {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* 게시글 히어로 (어두운 배경 섹션) 높이 조정 */
+  .article-header {
+    min-height: 180px;
+    padding: 24px 20px !important;
+  }
+
+  /* 헤더 */
+  header.header {
+    padding: 0 16px;
+  }
+
+  /* 카드 */
+  .list-type-default .item {
+    margin-bottom: 12px;
+    border-radius: 10px;
+  }
+
+  /* 홈 화면 패딩 */
+  .area-main-home,
+  .list-article {
+    padding: 0 16px;
+  }
+
+  /* 푸터 */
+  footer {
+    padding: 24px 20px;
+  }
+}
+
+/* 아주 작은 화면 (max-width: 480px) */
+@media (max-width: 480px) {
+  .article-header h2.title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .tt_article_useless_p_margin,
+  .entry-content {
+    font-size: 15px;
+  }
+}
+
+
+/* ── 8. 게시글 하단 '공감/댓글' 영역 정리 ───────────────── */
+.container_postbtn {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* 구독 버튼 — 토스 블루로 */
+.btn_subscription:not(.following) {
+  background-color: #0064FF !important;
+  border-color: #0064FF !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+}
+
+/* ============================================================
+   끝. 스킨 CSS 탭 맨 아래에 이 블록 전체를 붙여넣으면 됨.
+   ============================================================ */
