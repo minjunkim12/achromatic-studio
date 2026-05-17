@@ -23,14 +23,15 @@
       --bdr: #E5E8EC;
     }
 
+    html { overflow-x: hidden; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* 모바일: 회색 여백 없애기 */
     body {
       font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       -webkit-font-smoothing: antialiased;
       min-height: 100dvh;
+      overflow-x: hidden;
     }
 
     /* ── APP SHELL ── */
@@ -41,6 +42,7 @@
       background: var(--bg);
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     /* ── TOP BAR ── */
@@ -199,45 +201,52 @@
     .bot-btn.on { color: var(--blue); font-weight: 700; }
     .bot-btn svg { width: 24px; height: 24px; }
 
-    /* ── LACADEMY BANNER ── */
+    /* ── LACADEMY BANNER — Toss 쇼핑 배너 스타일 ── */
     .la-banner {
-      background: linear-gradient(180deg, #B8D4FF 0%, #D6E8FF 45%, #EFF6FF 100%);
+      background: linear-gradient(135deg, #A8CAFF 0%, #C5DEFF 40%, #E0EEFF 100%);
       border-radius: 20px;
-      padding: 26px 22px 22px;
+      padding: 22px 20px 22px 22px;
       text-decoration: none; cursor: pointer;
-      text-align: center;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      overflow: hidden; position: relative;
       animation: up 0.22s ease both;
-      box-shadow: 0 2px 12px rgba(0,85,255,0.1);
+      box-shadow: 0 2px 12px rgba(0,85,255,0.12);
       -webkit-tap-highlight-color: transparent;
+      min-height: 110px;
     }
-    .la-banner:active { opacity: 0.92; transform: scale(0.99); }
+    .la-banner:active { opacity: 0.93; transform: scale(0.99); }
+
+    .la-banner-text { flex: 1; min-width: 0; }
     .la-banner-chip {
-      display: inline-block;
       font-size: 11px; font-weight: 700;
       color: var(--blue);
-      background: rgba(0,85,255,0.1);
-      padding: 4px 12px; border-radius: 20px;
-      margin-bottom: 12px;
+      letter-spacing: -0.1px;
+      margin-bottom: 8px;
+      display: block;
     }
     .la-banner-title {
-      font-size: 24px; font-weight: 900; color: var(--t1);
-      letter-spacing: -0.8px; line-height: 1.25; margin-bottom: 7px;
+      font-size: 20px; font-weight: 900; color: var(--t1);
+      letter-spacing: -0.7px; line-height: 1.25;
+      margin-bottom: 6px;
     }
-    .la-banner-sub {
-      font-size: 13px; color: var(--t2);
-      letter-spacing: -0.1px; margin-bottom: 18px;
+    .la-banner-title .hl { color: var(--blue); }
+    .la-banner-meta {
+      font-size: 12px; color: rgba(0,55,120,0.55);
+      letter-spacing: -0.1px; margin-bottom: 10px;
     }
-    .la-banner-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 14px;
-      border-top: 1px solid rgba(0,85,255,0.12);
+    .la-banner-hint {
+      font-size: 11px; color: var(--t2);
+      letter-spacing: -0.1px;
     }
-    .la-banner-date {
-      font-size: 11px; color: var(--t3);
-    }
-    .la-banner-cta {
-      font-size: 13px; font-weight: 700; color: var(--blue);
-      display: flex; align-items: center; gap: 3px;
+
+    /* 우측 문서 일러스트 */
+    .la-banner-art {
+      flex-shrink: 0;
+      width: 72px; height: 84px;
+      opacity: 0.18;
+      position: relative;
     }
 
     @keyframes up {
@@ -444,30 +453,45 @@ const renderHome = () => {
   // 라카데미 배너
   const freelance = FILES.filter(f => catOf(f) === 'freelance');
   const latestLa = freelance.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-  const bannerSub = latestLa
-    ? `최신 보고서 · ${latestLa.date} 업데이트`
-    : '숏폼 성과 분석 보고서';
+  const rawTitle = latestLa ? latestLa.title : '최신 숏폼 성과';
+  const bannerDesc = latestLa ? latestLa.description : '숏폼 성과 분석 보고서';
+  const bannerDate = latestLa ? dateFmt(latestLa.date) : '';
 
-  const bannerTitle = latestLa ? latestLa.title : '최신 숏폼 성과';
-  const bannerDesc  = latestLa ? latestLa.description : '숏폼 성과 분석 보고서';
-  const bannerDate  = latestLa ? dateFmt(latestLa.date) : '';
+  // 마지막 어절 파란색으로
+  const words = rawTitle.split(' ');
+  const lastW = words.pop();
+  const bannerTitleHtml = words.length
+    ? `${words.join(' ')} <span class="hl">${lastW}</span>`
+    : `<span class="hl">${lastW}</span>`;
+
+  const DOC_SVG = `
+  <svg width="72" height="84" viewBox="0 0 72 84" fill="none">
+    <!-- back doc -->
+    <rect x="14" y="4" width="48" height="62" rx="8" fill="#0055FF"
+          transform="rotate(8 14 4)"/>
+    <!-- mid doc -->
+    <rect x="8" y="12" width="48" height="62" rx="8" fill="#0055FF"
+          transform="rotate(3 8 12)"/>
+    <!-- front doc -->
+    <rect x="4" y="18" width="50" height="64" rx="8" fill="#0055FF"/>
+    <!-- lines on front -->
+    <rect x="16" y="34" width="28" height="4" rx="2" fill="white" opacity="0.6"/>
+    <rect x="16" y="44" width="20" height="4" rx="2" fill="white" opacity="0.4"/>
+    <rect x="16" y="54" width="24" height="4" rx="2" fill="white" opacity="0.3"/>
+    <rect x="16" y="64" width="16" height="4" rx="2" fill="white" opacity="0.2"/>
+  </svg>`;
 
   const banner = document.createElement('a');
   banner.className = 'la-banner';
   banner.href = './lacademy.html';
   banner.innerHTML = `
-    <div class="la-banner-chip">라카데미 여의도 · 최신 보고서</div>
-    <div class="la-banner-title">${bannerTitle}</div>
-    <div class="la-banner-sub">${bannerDesc}</div>
-    <div class="la-banner-footer">
-      <span class="la-banner-date">${bannerDate}</span>
-      <span class="la-banner-cta">보고서 보기
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
-      </span>
+    <div class="la-banner-text">
+      <span class="la-banner-chip">라카데미 여의도</span>
+      <div class="la-banner-title">${bannerTitleHtml}</div>
+      <div class="la-banner-meta">${bannerDesc}</div>
+      <div class="la-banner-hint">눌러서 확인할 수 있어요</div>
     </div>
+    <div class="la-banner-art">${DOC_SVG}</div>
   `;
   c.appendChild(banner);
 
