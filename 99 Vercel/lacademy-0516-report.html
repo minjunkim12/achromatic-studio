@@ -122,18 +122,28 @@
       border-radius: 20px; padding: 16px 20px;
       max-width: 290px; margin: 0 auto;
       box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.55);
-      position: relative; z-index: 1; text-align: left;
+      position: relative; z-index: 1; text-align: center;
     }
-    .kpi-row { display: flex; align-items: baseline; gap: 6px; }
+    .kpi-row { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
     .kpi-num { font-size: 30px; font-weight: 800; color: var(--t1); letter-spacing: -1px; line-height: 1; }
     .kpi-num span { color: var(--blue); }
     .kpi-unit { font-size: 14px; color: var(--t2); font-weight: 500; }
     .kpi-sub { font-size: 12px; color: var(--t2); margin-top: 4px; }
-    .kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+    .kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
     .kpi-tag {
       font-size: 11px; font-weight: 600; color: var(--blue);
       background: var(--blue-bg); border-radius: 20px; padding: 3px 9px;
     }
+
+    /* Hero summary strip */
+    .hero-summary {
+      background: var(--bg);
+      padding: 16px 20px 14px;
+      font-size: 13px; color: var(--t2);
+      line-height: 1.72; letter-spacing: -0.2px;
+      text-align: center;
+    }
+    .hero-summary strong { color: var(--t1); font-weight: 600; }
 
     /* ── TAB BAR ── */
     .tab-bar {
@@ -357,6 +367,11 @@
         <span class="kpi-tag">전주 대비 +526%</span>
       </div>
     </div>
+  </div>
+
+  <!-- ── HERO SUMMARY ── -->
+  <div class="hero-summary">
+    이번 주 두 플랫폼에서 동시에 터졌어요. 전주 동시점 대비 <strong>5배 이상 성장</strong>했고, 시청자 대부분이 기존 팔로워가 아닌 <strong>신규 유저</strong>였어요. 알고리즘이 채널을 신뢰하는 지금이 연속 업로드 타이밍이에요.
   </div>
 
   <!-- ── TAB BAR ── -->
