@@ -1,532 +1,457 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<title>0516 라카데미 숏폼 분석 보고서</title>
-<link rel="icon" type="image/png" href="./favicon.png" />
-<style>
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>라카데미 · 0516 분석</title>
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
-:root {
-  --blue:   #0055FF;
-  --blue-bg:#EBF1FF;
-  --green:  #05C46B;
-  --red:    #FF3B30;
-  --ig:     #C13584;
-  --yt:     #CC0000;
-  --bg:     #F2F4F7;
-  --card:   #FFFFFF;
-  --t1:     #191919;
-  --t2:     #8B95A1;
-  --t3:     #C5CBD3;
-  --div:    #F0F2F5;
-  --bdr:    #E5E8EC;
-}
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #EBF1FF;
+      --blue-lt: #F3F6FF;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+    }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-body {
-  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  -webkit-font-smoothing: antialiased;
-}
+    .page {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--bg);
+      padding-bottom: 88px;
+    }
 
-/* ── APP SHELL ── */
-.app {
-  max-width: 390px;
-  margin: 0 auto;
-  min-height: 100dvh;
-  background: var(--bg);
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 80px; /* space for sticky CTA */
-}
+    /* ── HERO ANIMATIONS ── */
+    @keyframes shimmer {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+    @keyframes centerPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.08); }
+    }
+    @keyframes rippleRing {
+      0%   { transform: scale(1); opacity: 0.55; }
+      100% { transform: scale(3.4); opacity: 0; }
+    }
+    @keyframes nodeIn {
+      from { opacity: 0; transform: scale(0.2); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes nodeFloat {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-4px); }
+    }
+    @keyframes lineBlink {
+      0%, 100% { opacity: 0.18; }
+      50%       { opacity: 0.38; }
+    }
 
-/* ── TOP BAR ── */
-.top-bar {
-  position: sticky; top: 0; z-index: 100;
-  background: var(--card);
-  border-bottom: 1px solid var(--div);
-  height: 56px;
-  padding: 0 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
-}
-.back-btn {
-  width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  background: none; border: none; cursor: pointer;
-  color: var(--t1); border-radius: 50%;
-  -webkit-tap-highlight-color: transparent;
-}
-.back-btn:active { background: var(--div); }
-.page-title {
-  font-size: 16px; font-weight: 700; color: var(--t1);
-  position: absolute; left: 50%; transform: translateX(-50%);
-}
-.date-pill {
-  font-size: 12px; font-weight: 600; color: var(--t2);
-  background: var(--div); padding: 4px 10px; border-radius: 20px;
-}
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%, #A8CFFF 12%, #C4E1FF 28%,
+        #DCEFFF 48%, #EDF7FF 66%, #F5FBFF 84%, var(--bg) 100%
+      );
+      padding: 56px 24px 36px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 28%, rgba(255,255,255,0.48) 50%, transparent 72%);
+      animation: shimmer 4.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-back {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top)); left: 16px;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.38);
+      border: none; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--t1); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      z-index: 10; -webkit-tap-highlight-color: transparent;
+    }
+    .hero-back:active { background: rgba(255,255,255,0.6); }
+    .hero-date {
+      font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.55);
+      letter-spacing: -0.1px; margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-size: 24px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.8px; line-height: 1.28;
+      position: relative; z-index: 1; margin-bottom: 28px;
+    }
+    .hero-title em { font-style: normal; color: var(--blue); }
 
-/* ── CONTENT ── */
-.content { flex: 1; overflow-y: auto; }
+    .hero-gfx {
+      width: 160px; height: 160px;
+      margin: 0 auto 28px; position: relative; z-index: 1;
+    }
+    .hero-gfx svg { width: 100%; height: 100%; overflow: visible; }
 
-/* ── CARDS ── */
-.card {
-  background: var(--card);
-  border-radius: 18px;
-  margin: 0 12px 10px;
-  padding: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-.card.visible { opacity: 1; transform: translateY(0); }
+    /* SVG node animations */
+    .c-center { transform-box: fill-box; transform-origin: center; animation: centerPulse 2.4s ease-in-out infinite; }
+    .r1 { transform-box: fill-box; transform-origin: center; animation: rippleRing 2.8s ease-out infinite; }
+    .r2 { transform-box: fill-box; transform-origin: center; animation: rippleRing 2.8s ease-out 1.4s infinite; }
+    .cn1 { transform-box: fill-box; transform-origin: center; animation: nodeIn .5s ease .6s both, nodeFloat 4.2s ease-in-out 1.1s infinite; }
+    .cn2 { transform-box: fill-box; transform-origin: center; animation: nodeIn .5s ease .8s both, nodeFloat 3.8s ease-in-out 1.8s infinite; }
+    .cn3 { transform-box: fill-box; transform-origin: center; animation: nodeIn .5s ease .7s both, nodeFloat 5s ease-in-out 2.3s infinite; }
+    .cn4 { transform-box: fill-box; transform-origin: center; animation: nodeIn .5s ease 1s both; }
+    .cn5 { transform-box: fill-box; transform-origin: center; animation: nodeIn .5s ease 1.1s both; }
+    .cl { animation: lineBlink 3s ease-in-out infinite; }
 
-.sec-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
-  text-transform: uppercase; color: var(--t2);
-  margin-bottom: 14px;
-}
+    /* KPI card */
+    .hero-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 18px 22px;
+      position: relative; z-index: 1;
+      max-width: 300px; margin: 0 auto;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,255,255,0.5);
+    }
+    .hc-label { font-size: 13px; color: var(--t2); margin-bottom: 4px; }
+    .hc-num { font-size: 42px; font-weight: 900; color: var(--blue); letter-spacing: -1.6px; line-height: 1; }
+    .hc-div { height: 1px; background: rgba(0,0,0,0.07); margin: 14px 0; }
+    .hc-row { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--t1); }
+    .hc-ico { width: 28px; height: 28px; border-radius: 8px; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
 
-/* ── HERO NUMBERS ── */
-.hero-number {
-  font-size: 48px; font-weight: 900; color: var(--blue);
-  letter-spacing: -2px; line-height: 1;
-}
-.hero-label {
-  font-size: 13px; color: var(--t2); margin-top: 4px; margin-bottom: 20px;
-}
-.hero-badge {
-  display: inline-block; font-size: 12px; font-weight: 700;
-  padding: 4px 12px; border-radius: 20px;
-  background: #FFF0F0; color: var(--red);
-  margin-bottom: 16px;
-}
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); display: flex;
+      border-bottom: 2px solid var(--div);
+    }
+    .tab-btn {
+      flex: 1; height: 48px;
+      background: none; border: none; font-family: inherit;
+      font-size: 14px; font-weight: 600; color: var(--t3);
+      cursor: pointer; position: relative;
+      transition: color .18s; -webkit-tap-highlight-color: transparent;
+    }
+    .tab-btn.active { color: var(--blue); }
+    .tab-btn.active::after {
+      content: ''; position: absolute;
+      bottom: -2px; left: 20%; right: 20%;
+      height: 2px; background: var(--blue); border-radius: 2px;
+    }
 
-/* ── KPI GRID ── */
-.kpi-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
-  background: var(--bdr);
-  border-radius: 14px; overflow: hidden;
-  border: 1px solid var(--bdr);
-}
-.kpi-item {
-  background: var(--card);
-  padding: 16px;
-  text-align: center;
-}
-.kpi-val {
-  font-size: 22px; font-weight: 800; color: var(--t1);
-  letter-spacing: -0.8px; line-height: 1;
-}
-.kpi-val.blue { color: var(--blue); }
-.kpi-val.green { color: var(--green); }
-.kpi-val.ig { color: var(--ig); }
-.kpi-key {
-  font-size: 11px; color: var(--t2); margin-top: 4px;
-}
+    /* ── TAB PANELS ── */
+    .tab-panel { display: none; padding: 12px 0; }
+    .tab-panel.active { display: block; }
 
-/* ── METRIC LIST ── */
-.metric-list { display: flex; flex-direction: column; }
-.metric-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--div);
-}
-.metric-row:last-child { border-bottom: none; padding-bottom: 0; }
-.m-key { font-size: 14px; color: var(--t2); }
-.m-val { font-size: 15px; font-weight: 700; color: var(--t1); }
-.m-val.blue { color: var(--blue); }
-.m-val.green { color: var(--green); }
-.m-val.ig { color: var(--ig); }
+    /* ── BENEFIT CARD ── */
+    .b-card {
+      background: var(--card); border-radius: 20px;
+      margin: 0 16px 10px; overflow: hidden;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .b-item { padding: 20px; }
+    .b-item + .b-item { border-top: 1px solid var(--div); }
+    .b-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .b-name { font-size: 15px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; }
+    .b-quote {
+      border-left: 3px solid var(--blue-bg); padding: 12px 14px;
+      border-radius: 0 12px 12px 0; background: var(--blue-lt);
+    }
+    .b-desc { font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 5px; }
+    .b-big { font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 4px; }
+    .b-sub { font-size: 12px; color: var(--t2); line-height: 1.5; }
 
-/* ── PLATFORM HEADER ── */
-.plat-header {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
-}
-.plat-dot {
-  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-}
-.plat-name { font-size: 14px; font-weight: 700; color: var(--t1); }
-.plat-sub { font-size: 12px; color: var(--t2); margin-left: auto; }
+    /* ── CTA ── */
+    .cta-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--card);
+      padding: 10px 16px max(16px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--div);
+      display: flex; gap: 10px; z-index: 200;
+    }
+    .cta-btn {
+      flex: 1; height: 50px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 14px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+      text-decoration: none; transition: opacity .15s; -webkit-tap-highlight-color: transparent;
+    }
+    .cta-btn:active { opacity: 0.84; }
+    .cta-yt { background: var(--blue); color: #FFF; box-shadow: 0 4px 16px rgba(0,85,255,0.28); }
+    .cta-ig { background: var(--div); color: var(--t1); }
+    .cta-ig img { height: 20px; width: 20px; object-fit: contain; border-radius: 5px; }
 
-/* ── BIG STAT ── */
-.big-stat {
-  display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px;
-}
-.big-num {
-  font-size: 36px; font-weight: 900; letter-spacing: -1.2px; line-height: 1;
-}
-.big-unit { font-size: 16px; font-weight: 700; color: var(--t2); }
-.big-sub { font-size: 12px; color: var(--t2); margin-bottom: 16px; }
-
-/* ── PROGRESS BAR ── */
-.prog-item { margin-bottom: 10px; }
-.prog-top {
-  display: flex; justify-content: space-between;
-  font-size: 13px; color: var(--t2); margin-bottom: 5px;
-}
-.prog-pct { font-weight: 700; color: var(--t1); }
-.prog-bg { height: 5px; background: var(--div); border-radius: 3px; }
-.prog-fill { height: 5px; border-radius: 3px; }
-
-/* ── DIVIDER ── */
-.divider { height: 1px; background: var(--div); margin: 14px 0; }
-
-/* ── INSIGHT BOX ── */
-.insight {
-  background: var(--blue-bg);
-  border-radius: 12px;
-  padding: 14px 16px;
-  font-size: 13px; color: var(--t1);
-  line-height: 1.7; margin-top: 14px;
-}
-.insight strong { color: var(--blue); }
-
-/* ── NEXT ACTIONS ── */
-/* ── ACTION ITEMS WITH CONNECTOR ── */
-.action-list { display: flex; flex-direction: column; }
-.action-row {
-  display: flex; gap: 14px; align-items: flex-start;
-  padding-bottom: 20px;
-  position: relative;
-}
-.action-row:last-child { padding-bottom: 0; }
-/* vertical connecting line */
-.action-row:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 11px;
-  top: 26px;
-  bottom: 0;
-  width: 2px;
-  background: var(--div);
-  border-radius: 1px;
-}
-.action-num {
-  width: 24px; height: 24px; border-radius: 50%;
-  background: var(--blue-bg); color: var(--blue);
-  font-size: 11px; font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; margin-top: 1px;
-  position: relative; z-index: 1;
-}
-.action-title { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
-.action-desc { font-size: 13px; color: var(--t2); line-height: 1.55; }
-
-/* ── STICKY CTA ── */
-.cta-bar {
-  position: fixed; bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100%; max-width: 390px;
-  padding: 12px 16px 20px;
-  background: transparent;
-  border-top: none;
-  z-index: 200;
-}
-.cta-btn {
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  width: 100%; height: 50px;
-  background: var(--blue); color: #FFFFFF;
-  border: none; border-radius: 14px;
-  font-family: inherit;
-  font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
-  cursor: pointer; text-decoration: none;
-  box-shadow: 0 6px 24px rgba(0,85,255,0.42);
-  -webkit-tap-highlight-color: transparent;
-}
-.cta-btn:active { opacity: 0.88; box-shadow: 0 3px 10px rgba(0,85,255,0.3); }
-.yt-logo { height: 18px; width: auto; display: block; }
-
-/* ── COMPARE TABLE ── */
-.cmp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.cmp-table th {
-  text-align: left; padding: 8px 4px 8px 0;
-  color: var(--t2); font-weight: 600; font-size: 12px;
-  border-bottom: 2px solid var(--bdr);
-}
-.cmp-table th:not(:first-child) { text-align: right; }
-.cmp-table td {
-  padding: 10px 4px 10px 0;
-  border-bottom: 1px solid var(--div);
-  color: var(--t2);
-}
-.cmp-table td:not(:first-child) { text-align: right; }
-.cmp-table tr.highlight td { font-weight: 700; color: var(--t1); }
-.cmp-table tr.highlight td:first-child { color: var(--blue); }
-.cmp-table tr:last-child td { border-bottom: none; }
-
-/* ── DESKTOP FRAME ── */
-@media (min-width: 420px) {
-  body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
-  .app {
-    border-radius: 22px; overflow: hidden;
-    height: calc(100vh - 48px); min-height: auto;
-    box-shadow: 0 16px 56px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.08);
-  }
-  .cta-bar { border-radius: 0 0 22px 22px; }
-}
-</style>
+    @media (min-width: 680px) {
+      body { padding: 32px 0; min-height: 100vh; background: #D8DCE2; }
+      .page { border-radius: 20px; overflow: hidden; box-shadow: 0 8px 48px rgba(0,0,0,0.12); }
+      .cta-bar { max-width: 640px; left: 50%; transform: translateX(-50%); border-radius: 0 0 20px 20px; }
+    }
+  </style>
 </head>
 <body>
+<div class="page">
 
-<div class="app">
-  <!-- TOP BAR -->
-  <header class="top-bar">
-    <button class="back-btn" onclick="window.location.href='./lacademy.html'" aria-label="뒤로">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- HERO -->
+  <section class="hero">
+    <button class="hero-back" onclick="window.location.href='./lacademy.html'" aria-label="뒤로">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 12H5M12 19l-7-7 7-7"/>
       </svg>
     </button>
-    <span class="page-title">0516 분석 보고서</span>
-    <span class="date-pill">05.16</span>
-  </header>
+    <div class="hero-date">26.05.16 목요일 · 숏폼 분석</div>
+    <div class="hero-title">공유가 저장을<br><em>넘어섰어요</em></div>
 
-  <div class="content" style="padding-top:12px;">
+    <!-- 바이럴 확산 네트워크 그래픽 -->
+    <div class="hero-gfx">
+      <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Ripple rings from center -->
+        <circle cx="80" cy="80" r="22" stroke="#0055FF" stroke-width="1.5" class="r1"/>
+        <circle cx="80" cy="80" r="22" stroke="#0055FF" stroke-width="1" class="r2"/>
+        <!-- Connection lines -->
+        <line x1="80" y1="80" x2="136" y2="30" stroke="#0055FF" stroke-width="1.5" opacity="0.22" class="cl"/>
+        <line x1="80" y1="80" x2="148" y2="108" stroke="#0055FF" stroke-width="1.4" opacity="0.18" class="cl" style="animation-delay:.5s"/>
+        <line x1="80" y1="80" x2="22" y2="40" stroke="#0055FF" stroke-width="1.2" opacity="0.16" class="cl" style="animation-delay:1s"/>
+        <line x1="80" y1="80" x2="16" y2="120" stroke="#0055FF" stroke-width="1" opacity="0.12" class="cl" style="animation-delay:.3s"/>
+        <line x1="80" y1="80" x2="94" y2="154" stroke="#0055FF" stroke-width="1" opacity="0.10" class="cl" style="animation-delay:1.5s"/>
+        <!-- Outer nodes -->
+        <circle cx="136" cy="30" r="14" fill="#0055FF" opacity="0.65" class="cn1"/>
+        <circle cx="148" cy="108" r="11" fill="#0055FF" opacity="0.50" class="cn2"/>
+        <circle cx="22" cy="40" r="9" fill="#0055FF" opacity="0.40" class="cn3"/>
+        <circle cx="16" cy="120" r="7" fill="#0055FF" opacity="0.28" class="cn4"/>
+        <circle cx="94" cy="154" r="5" fill="#0055FF" opacity="0.20" class="cn5"/>
+        <!-- Center node -->
+        <circle cx="80" cy="80" r="23" fill="#0055FF" class="c-center"/>
+        <!-- Share / upload icon (white) -->
+        <path d="M80 90 L80 72" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M75 77 L80 71 L85 77" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M73 90 Q73 94 77 94 L83 94 Q87 94 87 90" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
 
-    <!-- ① 합산 -->
-    <div class="card">
-      <div class="sec-label">이번 주 최종 성과</div>
-      <span class="hero-badge">🔥 2026년 단일 릴스 최고 공유</span>
-      <div class="hero-number">17,328</div>
-      <div class="hero-label">합산 조회수 (IG + YT)</div>
-      <div class="kpi-grid">
-        <div class="kpi-item">
-          <div class="kpi-val ig">1.6만</div>
-          <div class="kpi-key">IG 조회수</div>
+    <!-- 핵심 KPI 카드 -->
+    <div class="hero-card">
+      <div class="hc-label">합산 조회수</div>
+      <div class="hc-num">17,328</div>
+      <div class="hc-div"></div>
+      <div class="hc-row">
+        <div class="hc-ico">🔥</div>
+        <span>IG 공유 96회 · 팔로우 +20명</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="summary">요약</button>
+    <button class="tab-btn" data-tab="youtube">유튜브</button>
+    <button class="tab-btn" data-tab="instagram">인스타그램</button>
+  </div>
+
+  <!-- 요약 탭 -->
+  <div class="tab-panel active" id="tab-summary">
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#FFF3E0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3h8v9a4 4 0 01-8 0V3z"/><path d="M5 5H3a2 2 0 002 4h3M19 5h2a2 2 0 01-2 4h-3"/>
+              <path d="M12 15v3M9 21h6"/>
+            </svg>
+          </div>
+          <span class="b-name">이번 주 최고 성과</span>
         </div>
-        <div class="kpi-item">
-          <div class="kpi-val">1,328</div>
-          <div class="kpi-key">YT 조회수</div>
+        <div class="b-quote">
+          <div class="b-desc">이전 주 합산(3,293) 대비</div>
+          <div class="b-big">+526%</div>
+          <div class="b-sub">IG 단독 1.6만 · YT 1,328 · 합산 17,328</div>
         </div>
-        <div class="kpi-item">
-          <div class="kpi-val blue">96</div>
-          <div class="kpi-key">공유 🔥</div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#EBF1FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0055FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 15V4M8 8l4-4 4 4"/>
+              <path d="M7 12H4a1 1 0 00-1 1v6a1 1 0 001 1h16a1 1 0 001-1v-6a1 1 0 00-1-1h-3"/>
+            </svg>
+          </div>
+          <span class="b-name">바이럴 신호</span>
         </div>
-        <div class="kpi-item">
-          <div class="kpi-val green">+20</div>
-          <div class="kpi-key">팔로우 전환</div>
+        <div class="b-quote">
+          <div class="b-desc">공유 > 저장 > 좋아요 순서 — 이례적 확산</div>
+          <div class="b-big">공유 96회</div>
+          <div class="b-sub">2026년 단일 릴스 최고치 · 저장 67 · 좋아요 54</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#E8F5EC">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0DAE50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="7" r="4"/><path d="M3 20c0-3.5 2.7-6 6-6M17 14v6M14 17h6"/>
+            </svg>
+          </div>
+          <span class="b-name">팔로워 전환</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">비팔로워 99.4% 유입 · 이 릴스 단독</div>
+          <div class="b-big">+20명</div>
+          <div class="b-sub">전환율 약 10.7% · 누적 200명대 진입</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#F0EEFF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B4FE9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6M10 21h4"/>
+              <path d="M12 2a7 7 0 00-4 12.74V17a1 1 0 001 1h6a1 1 0 001-1v-2.26A7 7 0 0012 2z"/>
+            </svg>
+          </div>
+          <span class="b-name">다음 영상 방향</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">"검증된 결과 + 놀라운 사실" 구조 유지</div>
+          <div class="b-big">소셜 프루프 반복</div>
+          <div class="b-sub">YT 제목은 선언형으로 A/B 테스트</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- ② Instagram -->
-    <div class="card">
-      <div class="plat-header">
-        <div class="plat-dot" style="background:var(--ig)"></div>
-        <span class="plat-name">Instagram Reels</span>
-        <span class="plat-sub">현시점 기준</span>
-      </div>
-      <div class="big-stat">
-        <span class="big-num" style="color:var(--ig)">1.6만</span>
-      </div>
-      <div class="big-sub">조회수 · 도달 1.3만</div>
-
-      <div class="metric-list">
-        <div class="metric-row">
-          <span class="m-key">비팔로워 유입</span>
-          <span class="m-val green">99.4%</span>
+  <!-- 유튜브 탭 -->
+  <div class="tab-panel" id="tab-youtube">
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#FFE8E8">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M10 8l6 4-6 4V8z" fill="#FF3B30" opacity="0.85" stroke="none"/>
+            </svg>
+          </div>
+          <span class="b-name">조회수</span>
         </div>
-        <div class="metric-row">
-          <span class="m-key">공유</span>
-          <span class="m-val blue">96 🔥</span>
-        </div>
-        <div class="metric-row">
-          <span class="m-key">저장</span>
-          <span class="m-val blue">67</span>
-        </div>
-        <div class="metric-row">
-          <span class="m-key">좋아요</span>
-          <span class="m-val">54</span>
-        </div>
-        <div class="metric-row">
-          <span class="m-key">팔로우 전환</span>
-          <span class="m-val green">+20명</span>
-        </div>
-        <div class="metric-row">
-          <span class="m-key">참여한 계정</span>
-          <span class="m-val">187</span>
+        <div class="b-quote">
+          <div class="b-desc">채널 평균 대비 72회 낮음 — 알고리즘 성장 중</div>
+          <div class="b-big">1,328회</div>
+          <div class="b-sub">구독자 +1명 · Shorts 피드 알고리즘 노출</div>
         </div>
       </div>
-
-      <div class="divider"></div>
-      <p style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:8px;">비팔로워 도달 비율</p>
-      <div class="prog-item">
-        <div class="prog-bg">
-          <div class="prog-fill" style="width:99.4%;background:linear-gradient(90deg,var(--ig),#E1306C)"></div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#EBF1FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="13" width="4" height="8" rx="1" fill="#0055FF" opacity="0.3"/>
+              <rect x="10" y="8" width="4" height="13" rx="1" fill="#0055FF" opacity="0.6"/>
+              <rect x="17" y="3" width="4" height="18" rx="1" fill="#0055FF"/>
+            </svg>
+          </div>
+          <span class="b-name">트래픽 소스</span>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:4px;">
-          <span style="font-size:11px;color:var(--t3)">팔로워 0.6%</span>
-          <span style="font-size:11px;font-weight:700;color:var(--ig)">비팔로워 99.4%</span>
-        </div>
-      </div>
-
-      <div class="insight">
-        공유(96) > 저장(67) > 좋아요(54) 순서. <strong>정보형 + 공유형 동시 작동.</strong> "단어"라는 주제가 수험생·학부모 네트워크를 타고 확산. 공유가 저장을 넘는 릴스는 이례적.
-      </div>
-    </div>
-
-    <!-- ③ YouTube -->
-    <div class="card">
-      <div class="plat-header">
-        <div class="plat-dot" style="background:var(--yt)"></div>
-        <span class="plat-name">YouTube Shorts</span>
-        <span class="plat-sub">현시점 기준</span>
-      </div>
-      <div class="big-stat">
-        <span class="big-num" style="color:var(--yt)">1,328</span>
-      </div>
-      <div class="big-sub">조회수</div>
-
-      <div class="metric-list">
-        <div class="metric-row">
-          <span class="m-key">구독자 변화</span>
-          <span class="m-val green">+1명</span>
-        </div>
-        <div class="metric-row">
-          <span class="m-key">채널 평균 대비</span>
-          <span class="m-val" style="color:#D97706">72회 낮음</span>
-        </div>
-        <div class="metric-row">
-          <span class="m-key">시청 지속률</span>
-          <span class="m-val" style="color:var(--t3)">5/18 체크 예정</span>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-      <p style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:10px;">트래픽 소스</p>
-      <div class="prog-item">
-        <div class="prog-top"><span>Shorts 피드</span><span class="prog-pct">96.2%</span></div>
-        <div class="prog-bg"><div class="prog-fill" style="width:96.2%;background:var(--yt)"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-top"><span>YouTube 검색</span><span class="prog-pct">1.5%</span></div>
-        <div class="prog-bg"><div class="prog-fill" style="width:1.5%;background:var(--t3)"></div></div>
-      </div>
-      <div class="prog-item">
-        <div class="prog-top"><span>탐색 기능</span><span class="prog-pct">1.4%</span></div>
-        <div class="prog-bg"><div class="prog-fill" style="width:1.4%;background:var(--t3)"></div></div>
-      </div>
-      <div class="prog-item" style="margin-bottom:0">
-        <div class="prog-top"><span>기타 / 외부</span><span class="prog-pct">0.7%</span></div>
-        <div class="prog-bg"><div class="prog-fill" style="width:0.7%;background:var(--t3)"></div></div>
-      </div>
-    </div>
-
-    <!-- ④ 콘텐츠 -->
-    <div class="card">
-      <div class="sec-label">Content</div>
-      <p style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px;line-height:1.4">
-        18년 영어 강사가 장담하는 1등급 비결 1가지 📖
-      </p>
-      <p style="font-size:12px;color:var(--t2);margin-bottom:14px">YouTube 제목</p>
-      <div style="background:var(--div);height:1px;margin-bottom:14px"></div>
-      <p style="font-size:13px;font-weight:700;color:var(--ig);margin-bottom:8px">"고3 절반이 2등급, 신문에 보도!" · "선생님이 시킨 건 이거 하나였다!"</p>
-      <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Instagram 썸네일 자막</p>
-      <div style="background:var(--bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px;font-size:13px;color:var(--t1);line-height:1.8">
-        고3 절반 이상 2등급 → 학교 신문 보도<br>
-        방법은 단 하나 — <strong style="color:var(--blue)">매 수업마다 단어 테스트</strong><br>
-        6개월 후 전원 등급 상승<br>
-        18년 경력의 결론: 단어만 하면 영어는 끝
-      </div>
-    </div>
-
-    <!-- ⑤ 이전 대비 -->
-    <div class="card">
-      <div class="sec-label">vs 이전 영상 비교</div>
-      <table class="cmp-table">
-        <thead>
-          <tr>
-            <th>영상</th><th>IG</th><th>YT</th><th>합산</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="highlight">
-            <td>0516 ★</td>
-            <td style="color:var(--ig)">16,000</td>
-            <td style="color:var(--yt)">1,328</td>
-            <td style="color:var(--blue)">17,328</td>
-          </tr>
-          <tr>
-            <td>0509 (5h)</td><td>2,266</td><td>1,027</td><td>3,293</td>
-          </tr>
-          <tr>
-            <td>0404 연세대</td><td>—</td><td>3,553</td><td>3,553+</td>
-          </tr>
-          <tr>
-            <td>0217 폰 없애면</td><td>—</td><td>4,879</td><td>4,879+</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="insight">
-        0509 5시간 기준 3,293 대비 <strong>526% 수준.</strong> IG 단독 16,000은 0509 IG 2,266 대비 706%. 공유 96은 단일 릴스 기준 최고치.
-      </div>
-    </div>
-
-    <!-- ⑥ 핵심 인사이트 -->
-    <div class="card">
-      <div class="sec-label">Key Insights</div>
-      <div class="action-row">
-        <div class="action-num" style="background:#FFF0F0;color:var(--red)">🔥</div>
-        <div>
-          <div class="action-title">공유 96 — 정보형 + 공유형 동시 작동</div>
-          <div class="action-desc">공유(96) > 저장(67) > 좋아요(54). "단어"라는 공감 주제 + "신문 보도" 소셜 프루프 조합이 수험생·학부모 네트워크를 타고 확산. 이 공식 반복 적용할 것.</div>
-        </div>
-      </div>
-      <div class="action-row">
-        <div class="action-num">2</div>
-        <div>
-          <div class="action-title">팔로우 +20 — 단일 릴스 높은 전환율</div>
-          <div class="action-desc">팔로워 ~212명 기준 이 릴스로 +20명. 전환율 약 10.7%. 0509 이후 계속 누적. 200명대 진입 확인.</div>
-        </div>
-      </div>
-      <div class="action-row">
-        <div class="action-num">3</div>
-        <div>
-          <div class="action-title">IG vs YT 12배 격차 구조 확인</div>
-          <div class="action-desc">IG 16,000 vs YT 1,328. IG 썸네일 소셜 프루프가 압도적. YT는 설명형 제목 → CTR 낮지만 성장 중. 두 플랫폼 각각 다르게 최적화 필요.</div>
-        </div>
-      </div>
-      <div class="action-row">
-        <div class="action-num" style="background:#E8FAF2;color:var(--green)">→</div>
-        <div>
-          <div class="action-title">다음 영상 — 공유 유발 + 소셜 프루프 반복</div>
-          <div class="action-desc">"(검증된 결과) + (놀라운 사실) + (모두가 아는 진실 뒤집기)" 구조 유지. YT 제목은 선언형으로 A/B 테스트.</div>
+        <div class="b-quote">
+          <div class="b-desc">Shorts 피드에서 대부분 유입</div>
+          <div class="b-big">Shorts 피드 96.2%</div>
+          <div class="b-sub">검색 1.5% · 탐색 1.4% · 외부 0.7%</div>
         </div>
       </div>
     </div>
+  </div>
 
-  </div><!-- /content -->
-</div><!-- /app -->
+  <!-- 인스타그램 탭 -->
+  <div class="tab-panel" id="tab-instagram">
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#F5E8FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A133C8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <span class="b-name">조회수 & 도달</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">도달 1.3만 · 참여 계정 187명</div>
+          <div class="b-big">조회 1.6만</div>
+          <div class="b-sub">비팔로워 유입 99.4% — 거의 전부 신규</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#EBF1FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0055FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 15V4M8 8l4-4 4 4"/>
+              <path d="M7 12H4a1 1 0 00-1 1v6a1 1 0 001 1h16a1 1 0 001-1v-6a1 1 0 00-1-1h-3"/>
+            </svg>
+          </div>
+          <span class="b-name">바이럴 지표</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">"단어" 주제 + "신문 보도" 소셜 프루프 조합</div>
+          <div class="b-big">공유 96</div>
+          <div class="b-sub">공유 > 저장(67) — 정보형 + 공유형 동시 작동</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#E8F5EC">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0DAE50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="7" r="4"/><path d="M3 20c0-3.5 2.7-6 6-6M17 14v6M14 17h6"/>
+            </svg>
+          </div>
+          <span class="b-name">팔로워 전환</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">릴스 단독 · 비팔로워 99.4%</div>
+          <div class="b-big">+20명</div>
+          <div class="b-sub">전환율 약 10.7% — 높은 콘텐츠 신뢰도</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<script>
-/* scroll-in for floating cards */
-const obs = new IntersectionObserver(
-  entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
-  { threshold: 0.06 }
-);
-document.querySelectorAll('.card').forEach((c, i) => {
-  c.style.transitionDelay = `${i * 0.05}s`;
-  obs.observe(c);
-});
-</script>
+</div><!-- /page -->
 
 <!-- STICKY CTA -->
 <div class="cta-bar">
-  <!-- TODO: 아래 href를 0516 영상 YouTube Shorts URL로 교체 -->
-  <a class="cta-btn" href="https://www.youtube.com/@jiwoo_english/shorts" target="_blank" rel="noopener">
-    <img class="yt-logo"
-         src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png"
-         alt="YouTube">
-    숏폼 보러가기
+  <a class="cta-btn cta-yt" href="YOUTUBE_SHARE_LINK_HERE" target="_blank" rel="noopener">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+      <path d="M10 8l6 4-6 4V8z" fill="white"/>
+    </svg>
+    유튜브에서 보기
+  </a>
+  <a class="cta-btn cta-ig" href="INSTAGRAM_REEL_LINK_HERE" target="_blank" rel="noopener">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuH7c5cLpGehi0b4iQk90fXUzC9p7Ebla13w&s" alt="Instagram">
+    릴스 보기
   </a>
 </div>
 
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
