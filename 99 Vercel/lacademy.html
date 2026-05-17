@@ -125,11 +125,11 @@
       padding: 4px 0 40px;
     }
 
-    /* ── TOSS CARD — 래퍼런스 스타일 ── */
+    /* ── TOSS CARD — 배경 일러스트 + 텍스트 하단 좌측 ── */
     .toss-card {
       background: var(--card);
       border-radius: 20px;
-      padding: 20px 20px 16px;
+      padding: 18px 20px;
       margin: 0 16px 10px;
       box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
       cursor: pointer;
@@ -137,6 +137,12 @@
       transform: translateY(14px);
       transition: opacity 0.32s ease, transform 0.32s ease, box-shadow 0.15s;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
     }
     .toss-card.visible { opacity: 1; transform: translateY(0); }
     .toss-card:active {
@@ -144,44 +150,51 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
-    /* Card top: text left + illustration right */
-    .tc-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 18px;
+    /* 배경 일러스트 — 우측, 크게, 연하게 */
+    .tc-bg-illus {
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 130px;
+      height: 130px;
+      opacity: 0.09;
+      pointer-events: none;
     }
-    .tc-content { flex: 1; min-width: 0; }
+    .tc-bg-illus svg { width: 130px !important; height: 130px !important; }
 
-    .tc-illus {
-      flex-shrink: 0;
-      width: 88px; height: 88px;
+    /* 텍스트 — 하단 좌측 */
+    .tc-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .tc-sub {
       font-size: 11px; font-weight: 700; color: var(--blue);
-      letter-spacing: -0.1px; margin-bottom: 8px;
+      letter-spacing: -0.1px;
     }
     .tc-title {
       font-size: 16px; font-weight: 700; color: var(--t1);
       letter-spacing: -0.4px; line-height: 1.38;
-      margin-bottom: 7px;
     }
     .tc-body {
       font-size: 12px; color: var(--t2);
       line-height: 1.6; letter-spacing: -0.1px;
     }
 
-    /* Card footer: timeAgo left + arrow right — NO divider */
-    .tc-footer {
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .tc-date { font-size: 12px; color: var(--t3); }
+    /* 화살표 — 우측 하단 고정 */
     .tc-arrow {
-      width: 32px; height: 32px; border-radius: 50%;
+      position: absolute;
+      bottom: 16px;
+      right: 18px;
+      width: 30px; height: 30px; border-radius: 50%;
       background: var(--blue-bg);
       display: flex; align-items: center; justify-content: center;
-      color: var(--blue); flex-shrink: 0;
+      color: var(--blue);
+      z-index: 2;
     }
 
     /* ── EMPTY ── */
@@ -327,22 +340,17 @@ if (!REPORTS.length) {
     const card = document.createElement('div');
     card.className = 'toss-card';
     card.innerHTML = `
-      <div class="tc-top">
-        <div class="tc-content">
-          <div class="tc-sub">${r.date} ${r.label} · ${r.sub}</div>
-          <div class="tc-title">${r.title}</div>
-          <div class="tc-body">${r.body}</div>
-        </div>
-        <div class="tc-illus">${r.svg}</div>
+      <div class="tc-bg-illus">${r.svg}</div>
+      <div class="tc-content">
+        <div class="tc-sub">${r.date} ${r.label} · ${r.sub}</div>
+        <div class="tc-title">${r.title}</div>
+        <div class="tc-body">${r.body}</div>
       </div>
-      <div class="tc-footer">
-        <span class="tc-date">${r.timeAgo}</span>
-        <div class="tc-arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <path d="M9 18l6-6-6-6"/>
-          </svg>
-        </div>
+      <div class="tc-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
       </div>
     `;
     card.addEventListener('click', () => window.open(`./${r.path}`, '_self'));
