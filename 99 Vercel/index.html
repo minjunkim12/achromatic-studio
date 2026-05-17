@@ -1,985 +1,567 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Achromatic." />
   <title>Achromatic. Studio</title>
   <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="icon" type="image/png" href="./favicon.png" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <style>
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       DESIGN TOKENS — OKLCH color space
-       L: lightness 0-100%, C: chroma 0-0.4, H: hue 0-360
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     :root {
-      /* Brand blue — Toss Blue equivalent */
-      --blue:       oklch(45% 0.28 264);
-      --blue-bg:    oklch(95% 0.04 264);
-      --blue-light: oklch(97% 0.02 264);
-
-      /* Text hierarchy (4 levels) */
-      --tx-900: oklch(15% 0.02 264);   /* headings */
-      --tx-700: oklch(35% 0.03 264);   /* body */
-      --tx-500: oklch(55% 0.03 264);   /* caption / desc */
-      --tx-400: oklch(68% 0.02 264);   /* meta / placeholder */
-
-      /* Surface elevation layers */
-      --bg-page:    oklch(97% 0.005 264);  /* app background */
-      --bg-surface: oklch(100% 0 0);       /* card / sheet */
-      --bg-raised:  oklch(99% 0.005 264);  /* elevated card */
-      --bg-100:     oklch(94% 0.01 264);   /* subtle fill */
-
-      /* Border */
-      --line: oklch(91% 0.01 264);
-
-      /* Multi-layer color shadows (blue-tinted, not gray) */
-      --shadow-1:    0 1px 4px  oklch(30% 0.08 264 / 0.06);
-      --shadow-2:    0 4px 16px oklch(30% 0.12 264 / 0.10);
-      --shadow-3:    0 8px 32px oklch(30% 0.15 264 / 0.16);
-      --shadow-blue: 0 4px 20px oklch(45% 0.28 264 / 0.22);
-
-      --radius:    16px;
-      --radius-sm: 12px;
+      --blue: #0055FF;
+      --bg: #F2F4F7;
+      --card: #FFFFFF;
+      --t1: #191919;
+      --t2: #8B95A1;
+      --t3: #C5CBD3;
+      --div: #F0F2F5;
+      --bdr: #E5E8EC;
     }
 
-    [data-theme="dark"] {
-      --tx-900: oklch(95% 0.01 264);
-      --tx-700: oklch(80% 0.02 264);
-      --tx-500: oklch(62% 0.025 264);
-      --tx-400: oklch(50% 0.02 264);
-
-      --bg-page:    oklch(14% 0.025 264);
-      --bg-surface: oklch(19% 0.028 264);
-      --bg-raised:  oklch(23% 0.028 264);
-      --bg-100:     oklch(22% 0.028 264);
-
-      --line: oklch(28% 0.025 264);
-
-      --shadow-1:    0 1px 4px  oklch(0% 0 0 / 0.35);
-      --shadow-2:    0 4px 16px oklch(0% 0 0 / 0.45);
-      --shadow-3:    0 8px 32px oklch(0% 0 0 / 0.55);
-      --shadow-blue: 0 4px 20px oklch(45% 0.28 264 / 0.30);
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       RESET
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-page);
-      color: var(--tx-900);
-      min-height: 100vh;
+      background: #D8DCE2;
       -webkit-font-smoothing: antialiased;
+      min-height: 100dvh;
     }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TDS: NAVIGATION BAR
-       — 56px height, backdrop-blur, underline tab indicator
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .nav-bar {
+    /* ── APP SHELL ── */
+    .app {
+      max-width: 390px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
       position: sticky; top: 0; z-index: 100;
-      background: oklch(100% 0 0 / 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--line);
+      background: var(--card);
+      border-bottom: 1px solid var(--div);
       height: 56px;
+      padding: 0 12px 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
     }
-    [data-theme="dark"] .nav-bar {
-      background: oklch(19% 0.028 264 / 0.88);
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: #191919; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
     }
-    .nav-bar-inner {
-      max-width: 1200px; margin: 0 auto;
-      padding: 0 24px; height: 100%;
-      display: flex; align-items: center;
+    .logo-word {
+      font-size: 17px; font-weight: 800;
+      color: var(--t1); letter-spacing: -0.5px;
     }
-
-    /* Logo */
-    .nav-logo {
-      display: flex; align-items: center; gap: 8px;
-      text-decoration: none; flex-shrink: 0;
-      margin-right: 8px; cursor: pointer;
-    }
-    .nav-logo img { width: 24px; height: 24px; border-radius: 7px; }
-    .nav-logo-text {
-      font-size: 16px; font-weight: 800; color: var(--tx-900);
-      letter-spacing: -0.4px;
-    }
-    .nav-logo-text em { color: var(--blue); font-style: normal; }
-
-    /* Desktop tabs — underline indicator (TDS Tab style) */
-    .nav-tabs {
-      display: flex; align-items: stretch;
-      flex: 1; height: 100%;
-    }
-    .nav-tab {
-      position: relative;
-      display: flex; align-items: center;
-      padding: 0 14px; height: 100%;
+    .top-btn {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
       background: none; border: none; cursor: pointer;
-      font-family: inherit; font-size: 15px; font-weight: 500;
-      color: var(--tx-500);
-      transition: color 0.18s;
-      white-space: nowrap;
+      border-radius: 50%; color: var(--t2);
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.1s, color 0.1s;
     }
-    /* Underline indicator — springs in with overshoot */
-    .nav-tab::after {
-      content: '';
-      position: absolute; bottom: 0; left: 10px; right: 10px;
-      height: 2px; border-radius: 2px 2px 0 0;
-      background: var(--blue);
-      transform: scaleX(0);
-      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .nav-tab.active { color: var(--tx-900); font-weight: 700; }
-    .nav-tab.active::after { transform: scaleX(1); }
-    .nav-tab:hover:not(.active) { color: var(--tx-700); }
+    .top-btn:active { background: var(--div); color: var(--t1); }
 
-    /* Right actions */
-    .nav-actions { margin-left: auto; display: flex; align-items: center; }
-    .icon-btn {
-      width: 36px; height: 36px; border: none; background: none;
-      cursor: pointer; border-radius: 8px;
+    /* ── PAGES ── */
+    .page { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+    .page.on { display: flex; }
+
+    /* ── CONTENT SCROLL ── */
+    .content {
+      flex: 1; overflow-y: auto;
+      padding: 10px 16px calc(64px + env(safe-area-inset-bottom));
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    /* ── SECTION CARD ── */
+    .s-card {
+      background: var(--card); border-radius: 16px;
+      overflow: hidden;
+      animation: up 0.22s ease both;
+    }
+    .s-head {
+      padding: 18px 20px 0;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    /* Claude icon container in section header */
+    .s-brand {
+      width: 36px; height: 36px;
+      background: #FFF0EB;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--tx-500); transition: all 0.15s;
+      flex-shrink: 0;
     }
-    .icon-btn:hover { background: var(--bg-100); color: var(--tx-900); }
-    .icon-btn svg { width: 18px; height: 18px; }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       MAIN LAYOUT
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    main {
-      max-width: 1200px; margin: 0 auto;
-      padding: 0 24px 100px;
+    .s-label {
+      font-size: 12px; font-weight: 500;
+      color: var(--t2); margin-bottom: 2px; letter-spacing: -0.1px;
     }
-    .tab-panel { display: none; padding-top: 40px; }
-    .tab-panel.active { display: block; }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TDS: TOP COMPONENT
-       — page/section header with optional right slot
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .tds-top {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .tds-top-title {
-      font-size: 20px; font-weight: 700; color: var(--tx-900);
-      letter-spacing: -0.3px; margin-bottom: 3px;
-    }
-    .tds-top-sub { font-size: 14px; color: var(--tx-500); line-height: 1.5; }
-    .tds-top-action {
-      flex-shrink: 0; display: flex; align-items: center; gap: 2px;
-      font-size: 14px; font-weight: 500; color: var(--tx-500);
-      background: none; border: none; cursor: pointer; font-family: inherit;
-      padding: 4px 0; margin-top: 2px; transition: color 0.15s;
-    }
-    .tds-top-action:hover { color: var(--tx-900); }
-    .tds-top-action svg { width: 14px; height: 14px; }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       HERO CARD
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .hero-card {
-      background: var(--bg-surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-2);
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 52% 48%;
-      min-height: 380px;
-      margin-bottom: 52px;
-      animation: fadeUp 0.4s ease both;
-    }
-    .hero-visual {
-      position: relative;
-      background: linear-gradient(145deg,
-        oklch(22% 0.18 264) 0%,
-        oklch(42% 0.25 264) 45%,
-        oklch(62% 0.20 264) 80%,
-        oklch(76% 0.14 264) 100%
-      );
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 28px; overflow: hidden;
-    }
-    /* Subtle light orb overlays */
-    .hero-visual::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 72% 22%, oklch(100% 0 0 / 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 18% 78%, oklch(100% 0 0 / 0.05) 0%, transparent 45%);
-    }
-    .hero-deco {
-      position: absolute; top: 18px; right: 18px;
-      font-size: 76px; opacity: 0.13; line-height: 1;
-      pointer-events: none; user-select: none;
-    }
-    .hero-badge {
-      position: relative;
-      display: inline-flex; align-items: center;
-      font-size: 11px; font-weight: 700;
-      color: oklch(100% 0 0 / 0.72);
-      letter-spacing: 0.6px; text-transform: uppercase;
-      background: oklch(100% 0 0 / 0.12);
-      border-radius: 100px; padding: 4px 10px;
-      margin-bottom: 12px; width: fit-content;
-    }
-    .hero-title {
-      position: relative;
-      font-size: 24px; font-weight: 800;
-      color: #ffffff; line-height: 1.35;
-      letter-spacing: -0.5px; margin-bottom: 8px;
-    }
-    .hero-sub {
-      position: relative;
-      font-size: 13px; color: oklch(100% 0 0 / 0.65); line-height: 1.5;
-    }
-    .hero-body {
-      padding: 32px 36px;
-      display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .hero-body-text {
-      font-size: 15px; color: var(--tx-700); line-height: 1.8;
-    }
-    .hero-body-text p { margin-bottom: 14px; }
-    .hero-body-text p:last-child { margin-bottom: 0; }
-    .hero-hl { color: oklch(42% 0.18 195); } /* teal accent */
-    .hero-h2 {
-      font-size: 17px; font-weight: 700; color: var(--tx-900);
-      margin: 16px 0 6px; letter-spacing: -0.2px;
-    }
-    .hero-cta { margin-top: 24px; }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TDS: BUTTON SYSTEM
-       fill = solid bg / weak = tinted bg
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    /* fill — primary (blue) */
-    .btn-fill-primary {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--blue); color: #fff;
-      border: none; border-radius: var(--radius-sm);
-      padding: 13px 26px;
-      font-family: inherit; font-size: 15px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      transition: opacity 0.15s, box-shadow 0.15s;
-      box-shadow: var(--shadow-blue);
-    }
-    .btn-fill-primary:hover { opacity: 0.88; }
-
-    /* fill — dark */
-    .btn-fill-dark {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--tx-900); color: var(--bg-surface);
-      border: none; border-radius: var(--radius-sm);
-      padding: 13px 26px;
-      font-family: inherit; font-size: 15px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .btn-fill-dark:hover { opacity: 0.78; }
-
-    /* fill — secondary (gray) */
-    .btn-fill-secondary {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--bg-100); color: var(--tx-700);
-      border: none; border-radius: var(--radius-sm);
-      padding: 13px 22px;
-      font-family: inherit; font-size: 15px; font-weight: 600;
-      cursor: pointer; transition: background 0.15s;
-    }
-    .btn-fill-secondary:hover { background: var(--line); }
-
-    /* weak — primary (blue tint) */
-    .btn-weak-primary {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--blue-bg); color: var(--blue);
-      border: none; border-radius: var(--radius-sm);
-      padding: 13px 26px;
-      font-family: inherit; font-size: 15px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      transition: opacity 0.15s;
-    }
-    .btn-weak-primary:hover { opacity: 0.78; }
-
-    /* text button */
-    .btn-text {
-      display: inline-flex; align-items: center; gap: 3px;
-      background: none; border: none; font-family: inherit;
-      font-size: 14px; font-weight: 500; color: var(--tx-500);
-      cursor: pointer; padding: 6px 0; transition: color 0.15s;
-    }
-    .btn-text:hover { color: var(--tx-900); }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TDS: BADGE SYSTEM
-       fill × 5 semantic colors, weak × 5
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .badge {
-      display: inline-flex; align-items: center;
-      font-size: 12px; font-weight: 600;
-      padding: 3px 10px; border-radius: 100px;
-      white-space: nowrap;
-    }
-    .badge-blue  { color: var(--blue);             background: var(--blue-bg);           }
-    .badge-teal  { color: oklch(42% 0.18 195);      background: oklch(95% 0.04 195);      }
-    .badge-green { color: oklch(40% 0.18 145);      background: oklch(95% 0.04 145);      }
-    .badge-red   { color: oklch(48% 0.22 25);       background: oklch(96% 0.04 25);       }
-    .badge-gray  { color: var(--tx-500);            background: var(--bg-100);            }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       SERIES CARDS — Asset Frame pattern
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .series-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    .series-card {
-      background: var(--bg-surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-1);
-      overflow: hidden; cursor: pointer;
-      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.22s ease,
-                  border-color 0.22s ease;
-      animation: fadeUp 0.35s ease both;
-    }
-    .series-card:nth-child(1) { animation-delay: .05s; }
-    .series-card:nth-child(2) { animation-delay: .10s; }
-    .series-card:nth-child(3) { animation-delay: .15s; }
-    .series-card:nth-child(4) { animation-delay: .20s; }
-    .series-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-2);
+    .s-title {
+      font-size: 18px; font-weight: 800;
+      color: var(--t1); letter-spacing: -0.6px;
     }
 
-    /* Cover area with gradient + Asset Frame */
-    .series-cover {
-      position: relative; overflow: hidden;
-      padding: 18px 18px 14px;
-      min-height: 86px;
-      display: flex; align-items: flex-start; justify-content: space-between;
-    }
-    /* Asset Frame — frosted glass icon container */
-    .series-asset {
-      width: 52px; height: 52px; border-radius: 14px;
-      background: oklch(100% 0 0 / 0.22);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
-      box-shadow: 0 2px 8px oklch(0% 0 0 / 0.18);
-      position: relative; z-index: 1; flex-shrink: 0;
-    }
-    /* Background decorative large emoji */
-    .series-deco {
-      position: absolute; right: 10px; bottom: -6px;
-      font-size: 58px; opacity: 0.09; line-height: 1;
-      user-select: none; pointer-events: none;
-    }
-
-    .series-body { padding: 0 18px 18px; }
-    .series-title {
-      font-size: 15px; font-weight: 700; color: var(--tx-900);
-      margin-bottom: 5px; line-height: 1.4;
-    }
-    .series-desc {
-      font-size: 13px; color: var(--tx-500); line-height: 1.55;
-      margin-bottom: 12px;
-      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       TDS: LIST ROW — results view
-       left: icon frame / content: title + desc / right: meta + chevron
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .list-container {
-      background: var(--bg-surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-1);
-      overflow: hidden;
-    }
-    .list-row {
+    /* ── LIST ROW ── */
+    .row {
       display: flex; align-items: center; gap: 14px;
-      padding: 16px 20px;
-      text-decoration: none;
-      transition: background 0.15s;
-      cursor: pointer;
-      border-bottom: 1px solid var(--line);
-      animation: fadeUp 0.3s ease both;
+      padding: 13px 20px;
+      border-top: 1px solid var(--div);
+      text-decoration: none; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.1s;
     }
-    .list-row:last-child { border-bottom: none; }
-    .list-row:hover { background: var(--bg-page); }
-    .list-row-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
+    .row:active { background: #FAFBFC; }
+    .row-ico {
+      width: 52px; height: 52px; border-radius: 14px;
+      flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-      box-shadow: var(--shadow-1);
+      font-size: 25px;
     }
-    .list-row-content { flex: 1; min-width: 0; }
-    .list-row-title {
-      font-size: 15px; font-weight: 600; color: var(--tx-900);
-      margin-bottom: 3px; line-height: 1.4;
-    }
-    .list-row-desc {
-      font-size: 13px; color: var(--tx-500); line-height: 1.4;
+    .row-copy { flex: 1; min-width: 0; }
+    .row-name {
+      font-size: 15px; font-weight: 600; color: var(--t1);
+      letter-spacing: -0.3px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .list-row-right {
-      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    .row-desc {
+      font-size: 12px; color: var(--t2); margin-top: 3px;
+      display: -webkit-box; -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1; overflow: hidden;
     }
-    .list-row-meta { font-size: 12px; color: var(--tx-400); }
-    .list-row-chevron { color: var(--tx-400); display: flex; }
-    .list-row-chevron svg { width: 14px; height: 14px; }
+    .row-date { font-size: 11px; color: var(--t3); margin-top: 3px; }
+    .row-btn {
+      flex-shrink: 0;
+      border: 1.5px solid var(--bdr); border-radius: 20px;
+      padding: 7px 15px;
+      font-size: 13px; font-weight: 600; color: var(--t1); background: white;
+      cursor: pointer; font-family: inherit; white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .row-btn:active { background: var(--bg); }
 
-    .empty-state {
-      text-align: center; padding: 56px 20px;
-      color: var(--tx-500); font-size: 15px; line-height: 1.6;
+    /* ── EMPTY ── */
+    .empty {
+      background: var(--card); border-radius: 16px;
+      padding: 56px 20px; text-align: center;
+      animation: up 0.22s ease both;
     }
-    .empty-icon { font-size: 40px; margin-bottom: 10px; }
+    .empty-ico { font-size: 40px; display: block; margin-bottom: 12px; }
+    .empty-h { font-size: 16px; font-weight: 700; color: var(--t1); margin-bottom: 6px; }
+    .empty-p { font-size: 14px; color: var(--t2); }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       POMODORO
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .pomo-wrap {
-      max-width: 460px; margin: 0 auto; text-align: center;
-    }
-    .pomo-modes {
-      display: inline-flex; background: var(--bg-100);
-      border-radius: 100px; padding: 4px; gap: 2px; margin-bottom: 44px;
-    }
-    .pomo-mode-btn {
-      background: none; border: none; font-family: inherit;
-      font-size: 14px; font-weight: 500; color: var(--tx-500);
-      padding: 8px 18px; border-radius: 100px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .pomo-mode-btn.active {
-      background: var(--bg-surface); color: var(--tx-900); font-weight: 600;
-      box-shadow: var(--shadow-1);
-    }
-    .pomo-ring-wrap {
-      position: relative; width: 220px; height: 220px;
-      margin: 0 auto 24px;
-    }
-    .pomo-ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-    .ring-bg { fill: none; stroke: var(--line); stroke-width: 7; }
-    .ring-prog {
-      fill: none; stroke-width: 7;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 1s linear, stroke 0.4s;
-    }
-    .pomo-center {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column;
+    /* ── AI PLACEHOLDER ── */
+    .placeholder {
+      flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
+      padding: 40px 32px calc(80px + env(safe-area-inset-bottom));
+      text-align: center;
     }
-    .pomo-time {
-      font-size: 52px; font-weight: 800; color: var(--tx-900);
-      letter-spacing: -2.5px; line-height: 1;
+    .ph-icon { font-size: 52px; margin-bottom: 20px; }
+    .ph-title {
+      font-size: 22px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.7px; margin-bottom: 10px;
     }
-    .pomo-mode-lbl {
-      font-size: 13px; color: var(--tx-400); margin-top: 6px; font-weight: 500;
+    .ph-desc { font-size: 14px; color: var(--t2); line-height: 1.7; letter-spacing: -0.1px; }
+    .ph-badge {
+      margin-top: 24px; display: inline-block;
+      background: var(--bg); border-radius: 20px;
+      padding: 7px 16px; font-size: 12px; font-weight: 600; color: var(--t2);
     }
-    .pomo-dots {
-      display: flex; gap: 6px; justify-content: center; margin-bottom: 24px;
-    }
-    .pomo-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--line); transition: background 0.3s;
-    }
-    .pomo-dot.done { background: var(--blue); }
-    .pomo-btns { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
-    .pomo-tip {
-      background: var(--blue-light);
-      border: 1px solid var(--blue-bg);
-      border-radius: var(--radius-sm);
-      padding: 16px 20px; text-align: left;
-    }
-    .pomo-tip-lbl {
-      font-size: 11px; font-weight: 700; color: var(--blue);
-      letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 5px;
-    }
-    .pomo-tip-txt { font-size: 14px; color: var(--tx-700); line-height: 1.6; }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       BOTTOM NAV (mobile only) — icon + label
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    .bottom-nav {
-      display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-      background: oklch(100% 0 0 / 0.9);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid var(--line);
-      padding: 6px 0 max(10px, env(safe-area-inset-bottom));
+    /* ── BOTTOM NAV ── */
+    .bot-nav {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 390px;
+      background: var(--card); border-top: 1px solid var(--div);
+      display: flex;
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+      z-index: 100;
     }
-    [data-theme="dark"] .bottom-nav {
-      background: oklch(19% 0.028 264 / 0.9);
+    .bot-btn {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 3px; padding: 10px 0 0;
+      font-family: inherit; font-size: 10px; font-weight: 500;
+      color: var(--t2); background: none; border: none;
+      cursor: pointer; letter-spacing: -0.2px;
+      -webkit-tap-highlight-color: transparent;
     }
-    .bottom-nav-inner { display: flex; justify-content: space-around; }
-    .tab-btn {
-      flex: 1; background: none; border: none; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      padding: 4px 0; font-family: inherit;
-      color: var(--tx-400); transition: color 0.18s;
-    }
-    .tab-btn svg { width: 22px; height: 22px; }
-    .tab-btn-lbl { font-size: 10px; font-weight: 500; }
-    .tab-btn.active { color: var(--blue); }
-    .tab-btn.active .tab-btn-lbl { font-weight: 700; }
+    .bot-btn.on { color: var(--blue); font-weight: 700; }
+    .bot-btn svg { width: 24px; height: 24px; }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       ANIMATION
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
+    /* ── LACADEMY BANNER ── */
+    .la-banner {
+      background: linear-gradient(150deg, #0040D0 0%, #0055FF 45%, #3A8AFF 100%);
+      border-radius: 20px;
+      padding: 20px 20px 18px;
+      text-decoration: none; cursor: pointer;
+      animation: up 0.22s ease both;
+      position: relative; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,85,255,0.28);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .la-banner:active { opacity: 0.92; transform: scale(0.99); }
+    .la-banner::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%; pointer-events: none;
+    }
+    .la-banner-chip {
+      display: inline-block;
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.18);
+      padding: 4px 11px; border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .la-banner-title {
+      font-size: 22px; font-weight: 900; color: #FFFFFF;
+      letter-spacing: -0.8px; line-height: 1.25; margin-bottom: 7px;
+    }
+    .la-banner-sub {
+      font-size: 12px; color: rgba(255,255,255,0.7);
+      letter-spacing: -0.1px; margin-bottom: 16px;
+    }
+    .la-banner-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+    .la-banner-date {
+      font-size: 11px; color: rgba(255,255,255,0.6);
+    }
+    .la-banner-cta {
+      font-size: 13px; font-weight: 700; color: #FFFFFF;
+      display: flex; align-items: center; gap: 3px;
+    }
+
+    @keyframes up {
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-       RESPONSIVE
-    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-    @media (max-width: 1024px) {
-      .series-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 768px) {
-      .nav-tabs { display: none; }
-      .bottom-nav { display: block; }
-      main { padding: 0 16px 88px; }
-      .nav-bar-inner { padding: 0 16px; }
-      .tab-panel { padding-top: 28px; }
-
-      .hero-card {
-        grid-template-columns: 1fr;
-        min-height: auto;
+    /* ── DESKTOP FRAME ── */
+    @media (min-width: 420px) {
+      body { display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+      .app {
+        border-radius: 22px; overflow: hidden;
+        height: calc(100vh - 48px); min-height: auto;
+        box-shadow: 0 16px 56px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.08);
       }
-      .hero-visual { min-height: 216px; padding: 24px; }
-      .hero-deco { font-size: 62px; }
-      .hero-title { font-size: 21px; }
-      .hero-body { padding: 24px 20px; }
-
-      /* Horizontal scroll strip on mobile */
-      .series-grid {
-        grid-template-columns: repeat(4, 172px);
-        overflow-x: auto; padding-bottom: 8px;
-        margin: 0 -16px;
-        padding-left: 16px; padding-right: 16px;
-        -ms-overflow-style: none; scrollbar-width: none;
-      }
-      .series-grid::-webkit-scrollbar { display: none; }
-      .series-card { min-width: 172px; }
-
-      .pomo-ring-wrap { width: 190px; height: 190px; }
-      .pomo-time { font-size: 44px; }
+      .bot-nav { border-radius: 0 0 22px 22px; }
     }
   </style>
 </head>
 <body>
+<div class="app">
 
-<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     TDS: NAVIGATION BAR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-<header class="nav-bar">
-  <div class="nav-bar-inner">
-    <a class="nav-logo" onclick="switchTab('newsletter')">
-      <img src="./apple-touch-icon.png" alt="Achromatic.">
-      <span class="nav-logo-text">Achromatic<em>.</em></span>
-    </a>
-
-    <nav class="nav-tabs">
-      <button class="nav-tab active" data-tab="newsletter" onclick="switchTab('newsletter')">뉴스레터</button>
-      <button class="nav-tab" data-tab="portfolio" onclick="switchTab('portfolio')">포모도로</button>
-      <button class="nav-tab" data-tab="results" onclick="switchTab('results')">결과물</button>
-    </nav>
-
-    <div class="nav-actions">
-      <button class="icon-btn" onclick="toggleDark()" title="다크모드 전환">
-        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M9 1.5V16.5M1.5 9H16.5M3.2 3.2l11.6 11.6M14.8 3.2L3.2 14.8"
+                stroke="white" stroke-width="2.2" stroke-linecap="round"/>
         </svg>
-        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </div>
+      <span class="logo-word">Achromatic.</span>
+    </div>
+    <button class="top-btn" onclick="location.reload()" aria-label="새로고침">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 4v6h-6"/>
+        <path d="M1 20v-6h6"/>
+        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- PAGE: 홈 -->
+  <div class="page on" id="page-home">
+    <div class="content" id="home-content"></div>
+  </div>
+
+  <!-- PAGE: 파일 -->
+  <div class="page" id="page-files">
+    <div class="content" id="files-content"></div>
+  </div>
+
+  <!-- PAGE: AI -->
+  <div class="page" id="page-ai">
+    <div class="placeholder">
+      <div class="ph-icon">
+        <!-- Spark / AI icon -->
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <rect width="52" height="52" rx="16" fill="#F0F4FF"/>
+          <path d="M26 12l2.5 8.5L37 23l-8.5 2.5L26 34l-2.5-8.5L15 23l8.5-2.5L26 12z"
+                fill="#0064FF" opacity="0.9"/>
+          <circle cx="36" cy="34" r="3" fill="#0064FF" opacity="0.4"/>
+          <circle cx="18" cy="36" r="2" fill="#0064FF" opacity="0.25"/>
         </svg>
-      </button>
-    </div>
-  </div>
-</header>
-
-<main>
-
-  <!-- ════════════════════════════════════════════════
-       TAB 1: 뉴스레터
-  ════════════════════════════════════════════════ -->
-  <div id="tab-newsletter" class="tab-panel active">
-
-    <!-- Hero Card — featured content -->
-    <div class="hero-card">
-      <div class="hero-visual">
-        <div class="hero-deco">🏦</div>
-        <div class="hero-badge">이 주의 픽</div>
-        <div class="hero-title">Accountex 2026,<br>런던 핀테크의 현장</div>
-        <div class="hero-sub">핀테크 중심에서 직접 보고 들은 것들</div>
       </div>
-      <div class="hero-body">
-        <div class="hero-body-text">
-          <p>Accountex 2026은 단순한 전시회가 아니었다. 회계·결제·세금 자동화가 어떻게 금융의 언어를 바꾸는지 확인하는 자리였다. <span class="hero-hl">오픈 뱅킹 API, AI 기반 세금 신고, 실시간 정산 인프라</span>가 한 자리에 모였다.</p>
-          <p>토스가 한국에서 만들어낸 변화를 유럽에서 어떻게 이식하는지, 현장에서 직접 파악했다.</p>
-          <div class="hero-h2">핀테크가 금융을 어떻게 바꾸는가</div>
-          <p style="color:var(--tx-400)">Stripe, Yapily, GoCardless… 글로벌 결제 인프라의 현재가 궁금하다면 아래 리포트를 확인해봐.</p>
-        </div>
-        <div class="hero-cta">
-          <a href="./accountex-2026-briefing.html" target="_blank" class="btn-fill-dark">이어서 읽기</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- TDS Top — section header -->
-    <div class="tds-top">
-      <div class="tds-top-text">
-        <div class="tds-top-title">오리지널 시리즈</div>
-        <div class="tds-top-sub">Achromatic. 이 직접 기록하는 콘텐츠</div>
-      </div>
-      <button class="tds-top-action">
-        전체 보기
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </div>
-
-    <!-- Series cards — Asset Frame design -->
-    <div class="series-grid">
-
-      <div class="series-card">
-        <div class="series-cover" style="background:linear-gradient(145deg, oklch(22% 0.18 264), oklch(58% 0.20 264))">
-          <div class="series-asset">🇬🇧</div>
-          <div class="series-deco">🇬🇧</div>
-        </div>
-        <div class="series-body">
-          <div class="series-title">런던 핀테크 탐방</div>
-          <div class="series-desc">2026년 5월, 런던 핀테크 생태계를 발로 뛰며 기록. Accountex부터 Level39 RegTech까지.</div>
-          <span class="badge badge-gray">5편 예정</span>
-        </div>
-      </div>
-
-      <div class="series-card">
-        <div class="series-cover" style="background:linear-gradient(145deg, oklch(30% 0.12 50), oklch(65% 0.22 56))">
-          <div class="series-asset">📊</div>
-          <div class="series-deco">📊</div>
-        </div>
-        <div class="series-body">
-          <div class="series-title">마케팅 케이스 회고</div>
-          <div class="series-desc">샤롯데 CTR 0.98→2.4%, 갤럭시 릴스 1,080만. 데이터가 담지 못한 현장의 디테일.</div>
-          <span class="badge badge-gray">3편 예정</span>
-        </div>
-      </div>
-
-      <div class="series-card">
-        <div class="series-cover" style="background:linear-gradient(145deg, oklch(22% 0.14 155), oklch(60% 0.20 155))">
-          <div class="series-asset">💻</div>
-          <div class="series-deco">💻</div>
-        </div>
-        <div class="series-body">
-          <div class="series-title">HTML/CSS 학습 일지</div>
-          <div class="series-desc">Claude와 페어 코딩하며 배운 것들. 토스피드 클론부터 Vercel 배포까지 입문기.</div>
-          <span class="badge badge-blue">연재 중</span>
-        </div>
-      </div>
-
-      <div class="series-card">
-        <div class="series-cover" style="background:linear-gradient(145deg, oklch(20% 0.02 264), oklch(45% 0.04 264))">
-          <div class="series-asset">🔧</div>
-          <div class="series-deco">🔧</div>
-        </div>
-        <div class="series-body">
-          <div class="series-title">디지털 도구 실험기</div>
-          <div class="series-desc">구독 절감, AI 자동화, Notion+Vercel 스택으로 1인 크리에이터 운영 최적화.</div>
-          <span class="badge badge-gray">2편 예정</span>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ════════════════════════════════════════════════
-       TAB 2: 포모도로
-  ════════════════════════════════════════════════ -->
-  <div id="tab-portfolio" class="tab-panel">
-    <div class="pomo-wrap">
-
-      <div class="pomo-modes">
-        <button class="pomo-mode-btn active" id="modeWork"      onclick="setMode('work')">집중</button>
-        <button class="pomo-mode-btn"        id="modeBreak"     onclick="setMode('break')">휴식</button>
-        <button class="pomo-mode-btn"        id="modeLongBreak" onclick="setMode('longBreak')">긴 휴식</button>
-      </div>
-
-      <div class="pomo-ring-wrap">
-        <svg class="pomo-ring-svg" viewBox="0 0 200 200">
-          <circle class="ring-bg" cx="100" cy="100" r="88"/>
-          <circle class="ring-prog" id="ringProg" cx="100" cy="100" r="88"/>
-        </svg>
-        <div class="pomo-center">
-          <div class="pomo-time" id="timerTxt">25:00</div>
-          <div class="pomo-mode-lbl" id="modeTxt">집중 시간</div>
-        </div>
-      </div>
-
-      <div class="pomo-dots" id="pomoDots">
-        <div class="pomo-dot"></div>
-        <div class="pomo-dot"></div>
-        <div class="pomo-dot"></div>
-        <div class="pomo-dot"></div>
-      </div>
-
-      <div class="pomo-btns">
-        <button class="btn-fill-secondary" onclick="resetTimer()">초기화</button>
-        <button class="btn-fill-primary"   id="startBtn" onclick="toggleTimer()">시작할게요</button>
-      </div>
-
-      <div class="pomo-tip">
-        <div class="pomo-tip-lbl">포모도로 기법</div>
-        <div class="pomo-tip-txt">25분 집중 → 5분 휴식. 4세션 완료 후 15분 긴 휴식. 집중력을 지키면서 번아웃을 막는 검증된 방법이에요.</div>
-      </div>
-
+      <div class="ph-title">AI 리소스</div>
+      <div class="ph-desc">유용한 AI 도구 · 링크 · 레퍼런스를<br>여기 모아둘 예정이에요</div>
+      <div class="ph-badge">준비 중</div>
     </div>
   </div>
 
-  <!-- ════════════════════════════════════════════════
-       TAB 3: 결과물
-  ════════════════════════════════════════════════ -->
-  <div id="tab-results" class="tab-panel">
-    <div class="tds-top">
-      <div class="tds-top-text">
-        <div class="tds-top-title">Claude 결과물</div>
-        <div class="tds-top-sub">Claude와 함께 만든 것들</div>
-      </div>
-    </div>
-    <!-- ListRow container — filled by JS from manifest.json -->
-    <div class="list-container" id="resultsGrid">
-      <div class="empty-state">
-        <div class="empty-icon">⏳</div>
-        불러오는 중...
-      </div>
-    </div>
-  </div>
-
-</main>
-
-<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     BOTTOM NAV (mobile only)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
-<nav class="bottom-nav">
-  <div class="bottom-nav-inner">
-    <button class="tab-btn active" data-tab="newsletter" onclick="switchTab('newsletter')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-        <polyline points="22,6 12,13 2,6"/>
+  <!-- BOTTOM NAV -->
+  <nav class="bot-nav" id="bot-nav">
+    <button class="bot-btn on" data-p="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
-      <span class="tab-btn-lbl">뉴스레터</span>
+      홈
     </button>
-    <button class="tab-btn" data-tab="portfolio" onclick="switchTab('portfolio')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <polyline points="12 6 12 12 16 14"/>
+    <button class="bot-btn" data-p="files">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/>
+        <polyline points="13 2 13 9 20 9"/>
       </svg>
-      <span class="tab-btn-lbl">포모도로</span>
+      파일
     </button>
-    <button class="tab-btn" data-tab="results" onclick="switchTab('results')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+    <button class="bot-btn" data-p="ai">
+      <!-- Spark icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
       </svg>
-      <span class="tab-btn-lbl">결과물</span>
+      AI
     </button>
-  </div>
-</nav>
+  </nav>
+
+</div>
 
 <script>
-// ── TABS
-function switchTab(id) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('[data-tab]').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  document.querySelectorAll('[data-tab="' + id + '"]').forEach(b => b.classList.add('active'));
-  if (id === 'results') loadResults();
-}
+/* ── CLAUDE ICON SVG (Anthropic-style starburst, orange) ── */
+const CLAUDE_ICON = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+  <g transform="translate(11,11)">
+    <rect x="-2.3" y="-9" width="4.6" height="6.4" rx="2.3" fill="#D97757" transform="rotate(0)"/>
+    <rect x="-2.3" y="-9" width="4.6" height="6.4" rx="2.3" fill="#D97757" transform="rotate(60)"/>
+    <rect x="-2.3" y="-9" width="4.6" height="6.4" rx="2.3" fill="#D97757" transform="rotate(120)"/>
+    <rect x="-2.3" y="-9" width="4.6" height="6.4" rx="2.3" fill="#D97757" transform="rotate(180)"/>
+    <rect x="-2.3" y="-9" width="4.6" height="6.4" rx="2.3" fill="#D97757" transform="rotate(240)"/>
+    <rect x="-2.3" y="-9" width="4.6" height="6.4" rx="2.3" fill="#D97757" transform="rotate(300)"/>
+  </g>
+</svg>`;
 
-// ── DARK MODE
-const html = document.documentElement;
-function applyTheme(dark) {
-  html.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('sunIcon').style.display  = dark ? 'none' : '';
-  document.getElementById('moonIcon').style.display = dark ? '' : 'none';
-}
-function toggleDark() {
-  const dark = html.getAttribute('data-theme') !== 'dark';
-  localStorage.setItem('achromatic-theme', dark ? 'dark' : 'light');
-  applyTheme(dark);
-}
-const savedTheme = localStorage.getItem('achromatic-theme') ||
-  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-applyTheme(savedTheme === 'dark');
-
-// ── POMODORO — OKLCH color values for ring stroke
-const C = 2 * Math.PI * 88; // circumference ≈ 552.9
-const MODES = {
-  work:      { label: '집중 시간', sec: 25*60, color: 'oklch(45% 0.28 264)' }, // blue
-  break:     { label: '휴식 시간', sec:  5*60, color: 'oklch(42% 0.18 155)' }, // green
-  longBreak: { label: '긴 휴식',   sec: 15*60, color: 'oklch(50% 0.20 295)' }  // purple
+/* ── ICON CONFIG ── */
+const iconOf = (f) => {
+  const p = (f.path || '').toLowerCase();
+  if (p.includes('lacademy'))
+    return { bg: 'linear-gradient(135deg,#FF6B35,#FFB347)', ico: '📊' };
+  if (/accountex|london|fintech|regtech|mpts/.test(p))
+    return { bg: 'linear-gradient(135deg,#0064FF,#4DA3FF)', ico: '🗺️' };
+  const MAP = {
+    report:       { bg: 'linear-gradient(135deg,#FF6B35,#FFB347)', ico: '📊' },
+    presentation: { bg: 'linear-gradient(135deg,#7C3AED,#A78BFA)', ico: '📑' },
+    analysis:     { bg: 'linear-gradient(135deg,#0EA5E9,#67E8F9)', ico: '🔍' },
+    landing:      { bg: 'linear-gradient(135deg,#F59E0B,#FCD34D)', ico: '🌐' },
+    portfolio:    { bg: 'linear-gradient(135deg,#1A1A2E,#4B5563)', ico: '💼' },
+  };
+  return MAP[(f.tags?.[0] || '').toLowerCase()]
+    || { bg: 'linear-gradient(135deg,#374151,#6B7280)', ico: '📄' };
 };
-let mode = 'work', total = MODES.work.sec, remain = total;
-let running = false, iv = null, sessions = 0;
 
-const ring   = document.getElementById('ringProg');
-const timerT = document.getElementById('timerTxt');
-const modeT  = document.getElementById('modeTxt');
-const startB = document.getElementById('startBtn');
-ring.style.strokeDasharray = C;
+const catOf = (f) => {
+  const p = (f.path || '').toLowerCase();
+  if (p.includes('lacademy')) return 'freelance';
+  return 'claude'; // everything else = Claude output
+};
 
-function setMode(m) {
-  if (running) return;
-  mode = m; total = MODES[m].sec; remain = total;
-  document.querySelectorAll('.pomo-mode-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
-  modeT.textContent = MODES[m].label;
-  ring.style.stroke = MODES[m].color;
-  render();
-}
+const dateFmt = (s) => {
+  if (!s) return '';
+  const d = new Date(s);
+  return `${d.getMonth() + 1}월 ${d.getDate()}일`;
+};
 
-function render() {
-  const m = String(Math.floor(remain/60)).padStart(2,'0');
-  const s = String(remain%60).padStart(2,'0');
-  timerT.textContent = m + ':' + s;
-  ring.style.strokeDashoffset = C * (1 - remain/total);
-}
+/* ── COMPONENTS ── */
+const makeRow = (f) => {
+  const s = iconOf(f);
+  const a = document.createElement('a');
+  a.className = 'row';
+  a.href = `./${f.path}`;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.innerHTML = `
+    <div class="row-ico" style="background:${s.bg}">${s.ico}</div>
+    <div class="row-copy">
+      <div class="row-name">${f.title}</div>
+      <div class="row-desc">${f.description || ''}</div>
+      <div class="row-date">${dateFmt(f.date)}</div>
+    </div>
+    <button class="row-btn">열기</button>
+  `;
+  a.querySelector('.row-btn').onclick = e => {
+    e.preventDefault(); window.open(a.href, '_blank');
+  };
+  return a;
+};
 
-function toggleTimer() {
-  if (running) {
-    clearInterval(iv); running = false;
-    startB.textContent = '계속할게요';
-  } else {
-    running = true;
-    startB.textContent = '잠깐 멈춰요';
-    iv = setInterval(() => {
-      if (remain <= 0) {
-        clearInterval(iv); running = false;
-        startB.textContent = '시작할게요';
-        if (mode === 'work') {
-          sessions = Math.min(sessions + 1, 4);
-          updateDots();
-          setMode(sessions >= 4 ? 'longBreak' : 'break');
-          if (sessions >= 4) sessions = 0;
-        } else {
-          setMode('work');
-        }
-        return;
-      }
-      remain--; render();
-    }, 1000);
+const makeCard = ({ label, title, files, brand = false, delay = 0 }) => {
+  const d = document.createElement('div');
+  d.className = 's-card';
+  d.style.animationDelay = `${delay}s`;
+
+  const head = document.createElement('div');
+  head.className = 's-head';
+  head.innerHTML = `
+    ${brand ? `<div class="s-brand">${CLAUDE_ICON}</div>` : ''}
+    <div>
+      <div class="s-label">${label}</div>
+      <div class="s-title">${title}</div>
+    </div>
+  `;
+  d.appendChild(head);
+  files.forEach(f => d.appendChild(makeRow(f)));
+  return d;
+};
+
+const makeEmpty = (ico, h, p, delay = 0) => {
+  const d = document.createElement('div');
+  d.className = 'empty';
+  d.style.animationDelay = `${delay}s`;
+  d.innerHTML = `<span class="empty-ico">${ico}</span>
+    <div class="empty-h">${h}</div><div class="empty-p">${p}</div>`;
+  return d;
+};
+
+/* ── RENDER ── */
+let FILES = [];
+
+const renderHome = () => {
+  const c = document.getElementById('home-content');
+  c.innerHTML = '';
+
+  // 라카데미 배너
+  const freelance = FILES.filter(f => catOf(f) === 'freelance');
+  const latestLa = freelance.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+  const bannerSub = latestLa
+    ? `최신 보고서 · ${latestLa.date} 업데이트`
+    : '숏폼 성과 분석 보고서';
+
+  const bannerTitle = latestLa ? latestLa.title : '최신 숏폼 성과';
+  const bannerDesc  = latestLa ? latestLa.description : '숏폼 성과 분석 보고서';
+  const bannerDate  = latestLa ? dateFmt(latestLa.date) : '';
+
+  const banner = document.createElement('a');
+  banner.className = 'la-banner';
+  banner.href = './lacademy.html';
+  banner.innerHTML = `
+    <div class="la-banner-chip">라카데미 여의도 · 최신 보고서</div>
+    <div class="la-banner-title">${bannerTitle}</div>
+    <div class="la-banner-sub">${bannerDesc}</div>
+    <div class="la-banner-footer">
+      <span class="la-banner-date">${bannerDate}</span>
+      <span class="la-banner-cta">보고서 보기
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </span>
+    </div>
+  `;
+  c.appendChild(banner);
+
+  if (!FILES.length) {
+    c.appendChild(makeEmpty('📭', '아직 자료가 없어요', '곧 업데이트할게요'));
+    return;
   }
-}
-
-function resetTimer() {
-  clearInterval(iv); running = false; remain = total;
-  startB.textContent = '시작할게요'; render();
-}
-
-function updateDots() {
-  document.querySelectorAll('#pomoDots .pomo-dot').forEach((d, i) => {
-    d.className = 'pomo-dot' + (i < sessions ? ' done' : '');
-  });
-}
-
-// Init ring
-ring.style.stroke = MODES.work.color;
-ring.style.strokeDashoffset = 0;
-render();
-
-// ── RESULTS — ListRow layout from manifest.json
-const ICONS = {
-  report: '📊', presentation: '📑', analysis: '🔍',
-  landing: '🌐', portfolio: '💼', default: '📄'
-};
-// OKLCH gradient backgrounds per tag
-const COVERS = {
-  report:       'linear-gradient(145deg, oklch(22% 0.18 264), oklch(55% 0.22 264))',
-  presentation: 'linear-gradient(145deg, oklch(28% 0.16 295), oklch(65% 0.18 295))',
-  analysis:     'linear-gradient(145deg, oklch(22% 0.14 155), oklch(58% 0.20 155))',
-  landing:      'linear-gradient(145deg, oklch(30% 0.12 50),  oklch(68% 0.22 56))',
-  portfolio:    'linear-gradient(145deg, oklch(20% 0.02 264), oklch(48% 0.04 264))',
-  default:      'linear-gradient(145deg, oklch(28% 0.03 264), oklch(52% 0.04 264))'
+  const sorted = [...FILES].sort((a, b) => new Date(b.date) - new Date(a.date));
+  c.appendChild(makeCard({
+    label: '이번 주 업데이트',
+    title: '최신 자료',
+    files: sorted.slice(0, 5),
+    delay: 0.06
+  }));
 };
 
-function fmtDate(d) {
-  if (!d) return '';
-  const dt = new Date(d + 'T00:00:00'), now = new Date();
-  const diff = Math.floor((now - dt) / 86400000);
-  if (diff === 0) return '오늘';
-  if (diff === 1) return '어제';
-  if (diff < 7)  return diff + '일 전';
-  return dt.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
-}
+const renderFiles = () => {
+  const c = document.getElementById('files-content');
+  c.innerHTML = '';
 
-let loaded = false;
-async function loadResults() {
-  if (loaded) return;
-  const g = document.getElementById('resultsGrid');
-  try {
-    const r = await fetch('./manifest.json?t=' + Date.now());
-    if (!r.ok) throw 0;
-    const { files = [] } = await r.json();
-    const sorted = [...files].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-    if (!sorted.length) {
-      g.innerHTML = '<div class="empty-state"><div class="empty-icon">📂</div>아직 결과물이 없어.</div>';
-      return;
-    }
-    // ListRow layout — each file is one row
-    g.innerHTML = sorted.map((f, i) => {
-      const tag = (f.tags?.[0] || 'default').toLowerCase();
-      const icon = ICONS[tag] || ICONS.default;
-      const cover = COVERS[tag] || COVERS.default;
-      return `
-        <a class="list-row" href="./${f.path}" target="_blank" style="animation-delay:${i * 0.06}s">
-          <div class="list-row-icon" style="background:${cover}">${icon}</div>
-          <div class="list-row-content">
-            <div class="list-row-title">${f.title}</div>
-            <div class="list-row-desc">${f.description || ''}</div>
-          </div>
-          <div class="list-row-right">
-            <span class="list-row-meta">${fmtDate(f.date)}</span>
-            <div class="list-row-chevron">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"/>
-              </svg>
-            </div>
-          </div>
-        </a>`;
-    }).join('');
-    loaded = true;
-  } catch {
-    g.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div>파일 목록을 불러올 수 없어요.</div>';
+  const claudeFiles = FILES
+    .filter(f => catOf(f) === 'claude')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const freelanceFiles = FILES
+    .filter(f => catOf(f) === 'freelance')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (claudeFiles.length) {
+    c.appendChild(makeCard({
+      label: 'Claude와 함께 만든 파일',
+      title: 'Claude 파일',
+      files: claudeFiles,
+      brand: true,
+      delay: 0
+    }));
   }
-}
 
-loadResults();
+  if (freelanceFiles.length) {
+    const fCard = makeCard({
+      label: '라카데미 여의도',
+      title: '프리랜서 자료',
+      files: freelanceFiles,
+      brand: false,
+      delay: 0.06
+    });
+    // 섹션 헤더에 "전체 보기" 링크 추가
+    const sHead = fCard.querySelector('.s-head');
+    const moreBtn = document.createElement('a');
+    moreBtn.href = './lacademy.html';
+    moreBtn.style.cssText = 'font-size:13px;color:var(--t2);text-decoration:none;padding-bottom:2px;';
+    moreBtn.textContent = '전체 보기 ›';
+    sHead.appendChild(moreBtn);
+    c.appendChild(fCard);
+  }
+
+  if (!claudeFiles.length && !freelanceFiles.length) {
+    c.appendChild(makeEmpty('📭', '아직 파일이 없어요', '자료를 추가하면 여기 표시돼요'));
+  }
+};
+
+/* ── PAGE SWITCH ── */
+const showPage = (p) => {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.bot-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById(`page-${p}`).classList.add('on');
+  document.querySelector(`.bot-btn[data-p="${p}"]`).classList.add('on');
+};
+
+document.getElementById('bot-nav').addEventListener('click', e => {
+  const btn = e.target.closest('.bot-btn');
+  if (btn) showPage(btn.dataset.p);
+});
+
+/* ── LOAD (file:// fallback 포함) ── */
+const FALLBACK = [
+  { title: '라카데미 숏폼 분석 보고서 0516', path: 'lacademy-0516-report.html',
+    date: '2026-05-16', description: 'IG 1.6만뷰 · 공유 96 · 팔로우 +20 · 합산 17,328', tags: ['report'] },
+  { title: '라카데미 숏폼 분석 보고서 0514', path: 'lacademy-0514-report.html',
+    date: '2026-05-14', description: 'YT 13,458 · IG 12.2만 · 구독자 377명', tags: ['report'] },
+  { title: 'Accountex 2026 브리핑', path: 'accountex-2026-briefing.html',
+    date: '2026-05-12', description: '런던 핀테크 탐방', tags: ['report'] },
+];
+
+fetch('./manifest.json')
+  .then(r => r.json())
+  .then(d => { FILES = d.files || []; renderHome(); renderFiles(); })
+  .catch(() => { FILES = FALLBACK; renderHome(); renderFiles(); });
 </script>
 </body>
 </html>
