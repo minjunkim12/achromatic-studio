@@ -14,15 +14,12 @@
     :root {
       --blue:    #0055FF;
       --blue-bg: #EBF1FF;
-      --green:   #05C46B;
-      --red:     #FF3B30;
       --bg:      #F2F4F7;
       --card:    #FFFFFF;
       --t1:      #191919;
       --t2:      #8B95A1;
       --t3:      #C5CBD3;
       --div:     #F0F2F5;
-      --bdr:     #E5E8EC;
     }
 
     html { overflow-x: hidden; }
@@ -35,10 +32,9 @@
       overflow-x: hidden;
     }
 
-    /* ── APP SHELL ── */
+    /* ── APP SHELL: 모바일 풀와이드 ── */
     .app {
-      max-width: 390px;
-      margin: 0 auto;
+      width: 100%;
       min-height: 100dvh;
       background: var(--bg);
       display: flex;
@@ -46,70 +42,76 @@
       overflow-x: hidden;
     }
 
-    /* ── TOP BAR ── */
-    .top-bar {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--card);
-      border-bottom: 1px solid var(--div);
-      height: 56px;
-      padding: 0 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .back-btn {
-      width: 36px; height: 36px;
-      display: flex; align-items: center; justify-content: center;
-      background: none; border: none; cursor: pointer;
-      color: var(--t1); border-radius: 50%;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .back-btn:active { background: var(--div); }
-    .page-title {
-      font-size: 16px; font-weight: 700; color: var(--t1);
-      position: absolute; left: 50%; transform: translateX(-50%);
-      letter-spacing: -0.3px; white-space: nowrap;
-    }
-    .count-pill {
-      font-size: 12px; font-weight: 700; color: var(--blue);
-      background: var(--blue-bg);
-      padding: 4px 10px; border-radius: 20px;
-    }
-
-    /* ── HERO — glisten animation ── */
-    @keyframes glisten {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* ── HERO — 상단 전체 그라데이션 + shimmer ── */
+    @keyframes shimmer {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
     }
 
     .hero-section {
-      background: linear-gradient(-45deg,
-        #8EC4FF 0%,
-        #B8D9FF 20%,
-        #E8F3FF 45%,
-        #C5DEFF 65%,
-        #9EC8FF 85%,
-        #D6EAFF 100%
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%,
+        #AAD0FF 18%,
+        #C8E3FF 38%,
+        #DFF0FF 58%,
+        #EDF7FF 74%,
+        #F5FBFF 86%,
+        var(--bg) 100%
       );
-      background-size: 300% 300%;
-      animation: glisten 5s ease infinite;
-      padding: 40px 24px 56px;
+      padding: 60px 24px 72px;
       text-align: center;
       flex-shrink: 0;
       cursor: pointer;
+      overflow: hidden;
       -webkit-tap-highlight-color: transparent;
     }
-    .hero-section:active { opacity: 0.93; }
+    .hero-section:active { opacity: 0.94; }
+
+    /* shimmer sweep */
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255,255,255,0.52) 50%,
+        transparent 70%
+      );
+      animation: shimmer 3.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* 뒤로가기 버튼 — 그라데이션 위에 overlay */
+    .back-btn {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      left: 16px;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.38);
+      border: none; cursor: pointer;
+      border-radius: 50%;
+      color: var(--t1);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 10;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:active { background: rgba(255,255,255,0.6); }
 
     .hero-label {
       font-size: 13px; font-weight: 500;
-      color: rgba(0, 55, 120, 0.65);
+      color: rgba(0, 45, 110, 0.62);
       letter-spacing: -0.2px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      position: relative; z-index: 1;
     }
     .hero-title {
-      font-size: 30px; font-weight: 900; color: var(--t1);
-      letter-spacing: -1px; line-height: 1.22;
+      font-size: 28px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.9px; line-height: 1.22;
+      position: relative; z-index: 1;
     }
     .hero-title em {
       font-style: normal;
@@ -120,10 +122,10 @@
     .feed {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 0 32px;
+      padding: 4px 0 40px;
     }
 
-    /* ── TOSS CARD ── */
+    /* ── TOSS CARD — 래퍼런스 스타일 ── */
     .toss-card {
       background: var(--card);
       border-radius: 20px;
@@ -147,21 +149,22 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
+      margin-bottom: 18px;
     }
     .tc-content { flex: 1; min-width: 0; }
+
     .tc-illus {
       flex-shrink: 0;
-      width: 64px; height: 64px;
-      margin-top: 2px;
+      width: 88px; height: 88px;
     }
 
     .tc-sub {
       font-size: 11px; font-weight: 700; color: var(--blue);
-      letter-spacing: -0.1px; margin-bottom: 7px;
+      letter-spacing: -0.1px; margin-bottom: 8px;
     }
     .tc-title {
-      font-size: 17px; font-weight: 900; color: var(--t1);
-      letter-spacing: -0.5px; line-height: 1.35;
+      font-size: 16px; font-weight: 700; color: var(--t1);
+      letter-spacing: -0.4px; line-height: 1.38;
       margin-bottom: 7px;
     }
     .tc-body {
@@ -169,10 +172,9 @@
       line-height: 1.6; letter-spacing: -0.1px;
     }
 
-    /* Card bottom: timeAgo left + arrow right — NO divider */
-    .tc-meta {
+    /* Card footer: timeAgo left + arrow right — NO divider */
+    .tc-footer {
       display: flex; align-items: center; justify-content: space-between;
-      margin-top: 16px;
     }
     .tc-date { font-size: 12px; color: var(--t3); }
     .tc-arrow {
@@ -188,10 +190,16 @@
     .empty-feed-h { font-size: 16px; font-weight: 700; color: var(--t1); }
     .empty-feed-p { font-size: 14px; color: var(--t2); margin-top: 6px; }
 
-    /* ── DESKTOP FRAME ── */
+    /* ── DESKTOP FRAME — 데스크탑에서만 폰 프레임 ── */
     @media (min-width: 420px) {
-      body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+      body {
+        background: #D8DCE2;
+        display: flex; justify-content: center;
+        padding: 24px 0; min-height: 100vh;
+      }
       .app {
+        width: 390px;
+        max-width: 390px;
         border-radius: 22px; overflow: hidden;
         height: calc(100vh - 48px); min-height: auto;
         box-shadow: 0 16px 56px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.08);
@@ -202,19 +210,7 @@
 <body>
 <div class="app">
 
-  <!-- TOP BAR -->
-  <header class="top-bar">
-    <button class="back-btn" onclick="window.location.href='./'" aria-label="뒤로">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
-    </button>
-    <span class="page-title">라카데미 여의도</span>
-    <span class="count-pill" id="count-pill">—</span>
-  </header>
-
-  <!-- HERO -->
+  <!-- HERO (탑바 없음, 백버튼 overlay) -->
   <div id="hero-wrap"></div>
 
   <!-- FEED -->
@@ -223,36 +219,46 @@
 </div>
 
 <script>
-/* ── SVG ILLUSTRATIONS ── */
+/* ── SVG ILLUSTRATIONS (larger 88×88) ── */
 const SVG_VIRAL = `
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
   <!-- center node -->
-  <circle cx="32" cy="32" r="9" fill="#0055FF" opacity="0.75"/>
-  <!-- outward nodes -->
-  <line x1="32" y1="32" x2="56" y2="14" stroke="#0055FF" stroke-width="1.5" opacity="0.25"/>
-  <circle cx="56" cy="14" r="6" fill="#0055FF" opacity="0.35"/>
-  <line x1="32" y1="32" x2="58" y2="44" stroke="#0055FF" stroke-width="1.5" opacity="0.2"/>
-  <circle cx="58" cy="44" r="5" fill="#0055FF" opacity="0.28"/>
-  <line x1="32" y1="32" x2="10" y2="16" stroke="#0055FF" stroke-width="1.5" opacity="0.18"/>
-  <circle cx="10" cy="16" r="4" fill="#0055FF" opacity="0.2"/>
-  <!-- arrow up-right -->
-  <path d="M48 8l6-2-2 6" stroke="#0055FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
-  <path d="M54 6l-10 10" stroke="#0055FF" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
+  <circle cx="44" cy="44" r="12" fill="#0055FF" opacity="0.72"/>
+  <!-- connection lines -->
+  <line x1="44" y1="44" x2="76" y2="18" stroke="#0055FF" stroke-width="1.5" opacity="0.22"/>
+  <line x1="44" y1="44" x2="80" y2="58" stroke="#0055FF" stroke-width="1.5" opacity="0.18"/>
+  <line x1="44" y1="44" x2="14" y2="22" stroke="#0055FF" stroke-width="1.5" opacity="0.15"/>
+  <line x1="44" y1="44" x2="18" y2="68" stroke="#0055FF" stroke-width="1" opacity="0.12"/>
+  <!-- outer nodes -->
+  <circle cx="76" cy="18" r="8" fill="#0055FF" opacity="0.38"/>
+  <circle cx="80" cy="58" r="7" fill="#0055FF" opacity="0.30"/>
+  <circle cx="14" cy="22" r="6" fill="#0055FF" opacity="0.22"/>
+  <circle cx="18" cy="68" r="5" fill="#0055FF" opacity="0.16"/>
+  <!-- tiny outer -->
+  <circle cx="68" cy="8"  r="4" fill="#0055FF" opacity="0.14"/>
+  <line x1="76" y1="18" x2="68" y2="8" stroke="#0055FF" stroke-width="1" opacity="0.1"/>
+  <!-- up-right arrow -->
+  <path d="M68 10 L78 4 M78 4 L74 12 M78 4 L70 8"
+        stroke="#0055FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
 </svg>`;
 
 const SVG_TROPHY = `
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-  <!-- trophy cup -->
-  <path d="M20 8h24v22c0 9-6 14-12 15-6-1-12-6-12-15V8z" fill="#C5D9FF"/>
-  <!-- cup handles -->
-  <path d="M20 14h-6a6 6 0 000 12h6" stroke="#C5D9FF" stroke-width="3" stroke-linecap="round" fill="none"/>
-  <path d="M44 14h6a6 6 0 010 12h-6" stroke="#C5D9FF" stroke-width="3" stroke-linecap="round" fill="none"/>
-  <!-- stand -->
-  <rect x="28" y="45" width="8" height="8" rx="2" fill="#B0CAFF"/>
-  <rect x="18" y="53" width="28" height="5" rx="4" fill="#0055FF" opacity="0.45"/>
-  <!-- star inside cup -->
-  <path d="M32 16l1.8 4.4h4.6l-3.7 2.7 1.4 4.4L32 25.2l-4.1 2.3 1.4-4.4-3.7-2.7h4.6z"
-        fill="white" opacity="0.7"/>
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- trophy cup body -->
+  <path d="M28 10 h32 v28 c0 12-8 18-16 20 -8-2-16-8-16-20 V10z"
+        fill="#C5D9FF"/>
+  <!-- handles -->
+  <path d="M28 18 h-10 a8 8 0 0 0 0 16 h10"
+        stroke="#B0C9FF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M60 18 h10 a8 8 0 0 1 0 16 h-10"
+        stroke="#B0C9FF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <!-- stem -->
+  <rect x="40" y="58" width="8" height="10" rx="2" fill="#B0C9FF"/>
+  <!-- base -->
+  <rect x="26" y="68" width="36" height="6" rx="5" fill="#0055FF" opacity="0.42"/>
+  <!-- star inside -->
+  <path d="M44 20 l2.4 5.8 6.2 0.4 -4.8 4 1.6 6 -5.4-3.4 -5.4 3.4 1.6-6 -4.8-4 6.2-0.4z"
+        fill="white" opacity="0.72"/>
 </svg>`;
 
 /* ── REPORT DATA ── */
@@ -281,9 +287,8 @@ const REPORTS = [
   },
 ];
 
-const feed     = document.getElementById('feed');
+const feed    = document.getElementById('feed');
 const heroWrap = document.getElementById('hero-wrap');
-document.getElementById('count-pill').textContent = `${REPORTS.length}개`;
 
 if (!REPORTS.length) {
   feed.innerHTML = `
@@ -298,10 +303,21 @@ if (!REPORTS.length) {
   /* ── HERO ── */
   heroWrap.innerHTML = `
     <div class="hero-section" id="hero-cta">
+      <button class="back-btn" id="back-btn" aria-label="뒤로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
       <div class="hero-label">AI로 분석한 라카데미 콘텐츠 현황</div>
       <div class="hero-title">${latest.heroTitle}</div>
     </div>
   `;
+
+  document.getElementById('back-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.location.href = './';
+  });
   document.getElementById('hero-cta').addEventListener('click', () => {
     window.location.href = `./${latest.path}`;
   });
@@ -319,7 +335,7 @@ if (!REPORTS.length) {
         </div>
         <div class="tc-illus">${r.svg}</div>
       </div>
-      <div class="tc-meta">
+      <div class="tc-footer">
         <span class="tc-date">${r.timeAgo}</span>
         <div class="tc-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
