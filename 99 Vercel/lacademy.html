@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>라카데미 여의도 — 분석 보고서</title>
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #EBF1FF;
+      --green:   #05C46B;
+      --red:     #FF3B30;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+      --bdr:     #E5E8EC;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #D8DCE2;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── APP SHELL ── */
+    .app {
+      max-width: 390px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--card);
+      border-bottom: 1px solid var(--div);
+      height: 56px;
+      padding: 0 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer;
+      color: var(--t1); border-radius: 50%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:active { background: var(--div); }
+    .page-title {
+      font-size: 16px; font-weight: 700; color: var(--t1);
+      position: absolute; left: 50%; transform: translateX(-50%);
+      letter-spacing: -0.3px;
+    }
+    .count-pill {
+      font-size: 12px; font-weight: 700; color: var(--blue);
+      background: var(--blue-bg);
+      padding: 4px 10px; border-radius: 20px;
+    }
+
+    /* ── FEED ── */
+    .feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px 28px;
+    }
+
+    /* ── FEED CARD ── */
+    .feed-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.03);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.35s ease, transform 0.35s ease,
+                  box-shadow 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .feed-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .feed-card:active {
+      transform: scale(0.985) translateY(0);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+
+    /* ── CARD TOP ROW ── */
+    .fc-top {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .fc-doc {
+      width: 32px; height: 32px; border-radius: 9px;
+      background: var(--blue-bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .fc-date-label {
+      font-size: 13px; font-weight: 500; color: var(--t2);
+      flex: 1; letter-spacing: -0.1px;
+    }
+    .fc-badge-row { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+    .badge {
+      font-size: 11px; font-weight: 700;
+      padding: 3px 8px; border-radius: 20px;
+      white-space: nowrap;
+    }
+    .b-gray   { background: var(--div);  color: var(--t2); }
+    .b-blue   { background: #EBF1FF;     color: var(--blue); }
+    .b-green  { background: #E6F9F1;     color: #0CAD5E; }
+    .b-red    { background: #FFF0F0;     color: var(--red); }
+    .b-orange { background: #FFF4EB;     color: #D97706; }
+    .b-purple { background: #F3EEFF;     color: #7C3AED; }
+
+    /* ── TITLE & BODY ── */
+    .fc-title {
+      font-size: 17px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.5px; line-height: 1.35;
+      margin-bottom: 7px;
+    }
+    .fc-body {
+      font-size: 14px; color: var(--t2);
+      line-height: 1.6; letter-spacing: -0.1px;
+      margin-bottom: 14px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* ── MINI KPI ── */
+    .fc-kpi {
+      display: flex;
+      background: var(--bg);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      border: 1px solid var(--bdr);
+    }
+    .fc-kpi-item {
+      flex: 1; padding: 12px 8px; text-align: center;
+    }
+    .fc-kpi-item + .fc-kpi-item { border-left: 1px solid var(--bdr); }
+    .fc-kpi-val {
+      font-size: 18px; font-weight: 900; color: var(--t1);
+      letter-spacing: -0.6px; line-height: 1;
+      display: block;
+    }
+    .fc-kpi-val.blue { color: var(--blue); }
+    .fc-kpi-val.green { color: var(--green); }
+    .fc-kpi-key {
+      font-size: 10px; color: var(--t2); margin-top: 4px;
+      letter-spacing: -0.1px; display: block;
+    }
+
+    /* ── HIGHLIGHT ROW ── */
+    .fc-highlight {
+      display: flex; align-items: baseline; gap: 6px;
+      padding: 12px 14px;
+      background: var(--blue-bg);
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .fc-hl-val {
+      font-size: 22px; font-weight: 900; color: var(--blue);
+      letter-spacing: -0.8px;
+    }
+    .fc-hl-key { font-size: 13px; color: var(--blue); opacity: 0.75; }
+
+    /* ── FOOTER ── */
+    .fc-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--div);
+    }
+    .fc-time { font-size: 12px; color: var(--t3); }
+    .fc-open {
+      font-size: 13px; font-weight: 700; color: var(--blue);
+      background: none; border: none; cursor: pointer;
+      font-family: inherit; padding: 4px 0;
+      display: flex; align-items: center; gap: 3px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── EMPTY ── */
+    .empty-feed {
+      padding: 60px 20px; text-align: center;
+    }
+    .empty-feed-ico { font-size: 40px; margin-bottom: 12px; display: block; }
+    .empty-feed-h { font-size: 16px; font-weight: 700; color: var(--t1); }
+    .empty-feed-p { font-size: 14px; color: var(--t2); margin-top: 6px; }
+
+    /* ── SPARKLE HERO BANNER ── */
+    .spark-hero {
+      margin: 12px 12px 10px;
+      background: linear-gradient(150deg, #0040D0 0%, #0055FF 45%, #3A8AFF 100%);
+      border-radius: 20px;
+      padding: 22px 20px 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px rgba(0,85,255,0.3);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .spark-hero:active { transform: scale(0.985); box-shadow: 0 2px 8px rgba(0,85,255,0.2); }
+    /* decorative blobs */
+    .spark-hero::before {
+      content: '';
+      position: absolute; top: -50px; right: -50px;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .spark-hero::after {
+      content: '';
+      position: absolute; bottom: -70px; left: -40px;
+      width: 220px; height: 220px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .spark-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+      color: rgba(255,255,255,0.9);
+      background: rgba(255,255,255,0.18);
+      padding: 5px 13px; border-radius: 20px;
+      margin-bottom: 18px;
+      position: relative; z-index: 1;
+    }
+    .spark-hero-title {
+      font-size: 28px; font-weight: 900; color: #FFFFFF;
+      letter-spacing: -1px; line-height: 1.2;
+      margin-bottom: 8px;
+      position: relative; z-index: 1;
+    }
+    .spark-hero-sub {
+      font-size: 13px; color: rgba(255,255,255,0.72);
+      letter-spacing: -0.1px; line-height: 1.5;
+      margin-bottom: 18px;
+      position: relative; z-index: 1;
+    }
+    .spark-hero-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      position: relative; z-index: 1;
+    }
+    .spark-hero-date {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+    }
+    .spark-hero-cta {
+      font-size: 13px; font-weight: 700; color: #FFFFFF;
+      display: flex; align-items: center; gap: 3px;
+    }
+
+    /* sparkle icon animation */
+    @keyframes spark-pulse {
+      0%   { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
+      20%  { transform: rotate(14deg)  scale(1.2);  filter: drop-shadow(0 0 10px rgba(255,255,255,0.9)); }
+      45%  { transform: rotate(-6deg)  scale(1.08); filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));  }
+      70%  { transform: rotate(8deg)   scale(1.14); filter: drop-shadow(0 0 8px rgba(255,255,255,0.75)); }
+      100% { transform: rotate(0deg)   scale(1);    filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
+    }
+    .spark-anim {
+      display: inline-flex;
+      animation: spark-pulse 3s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    /* ── DESKTOP FRAME ── */
+    @media (min-width: 420px) {
+      body { display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+      .app {
+        border-radius: 22px; overflow: hidden;
+        height: calc(100vh - 48px); min-height: auto;
+        box-shadow: 0 16px 56px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.08);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <button class="back-btn" onclick="window.location.href='./'" aria-label="뒤로">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <span class="page-title">라카데미 여의도</span>
+    <span class="count-pill" id="count-pill">—</span>
+  </header>
+
+  <!-- FEED -->
+  <div class="feed" id="feed"></div>
+
+</div>
+
+<script>
+/* ── 파일 아이콘 SVG ── */
+const DOC_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+  stroke="#0055FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+  <polyline points="14 2 14 8 20 8"/>
+  <line x1="16" y1="13" x2="8" y2="13"/>
+  <line x1="16" y1="17" x2="8" y2="17"/>
+</svg>`;
+
+/* ── REPORT DATA ── */
+const REPORTS = [
+  {
+    path: 'lacademy-0516-report.html',
+    date: '26.05.16',
+    label: '목요일',
+    title: '바이럴 확정',
+    body: '합산 17,328뷰 달성 · IG 공유 96회 · 팔로우 +20명',
+    badges: [
+      { label: '숏폼 분석', cls: 'b-gray' },
+      { label: '바이럴 ✓', cls: 'b-green' },
+    ],
+    kpi: [
+      { val: '1.6만', key: 'IG 조회수', cls: '' },
+      { val: '96',    key: '공유',      cls: 'blue' },
+      { val: '+20',   key: '팔로우',    cls: 'green' },
+    ],
+    highlight: { val: '17,328', key: '합산 조회수' },
+    timeAgo: '1일 전',
+  },
+  {
+    path: 'lacademy-0514-report.html',
+    date: '26.05.14',
+    label: '화요일',
+    title: 'YT 신기록 달성',
+    body: '서울대 의대생 영상 · YT 13,458 · IG 12.2만 동반 폭발',
+    badges: [
+      { label: '숏폼 분석', cls: 'b-gray' },
+      { label: 'YT 신기록', cls: 'b-red' },
+    ],
+    kpi: [
+      { val: '13,458', key: 'YT 조회수', cls: '' },
+      { val: '12.2만', key: 'IG 조회수', cls: '' },
+      { val: '377명',  key: '구독자',    cls: 'blue' },
+    ],
+    highlight: { val: '12.2만', key: 'IG 최고 기록' },
+    timeAgo: '3일 전',
+  },
+];
+
+/* ── SPARKLE SVG ── */
+const SPARK_SVG = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7B68EE"/>
+      <stop offset="100%" stop-color="#0055FF"/>
+    </linearGradient>
+  </defs>
+  <path d="M12 2L13.8 9.4L21 12L13.8 14.6L12 22L10.2 14.6L3 12L10.2 9.4Z"
+        fill="url(#sg)"/>
+  <circle cx="19.5" cy="4.5" r="1.4" fill="#4A9FFF" opacity="0.65"/>
+  <circle cx="5"    cy="19"  r="1"   fill="#0055FF" opacity="0.4"/>
+</svg>`;
+
+/* ── RENDER ── */
+const feed = document.getElementById('feed');
+document.getElementById('count-pill').textContent = `${REPORTS.length}개`;
+
+if (!REPORTS.length) {
+  feed.innerHTML = `
+    <div class="empty-feed">
+      <span class="empty-feed-ico">📭</span>
+      <div class="empty-feed-h">아직 보고서가 없어요</div>
+      <div class="empty-feed-p">보고서가 추가되면 여기 표시돼요</div>
+    </div>`;
+} else {
+  /* ── SPARKLE HERO BANNER (최신 보고서 기준) ── */
+  const latest = REPORTS[0];
+  const sparkEl = document.createElement('div');
+  sparkEl.className = 'spark-hero';
+  sparkEl.id = 'spark-cta';
+  sparkEl.innerHTML = `
+    <div class="spark-chip">
+      <span class="spark-anim">${SPARK_SVG}</span>
+      AI 분석 · 최신 보고서
+    </div>
+    <div class="spark-hero-title">${latest.title}</div>
+    <div class="spark-hero-sub">${latest.body}</div>
+    <div class="spark-hero-footer">
+      <span class="spark-hero-date">${latest.date} ${latest.label}</span>
+      <span class="spark-hero-cta">보고서 보기
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </span>
+    </div>
+  `;
+  feed.appendChild(sparkEl);
+  document.getElementById('spark-cta').addEventListener('click', () => {
+    window.location.href = `./${latest.path}`;
+  });
+
+  REPORTS.forEach((r) => {
+    const card = document.createElement('div');
+    card.className = 'feed-card';
+
+    card.innerHTML = `
+      <div class="fc-top">
+        <div class="fc-doc">${DOC_SVG}</div>
+        <span class="fc-date-label">${r.date} ${r.label}</span>
+        <div class="fc-badge-row">
+          ${r.badges.map(b => `<span class="badge ${b.cls}">${b.label}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="fc-title">${r.title}</div>
+      <div class="fc-body">${r.body}</div>
+
+      <div class="fc-kpi">
+        ${r.kpi.map(k => `
+          <div class="fc-kpi-item">
+            <span class="fc-kpi-val ${k.cls}">${k.val}</span>
+            <span class="fc-kpi-key">${k.key}</span>
+          </div>`).join('')}
+      </div>
+
+      <div class="fc-highlight">
+        <span class="fc-hl-val">${r.highlight.val}</span>
+        <span class="fc-hl-key">${r.highlight.key}</span>
+      </div>
+
+      <div class="fc-footer">
+        <span class="fc-time">${r.timeAgo}</span>
+        <button class="fc-open" onclick="event.stopPropagation(); window.open('./${r.path}', '_self')">
+          보고서 전체 보기
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+    `;
+
+    card.addEventListener('click', () => window.open(`./${r.path}`, '_self'));
+    feed.appendChild(card);
+  });
+
+  /* ── SCROLL-IN ANIMATION ── */
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.feed-card').forEach((c, i) => {
+    c.style.transitionDelay = `${i * 0.06}s`;
+    observer.observe(c);
+  });
+}
+</script>
+</body>
+</html>

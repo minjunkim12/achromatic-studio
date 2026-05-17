@@ -2,471 +2,531 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
 <title>0516 라카데미 숏폼 분석 보고서</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="icon" type="image/png" href="./favicon.png" />
 <style>
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 :root {
-  --blue: #0064FF;
-  --blue-bg: #eaf1ff;
-  --tx-900: #0f172a;
-  --tx-700: #334155;
-  --tx-500: #64748b;
-  --tx-400: #94a3b8;
-  --bg-0: #ffffff;
-  --bg-50: #f8fafc;
-  --bg-100: #f1f5f9;
-  --line: #e2e8f0;
-  --radius: 14px;
-  --shadow: 0 2px 12px rgba(0,0,0,0.06);
-  --shadow-hover: 0 4px 20px rgba(0,100,255,0.1);
-  --yt-red: #CC0000;
-  --ig-purple: #C13584;
-  --green: #05c46b;
+  --blue:   #0055FF;
+  --blue-bg:#EBF1FF;
+  --green:  #05C46B;
+  --red:    #FF3B30;
+  --ig:     #C13584;
+  --yt:     #CC0000;
+  --bg:     #F2F4F7;
+  --card:   #FFFFFF;
+  --t1:     #191919;
+  --t2:     #8B95A1;
+  --t3:     #C5CBD3;
+  --div:    #F0F2F5;
+  --bdr:    #E5E8EC;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tx-900: #f1f5f9; --tx-700: #cbd5e1; --tx-500: #94a3b8; --tx-400: #64748b;
-    --bg-0: #0f172a; --bg-50: #1e293b; --bg-100: #334155; --line: #1e293b;
-    --shadow: 0 2px 12px rgba(0,0,0,0.3);
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #D8DCE2;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── APP SHELL ── */
+.app {
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px; /* space for sticky CTA */
+}
+
+/* ── TOP BAR ── */
+.top-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--card);
+  border-bottom: 1px solid var(--div);
+  height: 56px;
+  padding: 0 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.back-btn {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: none; cursor: pointer;
+  color: var(--t1); border-radius: 50%;
+  -webkit-tap-highlight-color: transparent;
+}
+.back-btn:active { background: var(--div); }
+.page-title {
+  font-size: 16px; font-weight: 700; color: var(--t1);
+  position: absolute; left: 50%; transform: translateX(-50%);
+}
+.date-pill {
+  font-size: 12px; font-weight: 600; color: var(--t2);
+  background: var(--div); padding: 4px 10px; border-radius: 20px;
+}
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  margin: 0 12px 10px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.card.visible { opacity: 1; transform: translateY(0); }
+
+.sec-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase; color: var(--t2);
+  margin-bottom: 14px;
+}
+
+/* ── HERO NUMBERS ── */
+.hero-number {
+  font-size: 48px; font-weight: 900; color: var(--blue);
+  letter-spacing: -2px; line-height: 1;
+}
+.hero-label {
+  font-size: 13px; color: var(--t2); margin-top: 4px; margin-bottom: 20px;
+}
+.hero-badge {
+  display: inline-block; font-size: 12px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px;
+  background: #FFF0F0; color: var(--red);
+  margin-bottom: 16px;
+}
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--bdr);
+  border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--bdr);
+}
+.kpi-item {
+  background: var(--card);
+  padding: 16px;
+  text-align: center;
+}
+.kpi-val {
+  font-size: 22px; font-weight: 800; color: var(--t1);
+  letter-spacing: -0.8px; line-height: 1;
+}
+.kpi-val.blue { color: var(--blue); }
+.kpi-val.green { color: var(--green); }
+.kpi-val.ig { color: var(--ig); }
+.kpi-key {
+  font-size: 11px; color: var(--t2); margin-top: 4px;
+}
+
+/* ── METRIC LIST ── */
+.metric-list { display: flex; flex-direction: column; }
+.metric-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--div);
+}
+.metric-row:last-child { border-bottom: none; padding-bottom: 0; }
+.m-key { font-size: 14px; color: var(--t2); }
+.m-val { font-size: 15px; font-weight: 700; color: var(--t1); }
+.m-val.blue { color: var(--blue); }
+.m-val.green { color: var(--green); }
+.m-val.ig { color: var(--ig); }
+
+/* ── PLATFORM HEADER ── */
+.plat-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+.plat-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.plat-name { font-size: 14px; font-weight: 700; color: var(--t1); }
+.plat-sub { font-size: 12px; color: var(--t2); margin-left: auto; }
+
+/* ── BIG STAT ── */
+.big-stat {
+  display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px;
+}
+.big-num {
+  font-size: 36px; font-weight: 900; letter-spacing: -1.2px; line-height: 1;
+}
+.big-unit { font-size: 16px; font-weight: 700; color: var(--t2); }
+.big-sub { font-size: 12px; color: var(--t2); margin-bottom: 16px; }
+
+/* ── PROGRESS BAR ── */
+.prog-item { margin-bottom: 10px; }
+.prog-top {
+  display: flex; justify-content: space-between;
+  font-size: 13px; color: var(--t2); margin-bottom: 5px;
+}
+.prog-pct { font-weight: 700; color: var(--t1); }
+.prog-bg { height: 5px; background: var(--div); border-radius: 3px; }
+.prog-fill { height: 5px; border-radius: 3px; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--div); margin: 14px 0; }
+
+/* ── INSIGHT BOX ── */
+.insight {
+  background: var(--blue-bg);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px; color: var(--t1);
+  line-height: 1.7; margin-top: 14px;
+}
+.insight strong { color: var(--blue); }
+
+/* ── NEXT ACTIONS ── */
+/* ── ACTION ITEMS WITH CONNECTOR ── */
+.action-list { display: flex; flex-direction: column; }
+.action-row {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding-bottom: 20px;
+  position: relative;
+}
+.action-row:last-child { padding-bottom: 0; }
+/* vertical connecting line */
+.action-row:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 26px;
+  bottom: 0;
+  width: 2px;
+  background: var(--div);
+  border-radius: 1px;
+}
+.action-num {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--blue-bg); color: var(--blue);
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+  position: relative; z-index: 1;
+}
+.action-title { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
+.action-desc { font-size: 13px; color: var(--t2); line-height: 1.55; }
+
+/* ── STICKY CTA ── */
+.cta-bar {
+  position: fixed; bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%; max-width: 390px;
+  padding: 12px 16px 20px;
+  background: transparent;
+  border-top: none;
+  z-index: 200;
+}
+.cta-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; height: 50px;
+  background: var(--blue); color: #FFFFFF;
+  border: none; border-radius: 14px;
+  font-family: inherit;
+  font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 6px 24px rgba(0,85,255,0.42);
+  -webkit-tap-highlight-color: transparent;
+}
+.cta-btn:active { opacity: 0.88; box-shadow: 0 3px 10px rgba(0,85,255,0.3); }
+.yt-logo { height: 18px; width: auto; display: block; }
+
+/* ── COMPARE TABLE ── */
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.cmp-table th {
+  text-align: left; padding: 8px 4px 8px 0;
+  color: var(--t2); font-weight: 600; font-size: 12px;
+  border-bottom: 2px solid var(--bdr);
+}
+.cmp-table th:not(:first-child) { text-align: right; }
+.cmp-table td {
+  padding: 10px 4px 10px 0;
+  border-bottom: 1px solid var(--div);
+  color: var(--t2);
+}
+.cmp-table td:not(:first-child) { text-align: right; }
+.cmp-table tr.highlight td { font-weight: 700; color: var(--t1); }
+.cmp-table tr.highlight td:first-child { color: var(--blue); }
+.cmp-table tr:last-child td { border-bottom: none; }
+
+/* ── DESKTOP FRAME ── */
+@media (min-width: 420px) {
+  body { display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+  .app {
+    border-radius: 22px; overflow: hidden;
+    height: calc(100vh - 48px); min-height: auto;
+    box-shadow: 0 16px 56px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.08);
   }
+  .cta-bar { border-radius: 0 0 22px 22px; }
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background: var(--bg-50); color: var(--tx-700); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-
-header { position: sticky; top: 0; z-index: 100; background: rgba(248,250,252,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
-header .brand { font-size: 13px; font-weight: 700; color: var(--blue); }
-header .title { font-size: 13px; color: var(--tx-500); }
-header .date-badge { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--tx-400); background: var(--bg-100); padding: 4px 10px; border-radius: 20px; }
-
-main { max-width: 640px; margin: 0 auto; padding: 24px 16px 60px; display: flex; flex-direction: column; gap: 12px; }
-
-.card { background: var(--bg-0); border-radius: var(--radius); border: 1px solid var(--line); box-shadow: var(--shadow); padding: 20px; opacity: 0; animation: fadeUp 0.35s ease both; transition: box-shadow 0.15s, border-color 0.15s; }
-.card:hover { box-shadow: var(--shadow-hover); border-color: #c7d8ff; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.12s}
-.card:nth-child(4){animation-delay:.16s}.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
-.card:nth-child(7){animation-delay:.28s}.card:nth-child(8){animation-delay:.32s}
-
-.section-label { font-size: 11px; font-weight: 700; color: var(--tx-400); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 14px; }
-.divider { height: 1px; background: var(--line); margin: 16px 0; }
-
-/* Hero */
-.hero-card { background: linear-gradient(135deg, #0f172a 0%, #1a3a5c 100%); border: none; padding: 28px 24px; }
-.hero-eyebrow { font-size: 11px; font-weight: 700; color: #7dd3fc; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-.hero-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 6px; }
-.hero-sub { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
-
-.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.kpi-item { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 14px; border: 1px solid rgba(255,255,255,0.1); }
-.kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; line-height: 1; color: #fff; }
-.kpi-value.hi { color: #60a5fa; }
-.kpi-value.ig { color: #f9a8d4; }
-.kpi-value.gn { color: #6ee7b7; }
-.kpi-label { font-size: 11px; color: #94a3b8; margin-top: 4px; }
-
-/* Stats */
-.stat-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
-.stat-number { font-size: 30px; font-weight: 800; letter-spacing: -1px; color: var(--tx-900); line-height: 1; }
-.stat-label { font-size: 13px; color: var(--tx-500); margin-top: 2px; }
-
-/* Platform */
-.platform-head { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
-.platform-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
-.yt-badge { background: #ffecec; color: var(--yt-red); }
-.ig-badge { background: #fce4f3; color: var(--ig-purple); }
-
-/* Metric */
-.metric-list { display: flex; flex-direction: column; gap: 10px; }
-.metric-item { display: flex; justify-content: space-between; align-items: center; }
-.metric-key { font-size: 14px; color: var(--tx-700); }
-.metric-val { font-size: 15px; font-weight: 700; color: var(--tx-900); }
-.metric-val.blue { color: var(--blue); }
-.metric-val.green { color: var(--green); }
-.metric-val.ig { color: var(--ig-purple); }
-
-/* Progress */
-.progress-bar-bg { height: 6px; background: var(--bg-100); border-radius: 3px; overflow: hidden; margin-top: 6px; }
-.progress-fill { height: 100%; border-radius: 3px; }
-
-/* Traffic */
-.traffic-item { margin-bottom: 12px; }
-.traffic-top { display: flex; justify-content: space-between; font-size: 13px; color: var(--tx-700); margin-bottom: 4px; }
-.traffic-pct { font-weight: 700; color: var(--tx-900); }
-
-/* Tags */
-.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.tag { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue); }
-.tag.warn { background: #fff7e6; color: #d97706; }
-.tag.good { background: #e8faf2; color: var(--green); }
-.tag.hot { background: #fff0f0; color: #e53e3e; }
-
-/* Insight box */
-.insight-box { background: #0f172a; border-radius: 12px; padding: 18px; color: #e2e8f0; font-size: 14px; line-height: 1.7; margin-top: 14px; }
-.insight-box strong { color: #60a5fa; }
-
-/* Compare */
-.compare-row { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; align-items: start; }
-.compare-col { padding: 0 12px; }
-.compare-col:first-child { padding-left: 0; }
-.compare-col:last-child { padding-right: 0; }
-.compare-divider { background: var(--line); }
-.compare-head { font-size: 11px; font-weight: 700; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
-
-/* Action */
-.action-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.action-item:last-child { border-bottom: none; padding-bottom: 0; }
-.action-num { width: 26px; height: 26px; border-radius: 50%; background: var(--blue-bg); color: var(--blue); font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-.action-body { flex: 1; }
-.action-title { font-size: 14px; font-weight: 700; color: var(--tx-900); margin-bottom: 3px; }
-.action-desc { font-size: 13px; color: var(--tx-500); line-height: 1.5; }
-
-/* Script */
-.script-box { background: var(--bg-50); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 14px 16px; font-size: 14px; color: var(--tx-700); line-height: 1.8; }
-.script-box em { font-style: normal; color: var(--tx-400); font-size: 12px; }
-
-/* Alert banner */
-.alert-banner { background: linear-gradient(135deg, #05c46b15, #05c46b08); border: 1.5px solid #05c46b40; border-radius: 12px; padding: 14px 16px; margin-bottom: 4px; }
-.alert-banner .alert-title { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
-.alert-banner .alert-body { font-size: 13px; color: var(--tx-700); line-height: 1.5; }
 </style>
 </head>
 <body>
 
-<header>
-  <span class="brand">Achromatic.</span>
-  <span style="color:var(--line)">|</span>
-  <span class="title">라카데미 숏폼 분석</span>
-  <span class="date-badge">2026. 05. 16 (현시점 기준)</span>
-</header>
+<div class="app">
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <button class="back-btn" onclick="window.location.href='./lacademy.html'" aria-label="뒤로">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <span class="page-title">0516 분석 보고서</span>
+    <span class="date-pill">05.16</span>
+  </header>
 
-<main>
+  <div class="content" style="padding-top:12px;">
 
-  <!-- ① Hero -->
-  <div class="card hero-card">
-    <p class="hero-eyebrow">0516 Shortform Report · Updated</p>
-    <h1 class="hero-title">IG 1.6만뷰 · 공유 96 · 팔로우 +20<br>바이럴 확정 — 현시점 기준</h1>
-    <p class="hero-sub">18년 영어 강사가 장담하는 1등급 비결 1가지 📖</p>
-    <div class="kpi-grid">
-      <div class="kpi-item">
-        <div class="kpi-value hi">17,328</div>
-        <div class="kpi-label">합산 조회수 (현시점)</div>
-      </div>
-      <div class="kpi-item">
-        <div class="kpi-value ig">99.4%</div>
-        <div class="kpi-label">IG 비팔로워 유입</div>
-      </div>
-      <div class="kpi-item">
-        <div class="kpi-value gn">+20명</div>
-        <div class="kpi-label">이 릴스로 팔로우 전환</div>
-      </div>
-      <div class="kpi-item">
-        <div class="kpi-value hi">96회</div>
-        <div class="kpi-label">공유 (저장 67보다 많음)</div>
+    <!-- ① 합산 -->
+    <div class="card">
+      <div class="sec-label">이번 주 최종 성과</div>
+      <span class="hero-badge">🔥 2026년 단일 릴스 최고 공유</span>
+      <div class="hero-number">17,328</div>
+      <div class="hero-label">합산 조회수 (IG + YT)</div>
+      <div class="kpi-grid">
+        <div class="kpi-item">
+          <div class="kpi-val ig">1.6만</div>
+          <div class="kpi-key">IG 조회수</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">1,328</div>
+          <div class="kpi-key">YT 조회수</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val blue">96</div>
+          <div class="kpi-key">공유 🔥</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val green">+20</div>
+          <div class="kpi-key">팔로우 전환</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ② 성과 알림 -->
-  <div class="card" style="padding: 16px 20px;">
-    <div class="alert-banner">
-      <div class="alert-title">🚀 2026년 라카데미 숏폼 역대 최고 초기 속도</div>
-      <div class="alert-body">0509 영상 5시간 기준 합산 3,293 → 이번 영상 현시점 <strong>17,328</strong> (526% 수준). IG 단독 16,000뷰는 0509의 5시간 IG 2,266 대비 706%. 공유 96은 단일 릴스 기준 최고치.</div>
-    </div>
-  </div>
+    <!-- ② Instagram -->
+    <div class="card">
+      <div class="plat-header">
+        <div class="plat-dot" style="background:var(--ig)"></div>
+        <span class="plat-name">Instagram Reels</span>
+        <span class="plat-sub">현시점 기준</span>
+      </div>
+      <div class="big-stat">
+        <span class="big-num" style="color:var(--ig)">1.6만</span>
+      </div>
+      <div class="big-sub">조회수 · 도달 1.3만</div>
 
-  <!-- ③ 콘텐츠 개요 -->
-  <div class="card">
-    <p class="section-label">Content Overview</p>
-    <div style="margin-bottom:12px;">
-      <div style="font-size:15px;font-weight:700;color:var(--tx-900);margin-bottom:4px;">18년 영어 강사가 장담하는 1등급 비결 1가지 📖</div>
-      <div style="font-size:12px;color:var(--tx-400);">YouTube 제목</div>
-    </div>
-    <div style="margin-bottom:12px;">
-      <div style="font-size:15px;font-weight:700;color:var(--ig-purple);margin-bottom:4px;">"고3 절반이 2등급, 신문에 보도!" · "선생님이 시킨 건 이거 하나였다!"</div>
-      <div style="font-size:12px;color:var(--tx-400);">Instagram 썸네일 자막</div>
-    </div>
-    <div class="divider"></div>
-    <p style="font-size:13px;font-weight:600;color:var(--tx-500);margin-bottom:10px;">전사 요약</p>
-    <div class="script-box">
-      고3 절반 이상이 2등급 나와 학교가 신문에 보도됨<br>
-      4→3등급, 3→2등급, 2→1등급 전교생 일괄 상승<br>
-      방법은 단 하나 — <strong>매 수업마다 단어 테스트</strong><br>
-      6개월 후 전원 등급 상승<br>
-      <em>"단어 외우는 거 좋아하는 사람 아무도 없어요"</em><br>
-      18년 경력이 결론 내린 공식: 단어만 많이 하면 영어는 끝
-    </div>
-    <div class="tag-row" style="margin-top:12px;">
-      <span class="tag hot">바이럴 확정</span>
-      <span class="tag good">소셜 프루프 훅</span>
-      <span class="tag good">선언형 IG</span>
-      <span class="tag warn">설명형 YT 제목</span>
-    </div>
-  </div>
+      <div class="metric-list">
+        <div class="metric-row">
+          <span class="m-key">비팔로워 유입</span>
+          <span class="m-val green">99.4%</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">공유</span>
+          <span class="m-val blue">96 🔥</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">저장</span>
+          <span class="m-val blue">67</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">좋아요</span>
+          <span class="m-val">54</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">팔로우 전환</span>
+          <span class="m-val green">+20명</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">참여한 계정</span>
+          <span class="m-val">187</span>
+        </div>
+      </div>
 
-  <!-- ④ YouTube -->
-  <div class="card">
-    <div class="platform-head">
-      <span class="platform-badge yt-badge">YouTube Shorts</span>
-      <span style="font-size:12px;color:var(--tx-400);">현시점 기준</span>
-    </div>
-    <div class="metric-list">
-      <div class="metric-item">
-        <span class="metric-key">조회수</span>
-        <span class="metric-val" style="color:var(--yt-red);">1,328회</span>
+      <div class="divider"></div>
+      <p style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:8px;">비팔로워 도달 비율</p>
+      <div class="prog-item">
+        <div class="prog-bg">
+          <div class="prog-fill" style="width:99.4%;background:linear-gradient(90deg,var(--ig),#E1306C)"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+          <span style="font-size:11px;color:var(--t3)">팔로워 0.6%</span>
+          <span style="font-size:11px;font-weight:700;color:var(--ig)">비팔로워 99.4%</span>
+        </div>
       </div>
-      <div class="metric-item">
-        <span class="metric-key">구독자 변화</span>
-        <span class="metric-val green">+1명</span>
-      </div>
-      <div class="metric-item">
-        <span class="metric-key">평균 대비</span>
-        <span class="metric-val" style="color:#d97706;">72회 낮음</span>
-      </div>
-      <div class="metric-item">
-        <span class="metric-key">그래프 패턴</span>
-        <span class="metric-val">급상승 후 완만한 성장</span>
-      </div>
-      <div class="metric-item">
-        <span class="metric-key">시청 지속률</span>
-        <span class="metric-val" style="color:var(--tx-400);">미처리 (5/18 체크)</span>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <p style="font-size:13px;font-weight:600;color:var(--tx-500);margin-bottom:10px;">트래픽 소스</p>
-    <div class="traffic-item">
-      <div class="traffic-top"><span>Shorts 피드</span><span class="traffic-pct">96.2%</span></div>
-      <div class="progress-bar-bg"><div class="progress-fill" style="width:96.2%;background:var(--yt-red);"></div></div>
-    </div>
-    <div class="traffic-item">
-      <div class="traffic-top"><span>YouTube 검색</span><span class="traffic-pct">1.5%</span></div>
-      <div class="progress-bar-bg"><div class="progress-fill" style="width:1.5%;background:#94a3b8;"></div></div>
-    </div>
-    <div class="traffic-item">
-      <div class="traffic-top"><span>탐색 기능</span><span class="traffic-pct">1.4%</span></div>
-      <div class="progress-bar-bg"><div class="progress-fill" style="width:1.4%;background:#94a3b8;"></div></div>
-    </div>
-    <div class="traffic-item">
-      <div class="traffic-top"><span>기타 / 외부</span><span class="traffic-pct">0.7%</span></div>
-      <div class="progress-bar-bg"><div class="progress-fill" style="width:0.7%;background:#94a3b8;"></div></div>
-    </div>
-    <div class="insight-box">
-      YT 검색 1.5% + 탐색 1.4% 유입은 이전 0509 영상 초기값보다 높음 → 제목 키워드("1등급", "영어")가 검색에도 노출되기 시작. <strong>YT는 계속 성장 중.</strong>
-    </div>
-  </div>
 
-  <!-- ⑤ Instagram -->
-  <div class="card">
-    <div class="platform-head">
-      <span class="platform-badge ig-badge">Instagram Reels</span>
-      <span style="font-size:12px;color:var(--tx-400);">현시점 기준</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-      <div>
-        <div class="stat-row"><span class="stat-number" style="color:var(--ig-purple);">1.6만</span></div>
-        <div class="stat-label">조회수</div>
-      </div>
-      <div>
-        <div class="stat-row"><span class="stat-number">1.3만</span></div>
-        <div class="stat-label">도달한 계정</div>
+      <div class="insight">
+        공유(96) > 저장(67) > 좋아요(54) 순서. <strong>정보형 + 공유형 동시 작동.</strong> "단어"라는 주제가 수험생·학부모 네트워크를 타고 확산. 공유가 저장을 넘는 릴스는 이례적.
       </div>
     </div>
-    <div class="divider"></div>
-    <div class="metric-list">
-      <div class="metric-item"><span class="metric-key">비팔로워 유입</span><span class="metric-val green">99.4%</span></div>
-      <div class="metric-item"><span class="metric-key">공유</span><span class="metric-val blue">96 🔥</span></div>
-      <div class="metric-item"><span class="metric-key">저장</span><span class="metric-val blue">67</span></div>
-      <div class="metric-item"><span class="metric-key">좋아요</span><span class="metric-val">54</span></div>
-      <div class="metric-item"><span class="metric-key">댓글</span><span class="metric-val" style="color:var(--tx-400);">0</span></div>
-      <div class="metric-item"><span class="metric-key">팔로우 전환</span><span class="metric-val green">+20명</span></div>
-      <div class="metric-item"><span class="metric-key">참여한 계정</span><span class="metric-val">187</span></div>
-    </div>
-    <div class="divider"></div>
-    <p style="font-size:13px;font-weight:600;color:var(--tx-500);margin-bottom:8px;">비팔로워 유입 비율</p>
-    <div class="progress-bar-bg" style="height:8px;">
-      <div class="progress-fill" style="width:99.4%;background:linear-gradient(90deg,var(--ig-purple),#e1306c);"></div>
-    </div>
-    <div style="display:flex;justify-content:space-between;margin-top:4px;">
-      <span style="font-size:11px;color:var(--tx-400);">팔로워 0.6%</span>
-      <span style="font-size:11px;font-weight:700;color:var(--ig-purple);">비팔로워 99.4%</span>
-    </div>
-    <div class="insight-box">
-      공유(96) > 저장(67) > 좋아요(54) 순서. 이 순서는 이 영상이 <strong>정보형 + 공유형 동시 작동</strong>을 의미. "단어"라는 주제가 수험생들의 즉각 공유 심리를 건드렸고, 동시에 저장도 67로 높다. 팔로우 +20은 단일 릴스 기준 0509(+81명 당시 계정 팔로워 80명 → 팔로우율 대비) 수준의 효율.
-    </div>
-  </div>
 
-  <!-- ⑥ 플랫폼 비교 -->
-  <div class="card">
-    <p class="section-label">Platform Comparison</p>
-    <div class="compare-row">
-      <div class="compare-col">
-        <div class="compare-head" style="color:var(--yt-red);">YouTube Shorts</div>
-        <div class="metric-item" style="margin-bottom:8px;"><span class="metric-key" style="font-size:13px;">조회수</span><span class="metric-val" style="color:var(--yt-red);">1,328</span></div>
-        <div class="metric-item" style="margin-bottom:8px;"><span class="metric-key" style="font-size:13px;">피드 유입</span><span class="metric-val" style="font-size:14px;">96.2%</span></div>
-        <div class="metric-item"><span class="metric-key" style="font-size:13px;">구독자</span><span class="metric-val green" style="font-size:14px;">+1</span></div>
+    <!-- ③ YouTube -->
+    <div class="card">
+      <div class="plat-header">
+        <div class="plat-dot" style="background:var(--yt)"></div>
+        <span class="plat-name">YouTube Shorts</span>
+        <span class="plat-sub">현시점 기준</span>
       </div>
-      <div class="compare-divider"></div>
-      <div class="compare-col" style="padding-left:20px;">
-        <div class="compare-head" style="color:var(--ig-purple);">Instagram Reels</div>
-        <div class="metric-item" style="margin-bottom:8px;"><span class="metric-key" style="font-size:13px;">조회수</span><span class="metric-val" style="color:var(--ig-purple);">16,000</span></div>
-        <div class="metric-item" style="margin-bottom:8px;"><span class="metric-key" style="font-size:13px;">비팔로워</span><span class="metric-val green" style="font-size:14px;">99.4%</span></div>
-        <div class="metric-item"><span class="metric-key" style="font-size:13px;">팔로우</span><span class="metric-val green" style="font-size:14px;">+20</span></div>
+      <div class="big-stat">
+        <span class="big-num" style="color:var(--yt)">1,328</span>
       </div>
-    </div>
-    <div class="divider"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:center;">
-      <div>
-        <div style="font-size:12px;color:var(--tx-500);margin-bottom:4px;">IG / YT 배율</div>
-        <div style="font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--ig-purple);">12×</div>
-        <div style="font-size:11px;color:var(--tx-400);">현시점 기준</div>
-      </div>
-      <div>
-        <div style="font-size:12px;color:var(--tx-500);margin-bottom:4px;">합산 (현시점)</div>
-        <div style="font-size:32px;font-weight:800;letter-spacing:-1px;color:var(--blue);">17,328</div>
-        <div style="font-size:11px;color:var(--tx-400);">0509 5h 기준 3,293 대비 526%</div>
-      </div>
-    </div>
-  </div>
+      <div class="big-sub">조회수</div>
 
-  <!-- ⑦ 벤치마크 비교 -->
-  <div class="card">
-    <p class="section-label">vs 이전 영상 비교 (2026년 기준)</p>
-    <div style="overflow-x:auto;">
-      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <div class="metric-list">
+        <div class="metric-row">
+          <span class="m-key">구독자 변화</span>
+          <span class="m-val green">+1명</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">채널 평균 대비</span>
+          <span class="m-val" style="color:#D97706">72회 낮음</span>
+        </div>
+        <div class="metric-row">
+          <span class="m-key">시청 지속률</span>
+          <span class="m-val" style="color:var(--t3)">5/18 체크 예정</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <p style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:10px;">트래픽 소스</p>
+      <div class="prog-item">
+        <div class="prog-top"><span>Shorts 피드</span><span class="prog-pct">96.2%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:96.2%;background:var(--yt)"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-top"><span>YouTube 검색</span><span class="prog-pct">1.5%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:1.5%;background:var(--t3)"></div></div>
+      </div>
+      <div class="prog-item">
+        <div class="prog-top"><span>탐색 기능</span><span class="prog-pct">1.4%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:1.4%;background:var(--t3)"></div></div>
+      </div>
+      <div class="prog-item" style="margin-bottom:0">
+        <div class="prog-top"><span>기타 / 외부</span><span class="prog-pct">0.7%</span></div>
+        <div class="prog-bg"><div class="prog-fill" style="width:0.7%;background:var(--t3)"></div></div>
+      </div>
+    </div>
+
+    <!-- ④ 콘텐츠 -->
+    <div class="card">
+      <div class="sec-label">Content</div>
+      <p style="font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px;line-height:1.4">
+        18년 영어 강사가 장담하는 1등급 비결 1가지 📖
+      </p>
+      <p style="font-size:12px;color:var(--t2);margin-bottom:14px">YouTube 제목</p>
+      <div style="background:var(--div);height:1px;margin-bottom:14px"></div>
+      <p style="font-size:13px;font-weight:700;color:var(--ig);margin-bottom:8px">"고3 절반이 2등급, 신문에 보도!" · "선생님이 시킨 건 이거 하나였다!"</p>
+      <p style="font-size:12px;color:var(--t2);margin-bottom:14px">Instagram 썸네일 자막</p>
+      <div style="background:var(--bg);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px;font-size:13px;color:var(--t1);line-height:1.8">
+        고3 절반 이상 2등급 → 학교 신문 보도<br>
+        방법은 단 하나 — <strong style="color:var(--blue)">매 수업마다 단어 테스트</strong><br>
+        6개월 후 전원 등급 상승<br>
+        18년 경력의 결론: 단어만 하면 영어는 끝
+      </div>
+    </div>
+
+    <!-- ⑤ 이전 대비 -->
+    <div class="card">
+      <div class="sec-label">vs 이전 영상 비교</div>
+      <table class="cmp-table">
         <thead>
-          <tr style="border-bottom:2px solid var(--line);">
-            <th style="text-align:left;padding:8px 0;color:var(--tx-500);font-weight:600;">영상</th>
-            <th style="text-align:right;padding:8px 4px;color:var(--tx-500);font-weight:600;">IG</th>
-            <th style="text-align:right;padding:8px 4px;color:var(--tx-500);font-weight:600;">YT</th>
-            <th style="text-align:right;padding:8px 0;color:var(--tx-500);font-weight:600;">합산</th>
+          <tr>
+            <th>영상</th><th>IG</th><th>YT</th><th>합산</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="border-bottom:1px solid var(--line);">
-            <td style="padding:10px 0;font-weight:700;color:var(--blue);">0516 (현시점) ★</td>
-            <td style="text-align:right;padding:10px 4px;font-weight:700;color:var(--ig-purple);">16,000</td>
-            <td style="text-align:right;padding:10px 4px;font-weight:700;color:var(--yt-red);">1,328</td>
-            <td style="text-align:right;padding:10px 0;font-weight:800;color:var(--blue);">17,328</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--line);">
-            <td style="padding:10px 0;color:var(--tx-700);">0509 (5시간)</td>
-            <td style="text-align:right;padding:10px 4px;color:var(--tx-500);">2,266</td>
-            <td style="text-align:right;padding:10px 4px;color:var(--tx-500);">1,027</td>
-            <td style="text-align:right;padding:10px 0;color:var(--tx-700);">3,293</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--line);">
-            <td style="padding:10px 0;color:var(--tx-700);">0404 연세대 합격생</td>
-            <td style="text-align:right;padding:10px 4px;color:var(--tx-500);">—</td>
-            <td style="text-align:right;padding:10px 4px;color:var(--tx-500);">3,553</td>
-            <td style="text-align:right;padding:10px 0;color:var(--tx-700);">3,553+</td>
+          <tr class="highlight">
+            <td>0516 ★</td>
+            <td style="color:var(--ig)">16,000</td>
+            <td style="color:var(--yt)">1,328</td>
+            <td style="color:var(--blue)">17,328</td>
           </tr>
           <tr>
-            <td style="padding:10px 0;color:var(--tx-700);">0217 폰 없애면 돈</td>
-            <td style="text-align:right;padding:10px 4px;color:var(--tx-500);">—</td>
-            <td style="text-align:right;padding:10px 4px;color:var(--tx-500);">4,879</td>
-            <td style="text-align:right;padding:10px 0;color:var(--tx-700);">4,879+</td>
+            <td>0509 (5h)</td><td>2,266</td><td>1,027</td><td>3,293</td>
+          </tr>
+          <tr>
+            <td>0404 연세대</td><td>—</td><td>3,553</td><td>3,553+</td>
+          </tr>
+          <tr>
+            <td>0217 폰 없애면</td><td>—</td><td>4,879</td><td>4,879+</td>
           </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-
-  <!-- ⑧ 핵심 인사이트 -->
-  <div class="card">
-    <p class="section-label">Key Insights</p>
-
-    <div class="action-item">
-      <div class="action-num" style="background:#fff0f0;color:#e53e3e;">🔥</div>
-      <div class="action-body">
-        <div class="action-title">공유 96 — 2026년 단일 릴스 최고</div>
-        <div class="action-desc">공유(96) > 저장(67) > 좋아요(54). 정보형 콘텐츠에서 공유가 저장을 넘는 건 이례적. "단어"가 수험생·학부모 네트워크를 타고 확산 중. 이 콘텐츠 공식("누구나 공감하는 학습의 진실 + 소셜 프루프")을 다음 영상에 반복 적용.</div>
+      <div class="insight">
+        0509 5시간 기준 3,293 대비 <strong>526% 수준.</strong> IG 단독 16,000은 0509 IG 2,266 대비 706%. 공유 96은 단일 릴스 기준 최고치.
       </div>
     </div>
 
-    <div class="action-item">
-      <div class="action-num">2</div>
-      <div class="action-body">
-        <div class="action-title">팔로우 +20 — 단일 릴스 기준 높은 전환</div>
-        <div class="action-desc">현재 팔로워 ~212명 기준 이 릴스 하나로 +20명. 팔로우 전환율 약 10.7%. 0509 영상 이후 계속 쌓인 팔로워베이스 + 이번 영상으로 추가 가속. 200명대 진입 확인.</div>
+    <!-- ⑥ 핵심 인사이트 -->
+    <div class="card">
+      <div class="sec-label">Key Insights</div>
+      <div class="action-row">
+        <div class="action-num" style="background:#FFF0F0;color:var(--red)">🔥</div>
+        <div>
+          <div class="action-title">공유 96 — 정보형 + 공유형 동시 작동</div>
+          <div class="action-desc">공유(96) > 저장(67) > 좋아요(54). "단어"라는 공감 주제 + "신문 보도" 소셜 프루프 조합이 수험생·학부모 네트워크를 타고 확산. 이 공식 반복 적용할 것.</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">2</div>
+        <div>
+          <div class="action-title">팔로우 +20 — 단일 릴스 높은 전환율</div>
+          <div class="action-desc">팔로워 ~212명 기준 이 릴스로 +20명. 전환율 약 10.7%. 0509 이후 계속 누적. 200명대 진입 확인.</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num">3</div>
+        <div>
+          <div class="action-title">IG vs YT 12배 격차 구조 확인</div>
+          <div class="action-desc">IG 16,000 vs YT 1,328. IG 썸네일 소셜 프루프가 압도적. YT는 설명형 제목 → CTR 낮지만 성장 중. 두 플랫폼 각각 다르게 최적화 필요.</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <div class="action-num" style="background:#E8FAF2;color:var(--green)">→</div>
+        <div>
+          <div class="action-title">다음 영상 — 공유 유발 + 소셜 프루프 반복</div>
+          <div class="action-desc">"(검증된 결과) + (놀라운 사실) + (모두가 아는 진실 뒤집기)" 구조 유지. YT 제목은 선언형으로 A/B 테스트.</div>
+        </div>
       </div>
     </div>
 
-    <div class="action-item">
-      <div class="action-num">3</div>
-      <div class="action-body">
-        <div class="action-title">IG vs YT 성과 격차 구조적 확인</div>
-        <div class="action-desc">IG 16,000 vs YT 1,328 = 12배 차이. IG 썸네일의 소셜 프루프("신문에 보도") + 선언형 훅이 압도적. YT는 설명형 제목으로 CTR이 낮지만 꾸준히 성장 중. 두 플랫폼을 다르게 최적화해야 한다는 점 재확인.</div>
-      </div>
-    </div>
+  </div><!-- /content -->
+</div><!-- /app -->
 
-    <div class="action-item">
-      <div class="action-num">4</div>
-      <div class="action-body">
-        <div class="action-title">시청 지속률은 5/18 확인 후 구조 평가</div>
-        <div class="action-desc">조회수가 높아도 지속률이 낮으면 다음 알고리즘 배포가 줄어든다. 27초 영상에서 55%+ 목표. 5/18에 반드시 체크.</div>
-      </div>
-    </div>
-  </div>
+<script>
+/* scroll-in for floating cards */
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } }),
+  { threshold: 0.06 }
+);
+document.querySelectorAll('.card').forEach((c, i) => {
+  c.style.transitionDelay = `${i * 0.05}s`;
+  obs.observe(c);
+});
+</script>
 
-  <!-- ⑨ 채널 현황 -->
-  <div class="card">
-    <p class="section-label">Channel Status</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div>
-        <div class="stat-row"><span class="stat-number">~212</span></div>
-        <div class="stat-label">IG 팔로워 (추정)</div>
-      </div>
-      <div>
-        <div class="stat-row"><span class="stat-number" style="color:var(--green);">+20</span></div>
-        <div class="stat-label">이 릴스 팔로우 전환</div>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <div style="font-size:13px;color:var(--tx-500);">
-      0509 이전 ~80명 → 0509 릴스 +81명 → 0516 이전 192명 → 현재 ~212명.<br>
-      한 달여 만에 2.6배 성장. 200명대 진입.
-    </div>
-  </div>
+<!-- STICKY CTA -->
+<div class="cta-bar">
+  <!-- TODO: 아래 href를 0516 영상 YouTube Shorts URL로 교체 -->
+  <a class="cta-btn" href="https://www.youtube.com/@jiwoo_english/shorts" target="_blank" rel="noopener">
+    <img class="yt-logo"
+         src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png"
+         alt="YouTube">
+    숏폼 보러가기
+  </a>
+</div>
 
-  <!-- ⑩ 액션 플랜 -->
-  <div class="card">
-    <p class="section-label">Next Actions</p>
-
-    <div class="action-item">
-      <div class="action-num" style="background:#e8faf2;color:var(--green);">✓</div>
-      <div class="action-body">
-        <div class="action-title" style="color:var(--green);">현시점 데이터 수집 완료</div>
-        <div class="action-desc">IG 16,000 · YT 1,328 · 공유 96 · 저장 67 · 팔로우 +20 확인.</div>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">→</div>
-      <div class="action-body">
-        <div class="action-title">5/18 — YT 시청 지속률 + 48h 조회수 체크</div>
-        <div class="action-desc">YT 시청 지속률 55%+ 여부. YT + IG 48시간 기준 최종 수치 기록.</div>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">→</div>
-      <div class="action-body">
-        <div class="action-title">다음 영상 — 공유 유발 + 소셜 프루프 공식 반복</div>
-        <div class="action-desc">"(검증된 결과) + (놀라운 사실) + (모두가 아는 진실 뒤집기)" 구조. 공유가 96까지 간 원인은 "단어"라는 공감 주제 + "신문 보도"라는 소셜 프루프 조합.</div>
-      </div>
-    </div>
-
-    <div class="action-item">
-      <div class="action-num">→</div>
-      <div class="action-body">
-        <div class="action-title">YT 제목 리텍스트 A/B 실험</div>
-        <div class="action-desc">현재 설명형("18년 영어 강사가 장담하는 1등급 비결 1가지") → 선언형으로 변경 시 CTR 개선 가능. 예: "고3 절반이 2등급 된 학원의 방법은 단 하나였다"</div>
-      </div>
-    </div>
-  </div>
-
-</main>
 </body>
 </html>
