@@ -274,6 +274,20 @@ const SVG_TROPHY = `
         fill="white" opacity="0.72"/>
 </svg>`;
 
+const SVG_CHART = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- bar 1 (tall, blue) -->
+  <rect x="14" y="30" width="16" height="40" rx="4" fill="#0055FF" opacity="0.85"/>
+  <!-- bar 2 (medium, green) -->
+  <rect x="36" y="44" width="16" height="26" rx="4" fill="#00B493" opacity="0.75"/>
+  <!-- bar 3 (short, dim) -->
+  <rect x="58" y="56" width="16" height="14" rx="4" fill="#C5CBD3" opacity="0.7"/>
+  <!-- baseline -->
+  <line x1="10" y1="72" x2="78" y2="72" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- upward arrow on bar 1 -->
+  <path d="M22 24 l-4 5 h3 v0 h2 v0 h3 z" fill="#0055FF" opacity="0.6"/>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
   {
@@ -285,7 +299,7 @@ const REPORTS = [
     body: '합산 59,933뷰 · IG 공유 474건 · 팔로우 +60명',
     sub: '숏폼 분석 · 공유 역전',
     timeAgo: '방금',
-    svg: SVG_VIRAL,
+    svg: SVG_CHART,
   },
   {
     path: 'lacademy-0518-report.html',
