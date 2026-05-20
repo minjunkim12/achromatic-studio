@@ -371,12 +371,32 @@ if (!REPORTS.length) {
     window.location.href = `./${latest.path}`;
   });
 
+  /* ── SVG AUTO-EXTRACT: 보고서 HTML에서 hero SVG를 파싱해 카드 배경에 자동 주입 ── */
+  const _svgCache = new Map();
+
+  async function extractReportSVG(path) {
+    if (_svgCache.has(path)) return _svgCache.get(path);
+    try {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('fetch failed');
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const svgEl = doc.querySelector('.hero-svg-wrap svg');
+      const result = svgEl ? svgEl.outerHTML : null;
+      _svgCache.set(path, result);
+      return result;
+    } catch {
+      _svgCache.set(path, null);
+      return null;
+    }
+  }
+
   /* ── CARDS ── */
   REPORTS.forEach((r) => {
     const card = document.createElement('div');
     card.className = 'toss-card';
     card.innerHTML = `
-      <div class="tc-bg-illus">${r.svg}</div>
+      <div class="tc-bg-illus">${r.svg || ''}</div>
       <div class="tc-content">
         <div class="tc-sub">${r.date} ${r.label} · ${r.sub}</div>
         <div class="tc-title">${r.title}</div>
@@ -391,6 +411,12 @@ if (!REPORTS.length) {
     `;
     card.addEventListener('click', () => window.open(`./${r.path}`, '_self'));
     feed.appendChild(card);
+
+    /* 보고서 HTML fetch → hero SVG 추출 → 카드 배경 교체 (r.svg는 로딩 전 fallback) */
+    const bgEl = card.querySelector('.tc-bg-illus');
+    extractReportSVG(r.path).then(svgStr => {
+      if (svgStr) bgEl.innerHTML = svgStr;
+    });
   });
 
   /* ── SCROLL-IN ── */
