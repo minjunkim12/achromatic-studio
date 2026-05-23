@@ -1,723 +1,466 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>라카데미 숏폼 분석 보고서 — 0514</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<style>
-  /* ===== DESIGN TOKENS ===== */
-  :root {
-    --toss-blue: #0064FF;
-    --toss-blue-hover: #0052D4;
-    --toss-blue-light: #EAF2FF;
-    --yt-red: #CC0000;
-    --ig-purple: #C13584;
-    --success: #00B448;
-    --warning: #FF9500;
-    --danger: #FF3B30;
-    --grey-900: #191F28;
-    --grey-700: #3D4350;
-    --grey-500: #6B7684;
-    --grey-300: #B0B8C1;
-    --grey-100: #F2F4F6;
-    --grey-50: #F9FAFB;
-    --white: #FFFFFF;
-    --dark-bg: #0D1117;
-    --dark-card: #161B22;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 20px;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>라카데미 · 0514 분석</title>
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #EBF1FF;
+      --blue-lt: #F3F6FF;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+    }
 
-  body {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--grey-50);
-    color: var(--grey-900);
-    word-break: keep-all;
-    line-height: 1.6;
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; }
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-  /* ===== NAV ===== */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--grey-100);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .nav-logo {
-    width: 32px; height: 32px;
-    background: var(--toss-blue);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-  .nav-title { font-size: 15px; font-weight: 700; color: var(--grey-900); }
-  .nav-date { font-size: 13px; color: var(--grey-500); background: var(--grey-100); padding: 4px 10px; border-radius: 20px; }
+    .page {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--bg);
+      padding-bottom: 88px;
+    }
 
-  /* ===== LAYOUT ===== */
-  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-  section { padding: 60px 0; }
-  .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
-  .fade-up.visible { opacity: 1; transform: none; }
+    /* ── ANIMATIONS ── */
+    @keyframes shimmer {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+    @keyframes barRise {
+      from { transform: scaleY(0); }
+      to   { transform: scaleY(1); }
+    }
+    @keyframes recordPop {
+      0%   { transform: scaleY(0); }
+      70%  { transform: scaleY(1.04); }
+      100% { transform: scaleY(1); }
+    }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.4; transform: scale(0.8); }
+      50%       { opacity: 1; transform: scale(1.2); }
+    }
+    @keyframes badgePop {
+      from { opacity: 0; transform: translateY(6px) scale(0.9); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-  /* ===== HERO ===== */
-  .hero {
-    background: linear-gradient(135deg, #0A1628 0%, #0D2461 60%, #1A3A8A 100%);
-    padding: 72px 24px 60px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(0,100,255,0.25) 0%, transparent 70%);
-    top: -100px; right: -50px;
-    border-radius: 50%;
-  }
-  .hero-inner { max-width: 1080px; margin: 0 auto; position: relative; }
-  .hero-label {
-    display: inline-block;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
-    color: var(--toss-blue);
-    background: rgba(0,100,255,0.15);
-    padding: 4px 12px; border-radius: 20px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-  .hero h1 {
-    font-size: clamp(28px, 5vw, 44px);
-    font-weight: 800;
-    color: #FFFFFF;
-    line-height: 1.2;
-    margin-bottom: 16px;
-  }
-  .hero-sub {
-    font-size: 15px; color: rgba(255,255,255,0.65);
-    margin-bottom: 36px;
-  }
-  .hero-kpi-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-top: 8px;
-  }
-  .hero-kpi {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    backdrop-filter: blur(8px);
-  }
-  .hero-kpi-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
-  .hero-kpi-value { font-size: 24px; font-weight: 800; color: #FFFFFF; }
-  .hero-kpi-change { font-size: 12px; margin-top: 4px; }
-  .hero-kpi-change.up { color: #3DDC84; }
-  .hero-kpi-change.down { color: #FF6B6B; }
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%, #A8CFFF 12%, #C4E1FF 28%,
+        #DCEFFF 48%, #EDF7FF 66%, #F5FBFF 84%, var(--bg) 100%
+      );
+      padding: 56px 24px 36px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 28%, rgba(255,255,255,0.48) 50%, transparent 72%);
+      animation: shimmer 4.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-back {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top)); left: 16px;
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.38);
+      border: none; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--t1); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      z-index: 10; -webkit-tap-highlight-color: transparent;
+    }
+    .hero-back:active { background: rgba(255,255,255,0.6); }
+    .hero-date {
+      font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.55);
+      letter-spacing: -0.1px; margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-size: 24px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.8px; line-height: 1.28;
+      position: relative; z-index: 1; margin-bottom: 28px;
+    }
+    .hero-title em { font-style: normal; color: var(--blue); }
 
-  /* ===== SECTION HEADING ===== */
-  .section-label { font-size: 12px; font-weight: 600; color: var(--toss-blue); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-  .section-title { font-size: clamp(22px, 3vw, 32px); font-weight: 800; color: var(--grey-900); margin-bottom: 8px; }
-  .section-sub { font-size: 15px; color: var(--grey-500); }
+    .hero-gfx {
+      width: 160px; height: 160px;
+      margin: 0 auto 28px; position: relative; z-index: 1;
+    }
+    .hero-gfx svg { width: 100%; height: 100%; overflow: visible; }
 
-  /* ===== CARDS ===== */
-  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
-  .card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid rgba(0,0,0,0.04);
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-  .card-icon { font-size: 28px; margin-bottom: 12px; }
-  .card-label { font-size: 12px; color: var(--grey-500); margin-bottom: 6px; }
-  .card-value { font-size: 28px; font-weight: 800; color: var(--grey-900); margin-bottom: 4px; }
-  .card-sub { font-size: 13px; color: var(--grey-500); }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-  .badge-blue { background: var(--toss-blue-light); color: var(--toss-blue); }
-  .badge-green { background: rgba(0,180,72,0.12); color: var(--success); }
-  .badge-red { background: rgba(255,59,48,0.12); color: var(--danger); }
-  .badge-orange { background: rgba(255,149,0,0.12); color: var(--warning); }
+    /* Bar chart SVG animations */
+    .bar-old {
+      transform-box: fill-box; transform-origin: bottom center;
+      animation: barRise .5s ease both;
+    }
+    .b-b1 { animation-delay: .1s; }
+    .b-b2 { animation-delay: .25s; }
+    .b-b3 { animation-delay: .4s; }
+    .bar-record {
+      transform-box: fill-box; transform-origin: bottom center;
+      animation: recordPop .8s cubic-bezier(.34,1.56,.64,1) .6s both;
+    }
+    .sp { animation: sparkle 1.6s ease-in-out infinite; }
+    .sp1 { animation-delay: 0s; }
+    .sp2 { animation-delay: .5s; }
+    .sp3 { animation-delay: 1s; }
+    .rec-badge { animation: badgePop .5s ease 1.2s both; }
 
-  /* ===== TABLE ===== */
-  .table-wrap { background: var(--white); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.04); margin-top: 32px; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: var(--grey-50); border-bottom: 1px solid var(--grey-100); }
-  th { font-size: 12px; font-weight: 600; color: var(--grey-500); text-align: left; padding: 12px 16px; text-transform: uppercase; letter-spacing: 0.06em; }
-  td { font-size: 14px; color: var(--grey-700); padding: 14px 16px; border-bottom: 1px solid var(--grey-100); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--grey-50); }
-  .views-bar-wrap { width: 100px; }
-  .views-bar { height: 4px; border-radius: 2px; background: var(--grey-100); }
-  .views-bar-fill { height: 4px; border-radius: 2px; background: var(--toss-blue); }
-  .rank-badge { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
-  .rank-1 { background: #FFD700; color: #7A5C00; }
-  .rank-2 { background: #E0E0E0; color: #555; }
-  .rank-3 { background: #CD7F32; color: #fff; }
-  .rank-other { background: var(--grey-100); color: var(--grey-500); }
-  .title-cell { font-weight: 500; color: var(--grey-900); font-size: 13px; max-width: 280px; }
+    /* KPI card */
+    .hero-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 18px 22px;
+      position: relative; z-index: 1;
+      max-width: 300px; margin: 0 auto;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,255,255,0.5);
+    }
+    .hc-label { font-size: 13px; color: var(--t2); margin-bottom: 4px; }
+    .hc-num { font-size: 42px; font-weight: 900; color: var(--blue); letter-spacing: -1.6px; line-height: 1; }
+    .hc-div { height: 1px; background: rgba(0,0,0,0.07); margin: 14px 0; }
+    .hc-row { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--t1); }
+    .hc-ico { width: 28px; height: 28px; border-radius: 8px; background: var(--blue-bg); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
 
-  /* ===== INSIGHT DARK SECTION ===== */
-  .dark-section {
-    background: var(--dark-bg);
-    padding: 60px 24px;
-  }
-  .dark-section .section-title { color: #FFFFFF; }
-  .dark-section .section-sub { color: rgba(255,255,255,0.5); }
-  .insight-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 32px; }
-  .insight-card {
-    background: var(--dark-card);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-  }
-  .insight-number { font-size: 13px; font-weight: 700; color: var(--toss-blue); margin-bottom: 10px; }
-  .insight-text { font-size: 16px; font-weight: 700; color: #FFFFFF; margin-bottom: 8px; line-height: 1.4; }
-  .insight-sub { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
-  .insight-highlight { color: #3DDC84; font-weight: 700; }
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); display: flex;
+      border-bottom: 2px solid var(--div);
+    }
+    .tab-btn {
+      flex: 1; height: 48px;
+      background: none; border: none; font-family: inherit;
+      font-size: 14px; font-weight: 600; color: var(--t3);
+      cursor: pointer; position: relative;
+      transition: color .18s; -webkit-tap-highlight-color: transparent;
+    }
+    .tab-btn.active { color: var(--blue); }
+    .tab-btn.active::after {
+      content: ''; position: absolute;
+      bottom: -2px; left: 20%; right: 20%;
+      height: 2px; background: var(--blue); border-radius: 2px;
+    }
 
-  /* ===== PLATFORM COMPARE ===== */
-  .platform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
-  .platform-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.04); }
-  .platform-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-  .platform-dot-yt { width: 10px; height: 10px; border-radius: 50%; background: var(--yt-red); }
-  .platform-dot-ig { width: 10px; height: 10px; border-radius: 50%; background: var(--ig-purple); }
-  .platform-name { font-size: 15px; font-weight: 700; color: var(--grey-900); }
-  .platform-metric { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--grey-100); }
-  .platform-metric:last-child { border-bottom: none; }
-  .metric-label { font-size: 13px; color: var(--grey-500); }
-  .metric-value { font-size: 16px; font-weight: 700; color: var(--grey-900); }
-  .metric-value.highlight { color: var(--toss-blue); }
+    .tab-panel { display: none; padding: 12px 0; }
+    .tab-panel.active { display: block; }
 
-  /* ===== ACTION PLAN ===== */
-  .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
-  .action-card { background: var(--white); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,0.04); border-top: 3px solid var(--toss-blue); }
-  .action-week { font-size: 12px; font-weight: 700; color: var(--toss-blue); margin-bottom: 10px; text-transform: uppercase; }
-  .action-title { font-size: 16px; font-weight: 700; color: var(--grey-900); margin-bottom: 12px; }
-  .action-list { list-style: none; }
-  .action-list li { font-size: 13px; color: var(--grey-700); padding: 5px 0; padding-left: 16px; position: relative; }
-  .action-list li::before { content: '→'; position: absolute; left: 0; color: var(--toss-blue); font-size: 12px; }
+    /* ── BENEFIT CARD ── */
+    .b-card {
+      background: var(--card); border-radius: 20px;
+      margin: 0 16px 10px; overflow: hidden;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .b-item { padding: 20px; }
+    .b-item + .b-item { border-top: 1px solid var(--div); }
+    .b-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .b-name { font-size: 15px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; }
+    .b-quote {
+      border-left: 3px solid var(--blue-bg); padding: 12px 14px;
+      border-radius: 0 12px 12px 0; background: var(--blue-lt);
+    }
+    .b-desc { font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 5px; }
+    .b-big { font-size: 22px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 4px; }
+    .b-sub { font-size: 12px; color: var(--t2); line-height: 1.5; }
 
-  /* ===== FOOTER ===== */
-  footer {
-    background: var(--grey-900);
-    padding: 36px 24px;
-    text-align: center;
-  }
-  .footer-inner { max-width: 1080px; margin: 0 auto; }
-  .footer-brand { font-size: 14px; font-weight: 700; color: #FFFFFF; margin-bottom: 6px; }
-  .footer-sub { font-size: 12px; color: var(--grey-500); }
+    /* ── CTA ── */
+    .cta-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--card);
+      padding: 10px 16px max(16px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--div);
+      display: flex; gap: 10px; z-index: 200;
+    }
+    .cta-btn {
+      flex: 1; height: 50px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 14px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+      text-decoration: none; transition: opacity .15s; -webkit-tap-highlight-color: transparent;
+    }
+    .cta-btn:active { opacity: 0.84; }
+    .cta-yt { background: var(--blue); color: #FFF; box-shadow: 0 4px 16px rgba(0,85,255,0.28); }
+    .cta-ig { background: var(--div); color: var(--t1); }
+    .cta-ig img { height: 20px; width: 20px; object-fit: contain; border-radius: 5px; }
 
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 1023px) {
-    .hero-kpi-row { grid-template-columns: repeat(2, 1fr); }
-    .card-grid { grid-template-columns: repeat(2, 1fr); }
-    .insight-grid { grid-template-columns: 1fr; }
-    .action-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 639px) {
-    .hero-kpi-row { grid-template-columns: repeat(2, 1fr); }
-    .card-grid { grid-template-columns: 1fr; }
-    .platform-row { grid-template-columns: 1fr; }
-    .views-bar-wrap { display: none; }
-    section { padding: 40px 0; }
-  }
-
-  /* ===== SPECIAL ===== */
-  .top-short-banner {
-    background: linear-gradient(135deg, #0064FF 0%, #00A3FF 100%);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 32px;
-    flex-wrap: wrap;
-  }
-  .top-short-info {}
-  .top-short-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
-  .top-short-title { font-size: 20px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; line-height: 1.3; }
-  .top-short-stats { display: flex; gap: 20px; flex-wrap: wrap; }
-  .top-short-stat {}
-  .top-short-stat-v { font-size: 24px; font-weight: 800; color: #FFFFFF; }
-  .top-short-stat-l { font-size: 11px; color: rgba(255,255,255,0.6); }
-  .growth-tag { background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #FFFFFF; white-space: nowrap; }
-
-  .data-note { font-size: 12px; color: var(--grey-300); margin-top: 16px; font-style: italic; }
-  .slack-unavail { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--warning); background: rgba(255,149,0,0.1); padding: 4px 10px; border-radius: 4px; }
-</style>
+    @media (min-width: 680px) {
+      body { padding: 32px 0; min-height: 100vh; background: #D8DCE2; }
+      .page { border-radius: 20px; overflow: hidden; box-shadow: 0 8px 48px rgba(0,0,0,0.12); }
+      .cta-bar { max-width: 640px; left: 50%; transform: translateX(-50%); border-radius: 0 0 20px 20px; }
+    }
+  </style>
 </head>
 <body>
+<div class="page">
 
-<!-- NAV -->
-<nav>
-  <div class="nav-brand">
-    <div class="nav-logo">🎓</div>
-    <span class="nav-title">L'Academy 라카데미 여의도</span>
+  <!-- HERO -->
+  <section class="hero">
+    <button class="hero-back" onclick="window.location.href='./lacademy.html'" aria-label="뒤로">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <div class="hero-date">26.05.14 화요일 · 숏폼 분석</div>
+    <div class="hero-title">유튜브 <em>13,458뷰</em><br>역대 최고예요</div>
+
+    <!-- 역대 최고 기록 바 차트 그래픽 -->
+    <div class="hero-gfx">
+      <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- X axis -->
+        <line x1="18" y1="136" x2="148" y2="136" stroke="#C5CBD3" stroke-width="1.5" stroke-linecap="round"/>
+
+        <!-- Old bars (gray) -->
+        <!-- 0217: 4,879 → rel height 33% of 136 = 45px → y=91 -->
+        <rect x="28" y="91" width="20" height="45" rx="5" fill="#C5CBD3" class="bar-old b-b1"/>
+        <!-- 0404: 3,553 → rel 24% → 33px → y=103 -->
+        <rect x="55" y="103" width="20" height="33" rx="5" fill="#C5CBD3" class="bar-old b-b2"/>
+        <!-- 0509: 1,027 → rel 7% → 9px → y=127 -->
+        <rect x="82" y="127" width="20" height="9" rx="5" fill="#C5CBD3" class="bar-old b-b3"/>
+        <!-- 0514: 13,458 → rel 91% → 124px → y=12 (RECORD, blue) -->
+        <rect x="109" y="12" width="20" height="124" rx="5" fill="#0055FF" class="bar-record"/>
+
+        <!-- Sparkles around record bar -->
+        <path d="M138 22 l2-3 2 3-3-2 3 2" stroke="#0055FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="sp sp1"/>
+        <path d="M104 18 l2-3 2 3-3-2 3 2" stroke="#0055FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="sp sp2"/>
+        <path d="M142 35 l1.5-2.5 1.5 2.5-2.5-1.5 2.5 1.5" stroke="#0055FF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="sp sp3"/>
+
+        <!-- "#1" badge above record bar -->
+        <g class="rec-badge">
+          <rect x="106" y="2" width="26" height="14" rx="7" fill="#0055FF"/>
+          <text x="119" y="12" text-anchor="middle" font-size="8" font-weight="800" fill="white" font-family="sans-serif">#1</text>
+        </g>
+
+        <!-- X axis labels -->
+        <text x="38" y="149" text-anchor="middle" font-size="8" fill="#C5CBD3" font-family="sans-serif">0217</text>
+        <text x="65" y="149" text-anchor="middle" font-size="8" fill="#C5CBD3" font-family="sans-serif">0404</text>
+        <text x="92" y="149" text-anchor="middle" font-size="8" fill="#C5CBD3" font-family="sans-serif">0509</text>
+        <text x="119" y="149" text-anchor="middle" font-size="8" font-weight="700" fill="#0055FF" font-family="sans-serif">0514</text>
+      </svg>
+    </div>
+
+    <!-- 핵심 KPI 카드 -->
+    <div class="hero-card">
+      <div class="hc-label">유튜브 조회수 (5일차)</div>
+      <div class="hc-num">13,458</div>
+      <div class="hc-div"></div>
+      <div class="hc-row">
+        <div class="hc-ico">📈</div>
+        <span>IG 12.2만 동반 · 팔로우 +116명</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="summary">요약</button>
+    <button class="tab-btn" data-tab="youtube">유튜브</button>
+    <button class="tab-btn" data-tab="instagram">인스타그램</button>
   </div>
-  <span class="nav-date">📊 숏폼 분석 보고서 — 2026.05.14</span>
-</nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="fade-up">
-      <span class="hero-label">Weekly Report · May 14, 2026</span>
-      <h1>0509 서울대 의대생 숏폼,<br>13,458회 돌파</h1>
-      <p class="hero-sub">지난 28일 채널 조회수 1.7만 · 구독자 377명 · IG 12.2만 돌파 · 합산 13.5만 달성</p>
-    </div>
-    <div class="hero-kpi-row fade-up">
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">28일 채널 조회수</div>
-        <div class="hero-kpi-value">17,482</div>
-        <div class="hero-kpi-change up">↑ 평소 대비 +4,200</div>
-      </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">현재 YT 구독자</div>
-        <div class="hero-kpi-value">377명</div>
-        <div class="hero-kpi-change up">↑ 28일 +19 (이전 기간 대비 +111%)</div>
-      </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">0509 숏폼 YT 조회수</div>
-        <div class="hero-kpi-value">13,458</div>
-        <div class="hero-kpi-change up">↑ 2026년 라카데미 era 1위</div>
-      </div>
-      <div class="hero-kpi">
-        <div class="hero-kpi-label">0509 IG 조회수</div>
-        <div class="hero-kpi-value">12.2만</div>
-        <div class="hero-kpi-change up">↑ 도달 10.2만 · 공유 579 · 비팔로워 99.9%</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TOP PERFORMER -->
-<section>
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">이번 주 하이라이트</div>
-      <div class="section-title">0509 영상, 아직도 상승 중</div>
-      <p class="section-sub">게시 5일차 기준 — 알고리즘 롱테일 배포 진행 중</p>
-    </div>
-    <div class="top-short-banner fade-up">
-      <div class="top-short-info">
-        <div class="top-short-label">🏆 2026년 라카데미 era YT 최고 성과 숏폼</div>
-        <div class="top-short-title">서울대 의대생이 수능 3개만 틀린 이유</div>
-        <div class="top-short-stats">
-          <div class="top-short-stat">
-            <div class="top-short-stat-v">13,458</div>
-            <div class="top-short-stat-l">YT 조회수 (5일차)</div>
+  <!-- 요약 탭 -->
+  <div class="tab-panel active" id="tab-summary">
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#FFF3E0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3h8v9a4 4 0 01-8 0V3z"/><path d="M5 5H3a2 2 0 002 4h3M19 5h2a2 2 0 01-2 4h-3"/>
+              <path d="M12 15v3M9 21h6"/>
+            </svg>
           </div>
-          <div class="top-short-stat">
-            <div class="top-short-stat-v">12.2만</div>
-            <div class="top-short-stat-l">IG 조회수 (실측)</div>
+          <span class="b-name">유튜브 역대 1위</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">이전 최고(0404 연세대 3,553) 대비</div>
+          <div class="b-big">3.8배</div>
+          <div class="b-sub">"서울대 의대생" 키워드가 알고리즘 초기 배포 가속</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#EBF1FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0055FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 5h14M5 12h14M5 19h14"/>
+              <path d="M5 5l3 3M5 12l3 3"/>
+            </svg>
           </div>
-          <div class="top-short-stat">
-            <div class="top-short-stat-v">1,430</div>
-            <div class="top-short-stat-l">IG 참여한 계정</div>
+          <span class="b-name">저장형 콘텐츠 확인</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">저장(677) > 공유(579) — "나중에 다시 볼 정보"</div>
+          <div class="b-big">저장 677개</div>
+          <div class="b-sub">롱테일 알고리즘 배포 유리 · 이 형식 지속 활용</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#E8F5EC">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0DAE50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="7" r="4"/><path d="M3 20c0-3.5 2.7-6 6-6M17 14v6M14 17h6"/>
+            </svg>
           </div>
-          <div class="top-short-stat">
-            <div class="top-short-stat-v">+116명</div>
-            <div class="top-short-stat-l">IG 팔로워 전환 (실측)</div>
+          <span class="b-name">팔로워 폭증</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">80명 → 192명 (이 릴스 단독)</div>
+          <div class="b-big">+116명</div>
+          <div class="b-sub">전환율 약 60% · "서울대 의대생" 권위 소셜 프루프 효과</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#F0EEFF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B4FE9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="3"/>
+              <path d="M9 9l6 3-6 3V9z" fill="#7B4FE9" opacity="0.5" stroke="none"/>
+            </svg>
           </div>
+          <span class="b-name">크로스 포스팅 효율</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">동일 콘텐츠, IG가 YT를</div>
+          <div class="b-big">IG 9.1배 초과</div>
+          <div class="b-sub">IG 썸네일 자막 전략이 핵심 · IG 먼저, YT는 SEO 최적화</div>
         </div>
       </div>
-      <div class="growth-tag">📈 2026 YT #1 갱신 중</div>
     </div>
   </div>
-</section>
 
-<!-- PLATFORM COMPARE -->
-<section style="background: var(--white); border-top: 1px solid var(--grey-100); border-bottom: 1px solid var(--grey-100);">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">플랫폼 비교</div>
-      <div class="section-title">이번 주 YT vs IG</div>
-      <p class="section-sub">0509 영상 기준 · IG 데이터 2026.05.14 직접 실측</p>
-    </div>
-    <div class="platform-row fade-up">
-      <div class="platform-card">
-        <div class="platform-header">
-          <div class="platform-dot-yt"></div>
-          <span class="platform-name">YouTube @jiwoo_english</span>
+  <!-- 유튜브 탭 -->
+  <div class="tab-panel" id="tab-youtube">
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#FFE8E8">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M10 8l6 4-6 4V8z" fill="#FF3B30" opacity="0.85" stroke="none"/>
+            </svg>
+          </div>
+          <span class="b-name">조회수 (5일차)</span>
         </div>
-        <div class="platform-metric">
-          <span class="metric-label">조회수 (5일차)</span>
-          <span class="metric-value highlight">13,458회</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">구독자</span>
-          <span class="metric-value">377명</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">좋아요 비율</span>
-          <span class="metric-value">96.6%</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">28일 총 조회수</span>
-          <span class="metric-value">17,482회</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">28일 시청 시간</span>
-          <span class="metric-value">117.6시간</span>
+        <div class="b-quote">
+          <div class="b-desc">2026 라카데미 유튜브 역대 1위</div>
+          <div class="b-big">13,458회</div>
+          <div class="b-sub">좋아요 비율 96.6% · 알고리즘 롱테일 성장 중</div>
         </div>
       </div>
-      <div class="platform-card">
-        <div class="platform-header">
-          <div class="platform-dot-ig"></div>
-          <span class="platform-name">Instagram @lacademy.official</span>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#E8F5EC">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0DAE50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20V10M17 20V4M7 20v-6"/>
+            </svg>
+          </div>
+          <span class="b-name">채널 성장</span>
         </div>
-        <div class="platform-metric">
-          <span class="metric-label">조회수 (0509 릴스 실측)</span>
-          <span class="metric-value highlight">12.2만</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">도달 계정</span>
-          <span class="metric-value">10.2만</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">비팔로워 유입</span>
-          <span class="metric-value">99.9%</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">공유</span>
-          <span class="metric-value">579회</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">저장</span>
-          <span class="metric-value">677개</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">팔로워 전환 (실측)</span>
-          <span class="metric-value">+116명</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">팔로워 현재</span>
-          <span class="metric-value">192명</span>
-        </div>
-        <div class="platform-metric">
-          <span class="metric-label">IG 대 YT 배수</span>
-          <span class="metric-value">9.1배</span>
+        <div class="b-quote">
+          <div class="b-desc">28일 구독자 증가 — 전기 대비 +111%</div>
+          <div class="b-big">구독자 377명</div>
+          <div class="b-sub">+19명 증가 · 28일 채널 조회 17,482 · 시청 117.6시간</div>
         </div>
       </div>
     </div>
-    <p class="data-note">✅ IG 데이터 2026.05.14 직접 실측 (instagram.com/insights). YT Studio 동일 날짜 실측. Slack 전사 05.11~05.14 4개 수집 완료 — 숏폼 후보 5개 확보.</p>
   </div>
-</section>
 
-<!-- SHORTS TABLE -->
-<section>
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">콘텐츠 성과</div>
-      <div class="section-title">2026년 전체 Shorts 현황</div>
-      <p class="section-sub">게시 날짜 최신순 · 2026.05.14 YT Studio 실측</p>
+  <!-- 인스타그램 탭 -->
+  <div class="tab-panel" id="tab-instagram">
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#F5E8FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A133C8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <span class="b-name">조회수 & 도달</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">도달 10.2만 · 참여 계정 1,430명</div>
+          <div class="b-big">조회 12.2만</div>
+          <div class="b-sub">비팔로워 유입 99.9% — 완전한 바이럴 확산</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#EBF1FF">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0055FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+              <path d="M17 21v-8H7v8M7 3v5h8"/>
+            </svg>
+          </div>
+          <span class="b-name">저장 & 공유</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">저장 > 공유 — 정보 저장형 콘텐츠</div>
+          <div class="b-big">저장 677 · 공유 579</div>
+          <div class="b-sub">"나중에 볼 정보"로 인식 → 롱테일 확산</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-head">
+          <div class="b-icon" style="background:#E8F5EC">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0DAE50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="7" r="4"/><path d="M3 20c0-3.5 2.7-6 6-6M17 14v6M14 17h6"/>
+            </svg>
+          </div>
+          <span class="b-name">팔로워 전환</span>
+        </div>
+        <div class="b-quote">
+          <div class="b-desc">80명에서 이 릴스 단독으로</div>
+          <div class="b-big">+116명 (192명)</div>
+          <div class="b-sub">2.4배 성장 · "서울대 의대생" 권위 소셜 프루프 직격</div>
+        </div>
+      </div>
     </div>
-    <div class="table-wrap fade-up">
-      <table>
-        <thead>
-          <tr>
-            <th>순위</th>
-            <th>제목</th>
-            <th>게시일</th>
-            <th>조회수</th>
-            <th>추이</th>
-            <th>유형</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><div class="rank-badge rank-1">1</div></td>
-            <td class="title-cell">서울대 의대생이 수능 3개만 틀린 이유 🏴</td>
-            <td>2026.5.9</td>
-            <td><strong>13,458</strong></td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:100%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-blue">선언형+네임드</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">연세대 고려대 면접 부활? 대치동은 이미 난리남 🔥</td>
-            <td>2026.5.3</td>
-            <td>455</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:3%; background: var(--danger)"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-red">질문형</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">AI가 자소서 써줘도 면접은 본인이 봅니다 🤖</td>
-            <td>2026.4.27</td>
-            <td>504</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:4%; background: var(--danger)"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-red">낮은훅</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-3">3</div></td>
-            <td class="title-cell">교과서 암기, 과제로 내달라고 애원하는 학생들 😤</td>
-            <td>2026.4.12</td>
-            <td>2,775</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:20%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-blue">비하인드</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-2">2</div></td>
-            <td class="title-cell">연세대 합격생은 '이것'부터 다릅니다.</td>
-            <td>2026.4.4</td>
-            <td>3,552</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:26%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-blue">선언형+네임드</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">전교 4등부터 꼴찌까지 성적이 뒤집히는 이유 🔥</td>
-            <td>2026.3.28</td>
-            <td>2,136</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:16%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-orange">팩폭</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">스카 가지 말고 학교에서 공부하세요 🏫</td>
-            <td>2026.3.21</td>
-            <td>2,334</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:17%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-orange">팩폭</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">수업 듣고 까 막히는 학생들 필수 시청🔥</td>
-            <td>2026.3.14</td>
-            <td>1,303</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:10%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-orange">정보형</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">서울대 의대 합격생이 학원을 다니는 진짜 이유 😅</td>
-            <td>2026.3.7</td>
-            <td>1,757</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:13%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-blue">네임드+반전</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">이걸 안 지키면 수강 불가능합니다. 💥</td>
-            <td>2026.3.4</td>
-            <td>2,164</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:16%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-orange">비하인드</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other" style="background:#FFD700; color:#7A5C00">YT1</div></td>
-            <td class="title-cell">폰 없애면 돈을 주는 학원가!</td>
-            <td>2026.2.17</td>
-            <td>4,882</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:36%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-blue">파격 시스템</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">수능 어법을 초3이 끝내는 법. 문법은 짧고 굵게! 🤩</td>
-            <td>2026.2.15</td>
-            <td>693</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:5%; background: var(--danger)"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-red">설명형</span></td>
-          </tr>
-          <tr>
-            <td><div class="rank-badge rank-other">-</div></td>
-            <td class="title-cell">브레이크 없는 자전거 타지 마라. 그게 진짜 불효다. ⚠️</td>
-            <td>2026.1.31</td>
-            <td>1,353</td>
-            <td>
-              <div class="views-bar-wrap">
-                <div class="views-bar"><div class="views-bar-fill" style="width:10%"></div></div>
-              </div>
-            </td>
-            <td><span class="badge badge-orange">팩폭</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="data-note">* 순위는 2026년 숏폼 조회수 기준. 전체 채널 역대 1위는 "내신 1.0 학생의 공부법" (16,051, 2024년 다원교육 시절)</p>
   </div>
-</section>
 
-<!-- INSIGHTS -->
-<section class="dark-section">
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label" style="color: var(--toss-blue)">핵심 인사이트</div>
-      <div class="section-title">이번 주 4가지 발견</div>
-      <p class="section-sub">데이터 기반 · 가설 아닌 확정 인사이트만 기재</p>
-    </div>
-    <div class="insight-grid fade-up">
-      <div class="insight-card">
-        <div class="insight-number">INSIGHT 01</div>
-        <div class="insight-text">서울대 의대생 공식, 10배 배수 재확인</div>
-        <div class="insight-sub">
-          "서울대 의대생" 네임드 + "수능 3개만 틀린 이유" 선언형 조합 → YT <span class="insight-highlight">13,458회</span>.<br>
-          바로 직전 영상(0503 연세대 면접 부활 455회) 대비 <span class="insight-highlight">29.6배 격차</span>. 제목 공식의 차이가 전부다.
-        </div>
-      </div>
-      <div class="insight-card">
-        <div class="insight-number">INSIGHT 02</div>
-        <div class="insight-text">질문형 제목은 구조적으로 약하다</div>
-        <div class="insight-sub">
-          0503 "연세대 고려대 면접 부활?"과 0427 "AI가 자소서..." 모두 500회 미만.<br>
-          질문형은 내용을 예측 가능하게 해서 <span class="insight-highlight">CTR을 깎는다</span>. "~이유", "~다릅니다" 선언형으로 전환 필요.
-        </div>
-      </div>
-      <div class="insight-card">
-        <div class="insight-number">INSIGHT 03</div>
-        <div class="insight-text">IG가 YT보다 9.0배 강하다 (실측)</div>
-        <div class="insight-sub">
-          0509 기준 IG 12.2만 vs YT 13,458 → <span class="insight-highlight">9.0배 격차</span>. 팔로워 전환 +112명으로 계정 팔로워가 약 2.5배로 늘었다.<br>
-          탐색 알고리즘 비팔로워 99.9% — IG 우선 업로드 타이밍 고려할 것.
-        </div>
-      </div>
-      <div class="insight-card">
-        <div class="insight-number">INSIGHT 04</div>
-        <div class="insight-text">수업 전사에서 숏폼 재료 풍부하게 나오는 중</div>
-        <div class="insight-sub">
-          이번 주 Tiro 전사 4개 분석 결과 — 구독자 수 실시간 확인 장면, 학생 50점→85점 단어 암기 스토리, EBS 시절 학생 DM 재회 에피소드 등 <span class="insight-highlight">반전+비하인드 소재 다수 확보</span>.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+</div><!-- /page -->
 
-<!-- ACTION PLAN -->
-<section>
-  <div class="container">
-    <div class="fade-up">
-      <div class="section-label">다음 액션</div>
-      <div class="section-title">이번 주 실행 플랜</div>
-      <p class="section-sub">이번 주 신규 숏폼 없음 — 전사 기반 5개 클립 제안 별도 제공</p>
-    </div>
-    <div class="action-grid fade-up">
-      <div class="action-card">
-        <div class="action-week">즉시</div>
-        <div class="action-title">숏폼 클립 제작</div>
-        <ul class="action-list">
-          <li>이번 주 전사 4개 기반 숏폼 5개 후보 중 택 2~3개</li>
-          <li>제목 공식: 선언형 + 수치/네임드 필수</li>
-          <li>구독자 실시간 확인 장면 (비하인드) 최우선</li>
-          <li>단어 암기 50점→85점 스토리 두 번째 픽</li>
-        </ul>
-      </div>
-      <div class="action-card">
-        <div class="action-week">이번 주</div>
-        <div class="action-title">제목 패턴 강화</div>
-        <ul class="action-list">
-          <li>"연세대 고려대 면접 부활?" 형식 완전 폐기</li>
-          <li>"~한 이유", "~다릅니다" 선언형으로 통일</li>
-          <li>수능/서울대/의대 네임드 가능한 영상마다 삽입</li>
-          <li>IG 게시 시간: YT 업로드 후 2~4시간 내 동시 업로드</li>
-        </ul>
-      </div>
-      <div class="action-card">
-        <div class="action-week">다음 주</div>
-        <div class="action-title">KPI 목표</div>
-        <ul class="action-list">
-          <li>YT 구독자 400명 돌파</li>
-          <li>IG 팔로워 200명 → 400명 경로 설계</li>
-          <li>주간 숏폼 업로드 2개 유지</li>
-          <li>0509 영상 15,000회 도달 확인</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">Achromatic. × L'Academy 여의도</div>
-    <div class="footer-sub">작성: Achromatic.(민준) · 2026.05.14 · YT Studio 실측 기반</div>
-  </div>
-</footer>
+<!-- STICKY CTA -->
+<div class="cta-bar">
+  <a class="cta-btn cta-yt" href="YOUTUBE_SHARE_LINK_HERE" target="_blank" rel="noopener">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+      <path d="M10 8l6 4-6 4V8z" fill="white"/>
+    </svg>
+    유튜브에서 보기
+  </a>
+  <a class="cta-btn cta-ig" href="INSTAGRAM_REEL_LINK_HERE" target="_blank" rel="noopener">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuH7c5cLpGehi0b4iQk90fXUzC9p7Ebla13w&s" alt="Instagram">
+    릴스 보기
+  </a>
+</div>
 
 <script>
-  // Fade-up animation
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
 </script>
-
 </body>
 </html>

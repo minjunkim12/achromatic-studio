@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>라카데미 여의도 — 분석 보고서</title>
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #EBF1FF;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+    }
+
+    html { overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── APP SHELL: 모바일 풀와이드 ── */
+    .app {
+      width: 100%;
+      min-height: 100dvh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO — 상단 전체 그라데이션 + shimmer ── */
+    @keyframes shimmer {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+
+    .hero-section {
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%,
+        #AAD0FF 18%,
+        #C8E3FF 38%,
+        #DFF0FF 58%,
+        #EDF7FF 74%,
+        #F5FBFF 86%,
+        var(--bg) 100%
+      );
+      padding: 60px 24px 72px;
+      text-align: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hero-section:active { opacity: 0.94; }
+
+    /* shimmer sweep */
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255,255,255,0.52) 50%,
+        transparent 70%
+      );
+      animation: shimmer 3.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    /* 뒤로가기 버튼 — 그라데이션 위에 overlay */
+    .back-btn {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      left: 16px;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.38);
+      border: none; cursor: pointer;
+      border-radius: 50%;
+      color: var(--t1);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 10;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:active { background: rgba(255,255,255,0.6); }
+
+    .hero-label {
+      font-size: 13px; font-weight: 500;
+      color: rgba(0, 45, 110, 0.62);
+      letter-spacing: -0.2px;
+      margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.9px; line-height: 1.22;
+      position: relative; z-index: 1;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--blue);
+    }
+
+    /* ── FEED ── */
+    .feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 0 40px;
+    }
+
+    /* ── TOSS CARD — 배경 일러스트 + 텍스트 하단 좌측 ── */
+    .toss-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin: 0 16px 10px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.32s ease, transform 0.32s ease, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .toss-card.visible { opacity: 1; transform: translateY(0); }
+    .toss-card:active {
+      transform: scale(0.988) translateY(0);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    /* 배경 일러스트 — 우측, 크게, 연하게 */
+    .tc-bg-illus {
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 130px;
+      height: 130px;
+      opacity: 0.09;
+      pointer-events: none;
+    }
+    .tc-bg-illus svg { width: 130px !important; height: 130px !important; }
+
+    /* 텍스트 — 하단 좌측 */
+    .tc-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tc-sub {
+      font-size: 11px; font-weight: 700; color: var(--blue);
+      letter-spacing: -0.1px;
+    }
+    .tc-title {
+      font-size: 16px; font-weight: 700; color: var(--t1);
+      letter-spacing: -0.4px; line-height: 1.38;
+    }
+    .tc-body {
+      font-size: 12px; color: var(--t2);
+      line-height: 1.6; letter-spacing: -0.1px;
+    }
+
+    /* 화살표 — 우측 하단 고정 */
+    .tc-arrow {
+      position: absolute;
+      bottom: 16px;
+      right: 18px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--blue-bg);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue);
+      z-index: 2;
+    }
+
+    /* ── EMPTY ── */
+    .empty-feed { padding: 60px 20px; text-align: center; }
+    .empty-feed-ico { font-size: 40px; margin-bottom: 12px; display: block; }
+    .empty-feed-h { font-size: 16px; font-weight: 700; color: var(--t1); }
+    .empty-feed-p { font-size: 14px; color: var(--t2); margin-top: 6px; }
+
+    /* ── DESKTOP FRAME — 데스크탑에서만 폰 프레임 ── */
+    @media (min-width: 420px) {
+      body {
+        background: #D8DCE2;
+        display: flex; justify-content: center;
+        padding: 24px 0; min-height: 100vh;
+      }
+      .app {
+        width: 390px;
+        max-width: 390px;
+        border-radius: 22px; overflow: hidden;
+        height: calc(100vh - 48px); min-height: auto;
+        box-shadow: 0 16px 56px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.08);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HERO (탑바 없음, 백버튼 overlay) -->
+  <div id="hero-wrap"></div>
+
+  <!-- FEED -->
+  <div class="feed" id="feed"></div>
+
+</div>
+
+<script>
+/* ── SVG ILLUSTRATIONS (larger 88×88) ── */
+const SVG_VIRAL = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- center node -->
+  <circle cx="44" cy="44" r="12" fill="#0055FF" opacity="0.72"/>
+  <!-- connection lines -->
+  <line x1="44" y1="44" x2="76" y2="18" stroke="#0055FF" stroke-width="1.5" opacity="0.22"/>
+  <line x1="44" y1="44" x2="80" y2="58" stroke="#0055FF" stroke-width="1.5" opacity="0.18"/>
+  <line x1="44" y1="44" x2="14" y2="22" stroke="#0055FF" stroke-width="1.5" opacity="0.15"/>
+  <line x1="44" y1="44" x2="18" y2="68" stroke="#0055FF" stroke-width="1" opacity="0.12"/>
+  <!-- outer nodes -->
+  <circle cx="76" cy="18" r="8" fill="#0055FF" opacity="0.38"/>
+  <circle cx="80" cy="58" r="7" fill="#0055FF" opacity="0.30"/>
+  <circle cx="14" cy="22" r="6" fill="#0055FF" opacity="0.22"/>
+  <circle cx="18" cy="68" r="5" fill="#0055FF" opacity="0.16"/>
+  <!-- tiny outer -->
+  <circle cx="68" cy="8"  r="4" fill="#0055FF" opacity="0.14"/>
+  <line x1="76" y1="18" x2="68" y2="8" stroke="#0055FF" stroke-width="1" opacity="0.1"/>
+  <!-- up-right arrow -->
+  <path d="M68 10 L78 4 M78 4 L74 12 M78 4 L70 8"
+        stroke="#0055FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+</svg>`;
+
+const SVG_TROPHY = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- trophy cup body -->
+  <path d="M28 10 h32 v28 c0 12-8 18-16 20 -8-2-16-8-16-20 V10z"
+        fill="#C5D9FF"/>
+  <!-- handles -->
+  <path d="M28 18 h-10 a8 8 0 0 0 0 16 h10"
+        stroke="#B0C9FF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M60 18 h10 a8 8 0 0 1 0 16 h-10"
+        stroke="#B0C9FF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <!-- stem -->
+  <rect x="40" y="58" width="8" height="10" rx="2" fill="#B0C9FF"/>
+  <!-- base -->
+  <rect x="26" y="68" width="36" height="6" rx="5" fill="#0055FF" opacity="0.42"/>
+  <!-- star inside -->
+  <path d="M44 20 l2.4 5.8 6.2 0.4 -4.8 4 1.6 6 -5.4-3.4 -5.4 3.4 1.6-6 -4.8-4 6.2-0.4z"
+        fill="white" opacity="0.72"/>
+</svg>`;
+
+const SVG_CHART = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- bar 1 (tall, blue) -->
+  <rect x="14" y="30" width="16" height="40" rx="4" fill="#0055FF" opacity="0.85"/>
+  <!-- bar 2 (medium, green) -->
+  <rect x="36" y="44" width="16" height="26" rx="4" fill="#00B493" opacity="0.75"/>
+  <!-- bar 3 (short, dim) -->
+  <rect x="58" y="56" width="16" height="14" rx="4" fill="#C5CBD3" opacity="0.7"/>
+  <!-- baseline -->
+  <line x1="10" y1="72" x2="78" y2="72" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- upward arrow on bar 1 -->
+  <path d="M22 24 l-4 5 h3 v0 h2 v0 h3 z" fill="#0055FF" opacity="0.6"/>
+</svg>`;
+
+/* ── REPORT DATA ── */
+const REPORTS = [
+  {
+    path: 'lacademy-0521-report.html',
+    date: '26.05.21',
+    label: '목요일',
+    title: '공유가 저장의 1.7배예요',
+    heroTitle: '공유가<br><em>저장의 1.7배예요</em>',
+    body: '합산 59,933뷰 · IG 공유 474건 · 팔로우 +60명',
+    sub: '숏폼 분석 · 공유 역전',
+    timeAgo: '방금',
+    svg: SVG_CHART,
+  },
+  {
+    path: 'lacademy-0518-report.html',
+    date: '26.05.18',
+    label: '월요일',
+    title: '공유가 좋아요의 두 배를 넘었어요',
+    heroTitle: '공유가 좋아요의<br><em>두 배를 넘었어요</em>',
+    body: '합산 44,800뷰 · IG 공유 297회 · 팔로우 +46명',
+    sub: '숏폼 분석 · 공유 역전',
+    timeAgo: '방금',
+    svg: SVG_VIRAL,
+  },
+  {
+    path: 'lacademy-0516-report.html',
+    date: '26.05.16',
+    label: '목요일',
+    title: '이번 주도 바이럴이 터졌어요',
+    heroTitle: '공유가 저장을<br><em>넘어섰어요</em>',
+    body: '합산 17,328뷰 달성 · IG 공유 96회 · 팔로우 +20명',
+    sub: '숏폼 분석 · 바이럴 ✓',
+    timeAgo: '1일 전',
+    svg: SVG_VIRAL,
+  },
+  {
+    path: 'lacademy-0514-report.html',
+    date: '26.05.14',
+    label: '화요일',
+    title: '유튜브에서 역대 최고를 찍었어요',
+    heroTitle: '유튜브 <em>13,458뷰</em><br>역대 최고예요',
+    body: '서울대 의대생 영상 · YT 13,458 · IG 12.2만 동반 폭발',
+    sub: '숏폼 분석 · YT 신기록',
+    timeAgo: '3일 전',
+    svg: SVG_TROPHY,
+  },
+];
+
+const feed    = document.getElementById('feed');
+const heroWrap = document.getElementById('hero-wrap');
+
+if (!REPORTS.length) {
+  feed.innerHTML = `
+    <div class="empty-feed">
+      <span class="empty-feed-ico">📭</span>
+      <div class="empty-feed-h">아직 보고서가 없어요</div>
+      <div class="empty-feed-p">보고서가 추가되면 여기 표시돼요</div>
+    </div>`;
+} else {
+  const latest = REPORTS[0];
+
+  /* ── HERO ── */
+  heroWrap.innerHTML = `
+    <div class="hero-section" id="hero-cta">
+      <button class="back-btn" id="back-btn" aria-label="뒤로">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="hero-label">AI로 분석한 라카데미 콘텐츠 현황</div>
+      <div class="hero-title">${latest.heroTitle}</div>
+    </div>
+  `;
+
+  document.getElementById('back-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    window.location.href = './';
+  });
+  document.getElementById('hero-cta').addEventListener('click', () => {
+    window.location.href = `./${latest.path}`;
+  });
+
+  /* ── SVG AUTO-EXTRACT: 보고서 HTML에서 hero SVG를 파싱해 카드 배경에 자동 주입 ── */
+  const _svgCache = new Map();
+
+  async function extractReportSVG(path) {
+    if (_svgCache.has(path)) return _svgCache.get(path);
+    try {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('fetch failed');
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const svgEl = doc.querySelector('.hero-svg-wrap svg');
+      const result = svgEl ? svgEl.outerHTML : null;
+      _svgCache.set(path, result);
+      return result;
+    } catch {
+      _svgCache.set(path, null);
+      return null;
+    }
+  }
+
+  /* ── CARDS ── */
+  REPORTS.forEach((r) => {
+    const card = document.createElement('div');
+    card.className = 'toss-card';
+    card.innerHTML = `
+      <div class="tc-bg-illus">${r.svg || ''}</div>
+      <div class="tc-content">
+        <div class="tc-sub">${r.date} ${r.label} · ${r.sub}</div>
+        <div class="tc-title">${r.title}</div>
+        <div class="tc-body">${r.body}</div>
+      </div>
+      <div class="tc-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </div>
+    `;
+    card.addEventListener('click', () => window.open(`./${r.path}`, '_self'));
+    feed.appendChild(card);
+
+    /* 보고서 HTML fetch → hero SVG 추출 → 카드 배경 교체 (r.svg는 로딩 전 fallback) */
+    const bgEl = card.querySelector('.tc-bg-illus');
+    extractReportSVG(r.path).then(svgStr => {
+      if (svgStr) bgEl.innerHTML = svgStr;
+    });
+  });
+
+  /* ── SCROLL-IN ── */
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('.toss-card').forEach((c, i) => {
+    c.style.transitionDelay = `${i * 0.07}s`;
+    observer.observe(c);
+  });
+}
+</script>
+</body>
+</html>
