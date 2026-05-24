@@ -288,6 +288,19 @@ const SVG_CHART = `
   <path d="M22 24 l-4 5 h3 v0 h2 v0 h3 z" fill="#0055FF" opacity="0.6"/>
 </svg>`;
 
+/* YT 압도 / IG 배포 실패 역전 차트 (0524) */
+const SVG_REVERSAL = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (tall, blue) — 1,407뷰 -->
+  <rect x="14" y="16" width="22" height="56" rx="5" fill="#0055FF" opacity="0.82"/>
+  <!-- IG bar (tiny, muted) — 249뷰 배포 실패 -->
+  <rect x="52" y="60" width="22" height="12" rx="5" fill="#FFAA66" opacity="0.52"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- up arrow above YT bar -->
+  <path d="M25 11 l-4.5 6 h3.3 v0 h2.4 v0 h3.3 z" fill="#0055FF" opacity="0.55"/>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
   {
@@ -299,7 +312,7 @@ const REPORTS = [
     body: '합산 1,656뷰 · IG 비팔로워 76% · YT 평균 범위',
     sub: '숏폼 분석 · IG 알고리즘 실패',
     timeAgo: '방금',
-    svg: SVG_CHART,
+    svg: SVG_REVERSAL,
   },
   {
     path: 'lacademy-0521-report.html',
@@ -310,7 +323,7 @@ const REPORTS = [
     body: '합산 59,933뷰 · IG 공유 474건 · 팔로우 +60명',
     sub: '숏폼 분석 · 공유 역전',
     timeAgo: '방금',
-    svg: SVG_CHART,
+    svg: SVG_VIRAL,
   },
   {
     path: 'lacademy-0518-report.html',
@@ -382,26 +395,6 @@ if (!REPORTS.length) {
     window.location.href = `./${latest.path}`;
   });
 
-  /* ── SVG AUTO-EXTRACT: 보고서 HTML에서 hero SVG를 파싱해 카드 배경에 자동 주입 ── */
-  const _svgCache = new Map();
-
-  async function extractReportSVG(path) {
-    if (_svgCache.has(path)) return _svgCache.get(path);
-    try {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error('fetch failed');
-      const html = await res.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const svgEl = doc.querySelector('.hero-svg-wrap svg');
-      const result = svgEl ? svgEl.outerHTML : null;
-      _svgCache.set(path, result);
-      return result;
-    } catch {
-      _svgCache.set(path, null);
-      return null;
-    }
-  }
-
   /* ── CARDS ── */
   REPORTS.forEach((r) => {
     const card = document.createElement('div');
@@ -422,12 +415,6 @@ if (!REPORTS.length) {
     `;
     card.addEventListener('click', () => window.open(`./${r.path}`, '_self'));
     feed.appendChild(card);
-
-    /* 보고서 HTML fetch → hero SVG 추출 → 카드 배경 교체 (r.svg는 로딩 전 fallback) */
-    const bgEl = card.querySelector('.tc-bg-illus');
-    extractReportSVG(r.path).then(svgStr => {
-      if (svgStr) bgEl.innerHTML = svgStr;
-    });
   });
 
   /* ── SCROLL-IN ── */
