@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라카데미 콘텐츠 분석 · 26.05.26</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+:root {
+  --blue:    #0055FF;
+  --blue-bg: #E8EFFF;
+  --bg:      #F2F4F7;
+  --card:    #FFFFFF;
+  --t1:      #191919;
+  --t2:      #8B95A1;
+  --t3:      #C5CBD3;
+  --div:     #F0F2F5;
+  --green:   #00B493;
+  --red:     #F04452;
+  --red-bg:  #FFEAEC;
+}
+
+html { overflow-x: hidden; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: 100%; max-width: 640px;
+  margin: 0 auto; min-height: 100dvh;
+  background: var(--bg); display: flex; flex-direction: column;
+}
+
+/* ── HERO ── */
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+@keyframes barRise  { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes fadeIn   { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.hero {
+  position: relative;
+  background: linear-gradient(180deg,
+    #8BBEFF 0%, #A8CFFF 14%, #C0DFFF 28%,
+    #D8ECFF 44%, #EAF5FF 62%, #F4FBFF 80%, var(--bg) 100%
+  );
+  padding: 0 24px 36px; text-align: center; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.48) 50%, transparent 70%);
+  animation: shimmer 3.6s ease-in-out infinite; pointer-events: none;
+}
+
+.top-nav {
+  padding: max(14px, env(safe-area-inset-top)) 4px 0;
+  display: flex; align-items: center;
+  position: relative; z-index: 2;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: none; cursor: pointer; color: var(--t1);
+  background: rgba(255,255,255,0.42);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.back-btn:active { background: rgba(255,255,255,0.65); }
+
+.hero-label {
+  font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.5);
+  letter-spacing: -0.1px; margin-bottom: 8px; position: relative; z-index: 1;
+}
+.hero-title {
+  font-size: 26px; font-weight: 800; color: var(--t1);
+  letter-spacing: -0.8px; line-height: 1.24;
+  position: relative; z-index: 1; margin-bottom: 20px;
+}
+.hero-title em { font-style: normal; color: var(--blue); }
+
+.hero-svg-wrap {
+  width: 160px; height: 160px;
+  margin: 0 auto 18px; position: relative; z-index: 1;
+}
+
+.hero-card {
+  background: rgba(255,255,255,0.84);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px; padding: 16px 20px;
+  max-width: 290px; margin: 0 auto;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.55);
+  position: relative; z-index: 1; text-align: center;
+}
+.kpi-row { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
+.kpi-num { font-size: 30px; font-weight: 800; color: var(--t1); letter-spacing: -1px; line-height: 1; }
+.kpi-num span { color: var(--blue); }
+.kpi-num span.red { color: var(--red); }
+.kpi-unit { font-size: 14px; color: var(--t2); font-weight: 500; }
+.kpi-sub  { font-size: 12px; color: var(--t2); margin-top: 4px; }
+.kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+.kpi-tag  { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-bg); border-radius: 20px; padding: 3px 9px; }
+.kpi-tag.red { color: var(--red); background: var(--red-bg); }
+
+.hero-summary {
+  background: var(--bg); padding: 16px 20px 14px;
+  font-size: 13px; color: var(--t2); line-height: 1.72; letter-spacing: -0.2px; text-align: center;
+}
+.hero-summary strong { color: var(--t1); font-weight: 600; }
+
+/* ── TAB BAR ── */
+.tab-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg); display: flex; border-bottom: 1px solid var(--div);
+}
+.tab-btn {
+  flex: 1; padding: 12px 0 10px;
+  font-size: 13px; font-weight: 600; color: var(--t2);
+  background: none; border: none; cursor: pointer;
+  position: relative; letter-spacing: -0.2px; transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-btn.active { color: var(--t1); }
+.tab-btn.active::after {
+  content: ''; position: absolute; bottom: -1px;
+  left: 20%; right: 20%; height: 2px; background: var(--blue); border-radius: 2px;
+}
+
+.tab-panel { display: none; padding: 12px 0 48px; }
+.tab-panel.active { display: block; }
+
+.sec-lbl {
+  font-size: 11px; font-weight: 700; color: var(--t2);
+  letter-spacing: 0.4px; text-transform: uppercase; padding: 16px 20px 8px;
+}
+
+/* ── CARD ── */
+.b-card {
+  background: var(--card); border-radius: 20px; margin: 0 16px 8px;
+  overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+}
+.b-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+.b-item + .b-item { border-top: 1px solid var(--div); }
+.b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; }
+.b-text { flex: 1; min-width: 0; }
+.b-title { font-size: 14px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; line-height: 1.4; }
+.b-desc  { font-size: 12px; color: var(--t2); line-height: 1.65; margin-top: 3px; }
+.b-quote { border-left: 2px solid var(--t3); padding: 6px 10px; margin-top: 8px; color: var(--t2); font-size: 12px; line-height: 1.65; }
+.b-footer { padding: 12px 16px; border-top: 1px solid var(--div); }
+.b-footer p { font-size: 12px; color: var(--t2); line-height: 1.7; }
+.b-footer p strong { color: var(--t1); font-weight: 600; }
+.b-footer .fn { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
+
+/* ── PLATFORM COMPARISON ── */
+.plat-head { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 14px 16px 8px; gap: 4px; align-items: center; }
+.plat-head-col { font-size: 12px; font-weight: 700; color: var(--t2); text-align: center; line-height: 1.3; }
+.plat-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 10px 16px; border-top: 1px solid var(--div); gap: 4px; align-items: center; }
+.pr-lbl { font-size: 12px; color: var(--t2); }
+.pr-val { font-size: 16px; font-weight: 700; color: var(--t1); text-align: center; }
+.pr-val.blue  { color: var(--blue); }
+.pr-val.green { color: var(--green); }
+.pr-val.red   { color: var(--red); }
+.pr-val.sm  { font-size: 13px; }
+.pr-val.dim { color: var(--t3); font-size: 13px; }
+
+.comb-row { display: flex; border-top: 1px solid var(--div); }
+.comb-item { flex: 1; padding: 14px 16px; text-align: center; }
+.comb-item + .comb-item { border-left: 1px solid var(--div); }
+.comb-num { font-size: 24px; font-weight: 800; color: var(--blue); letter-spacing: -0.8px; line-height: 1; }
+.comb-num.red { color: var(--red); }
+.comb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; }
+
+/* ── STUDIO DASHBOARD ── */
+.metric-hero { padding: 20px 16px 10px; }
+.metric-num { font-size: 40px; font-weight: 800; color: var(--t1); letter-spacing: -1.5px; line-height: 1; }
+.metric-num.blue { color: var(--blue); }
+.metric-num.red  { color: var(--red); }
+.metric-label { font-size: 13px; color: var(--t2); margin-top: 4px; }
+.metric-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 8px; margin-top: 6px; }
+.metric-badge.green { color: var(--green); background: rgba(0,180,147,0.09); }
+.metric-badge.red   { color: var(--red); background: var(--red-bg); }
+.metric-badge.blue  { color: var(--blue); background: var(--blue-bg); }
+
+.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 16px; }
+.metric-box { background: var(--bg); border-radius: 12px; padding: 12px 14px; }
+.mb-num { font-size: 20px; font-weight: 700; color: var(--t1); letter-spacing: -0.5px; }
+.mb-num.blue  { color: var(--blue); }
+.mb-num.green { color: var(--green); }
+.mb-num.red   { color: var(--red); }
+.mb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+.stat-div { padding: 8px 16px 4px; border-top: 1px solid var(--div); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.4px; }
+.stat-row { padding: 11px 16px; border-top: 1px solid var(--div); display: flex; justify-content: space-between; align-items: center; }
+.sr-lbl { font-size: 13px; color: var(--t2); }
+.sr-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+.sr-val.blue  { color: var(--blue); }
+.sr-val.green { color: var(--green); }
+.sr-val.red   { color: var(--red); }
+
+/* ── COMPARE CARD ── */
+.compare-wrap { margin: 0 16px 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.compare-box { background: var(--card); border-radius: 16px; padding: 14px; overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03); }
+.compare-box.success { border-top: 3px solid var(--blue); }
+.compare-box.fail    { border-top: 3px solid var(--red); }
+.cb-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
+.cb-badge.success { color: var(--blue); background: var(--blue-bg); }
+.cb-badge.fail    { color: var(--red); background: var(--red-bg); }
+.cb-title { font-size: 12px; font-weight: 600; color: var(--t1); line-height: 1.4; margin-bottom: 10px; word-break: keep-all; }
+.cb-num   { font-size: 24px; font-weight: 800; letter-spacing: -0.8px; line-height: 1; }
+.cb-num.blue { color: var(--blue); }
+.cb-num.red  { color: var(--red); }
+.cb-sub   { font-size: 11px; color: var(--t2); margin-top: 2px; }
+.cb-divider { border: none; border-top: 1px solid var(--div); margin: 10px 0; }
+.cb-row { display: flex; justify-content: space-between; padding: 2px 0; }
+.cb-row-lbl { font-size: 11px; color: var(--t2); }
+.cb-row-val { font-size: 11px; font-weight: 700; color: var(--t1); }
+.cb-row-val.blue  { color: var(--blue); }
+.cb-row-val.red   { color: var(--red); }
+.cb-row-val.green { color: var(--green); }
+
+/* ── DESKTOP ── */
+@media (min-width: 680px) {
+  body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+  .page { border-radius: 20px; overflow: hidden; box-shadow: 0 16px 56px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.05); }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="top-nav">
+      <button class="back-btn" onclick="window.location.href='./'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero SVG: 0516 성공 vs 0523 실패 막대 비교 -->
+    <div class="hero-svg-wrap">
+      <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- 배경 원 -->
+        <circle cx="80" cy="80" r="72" fill="rgba(255,255,255,0.3)"/>
+        <!-- 라벨 -->
+        <text x="52" y="135" text-anchor="middle" font-size="10" font-weight="700" fill="#0055FF" font-family="sans-serif">0516</text>
+        <text x="108" y="135" text-anchor="middle" font-size="10" font-weight="700" fill="#F04452" font-family="sans-serif">0523</text>
+        <!-- 0516 막대 (높음 - 성공) -->
+        <rect x="32" y="32" width="40" height="90" rx="8" fill="#0055FF" opacity="0.9"
+              style="transform-origin: 52px 122px; animation: barRise 0.8s ease-out 0.2s both;"/>
+        <!-- 0516 수치 -->
+        <text x="52" y="25" text-anchor="middle" font-size="11" font-weight="800" fill="#0055FF" font-family="sans-serif">6만</text>
+        <!-- 0523 막대 (낮음 - 실패) -->
+        <rect x="88" y="105" width="40" height="17" rx="6" fill="#F04452" opacity="0.85"
+              style="transform-origin: 108px 122px; animation: barRise 0.8s ease-out 0.5s both;"/>
+        <!-- 0523 수치 -->
+        <text x="108" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#F04452" font-family="sans-serif">404</text>
+        <!-- 배율 텍스트 -->
+        <text x="80" y="155" text-anchor="middle" font-size="9" font-weight="600" fill="rgba(0,45,110,0.5)" font-family="sans-serif">IG 조회수 148배 차이</text>
+      </svg>
+    </div>
+
+    <div class="hero-label">AI로 분석한 라카데미 콘텐츠 현황 · 26.05.26</div>
+    <div class="hero-title">제목 하나가<br><em>148배 차이</em>를 만들었습니다</div>
+
+    <div class="hero-card">
+      <div class="kpi-row">
+        <div class="kpi-num"><span>6만</span></div>
+        <div class="kpi-unit">vs 404 뷰</div>
+      </div>
+      <div class="kpi-sub">0516 IG 60,000 · 0523 IG 404 (배포 실패)</div>
+      <div class="kpi-tags">
+        <span class="kpi-tag">0516 대성공</span>
+        <span class="kpi-tag red">0523 배포 실패</span>
+        <span class="kpi-tag">구독자 395</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-summary">
+    <strong>0516 영상은 IG 6만·공유 561·팔로우 +66으로 2026년 2위 성과</strong>를 기록했습니다. 반면 0523은 IG 404뷰에 그쳤습니다. 두 영상의 <strong>제목 구조 차이</strong>가 배포량의 148배 격차를 만들었을 가능성이 높습니다.
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="0">요약</button>
+    <button class="tab-btn" data-tab="1">0516 분석</button>
+    <button class="tab-btn" data-tab="2">0523 진단</button>
+  </div>
+
+  <!-- ========== TAB 0: 요약 ========== -->
+  <div class="tab-panel active">
+
+    <div class="sec-lbl">이번 주 콘텐츠 비교</div>
+    <div class="compare-wrap">
+      <div class="compare-box success">
+        <span class="cb-badge success">✓ 성공</span>
+        <div class="cb-title">18년 영어 강사가 장담하는 1등급 비결 1가지</div>
+        <div class="cb-num blue">6만</div>
+        <div class="cb-sub">IG 조회수 (10일)</div>
+        <hr class="cb-divider">
+        <div class="cb-row"><span class="cb-row-lbl">YT</span><span class="cb-row-val blue">5,000</span></div>
+        <div class="cb-row"><span class="cb-row-lbl">비팔로워</span><span class="cb-row-val green">99.5%</span></div>
+        <div class="cb-row"><span class="cb-row-lbl">팔로우</span><span class="cb-row-val green">+66명</span></div>
+        <div class="cb-row"><span class="cb-row-lbl">공유</span><span class="cb-row-val blue">561</span></div>
+      </div>
+      <div class="compare-box fail">
+        <span class="cb-badge fail">✗ 배포 실패</span>
+        <div class="cb-title">문법이 아니라 '이것'이 문제입니다</div>
+        <div class="cb-num red">404</div>
+        <div class="cb-sub">IG 조회수 (2일)</div>
+        <hr class="cb-divider">
+        <div class="cb-row"><span class="cb-row-lbl">YT</span><span class="cb-row-val">1,814</span></div>
+        <div class="cb-row"><span class="cb-row-lbl">비팔로워</span><span class="cb-row-val red">78.3%</span></div>
+        <div class="cb-row"><span class="cb-row-lbl">팔로우</span><span class="cb-row-val">+1명</span></div>
+        <div class="cb-row"><span class="cb-row-lbl">공유</span><span class="cb-row-val red">0</span></div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">채널 현황 (28일)</div>
+    <div class="b-card">
+      <div class="plat-head">
+        <div class="plat-head-col" style="text-align:left;">항목</div>
+        <div class="plat-head-col">유튜브</div>
+        <div class="plat-head-col">인스타</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">구독자 / 팔로워</div>
+        <div class="pr-val sm">395명</div>
+        <div class="pr-val blue">267명</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">28일 조회수</div>
+        <div class="pr-val sm">2.8만</div>
+        <div class="pr-val dim">—</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">구독자 증가 (28일)</div>
+        <div class="pr-val green">+37</div>
+        <div class="pr-val dim">—</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">시청 시간</div>
+        <div class="pr-val sm">148.9시간</div>
+        <div class="pr-val dim">—</div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">핵심 인사이트</div>
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-icon" style="background:#E8EFFF;">📐</div>
+        <div class="b-text">
+          <div class="b-title">제목의 모호성이 알고리즘 배포를 막습니다</div>
+          <div class="b-desc">'이것'이라는 단어는 클릭 전에 내용을 예측할 수 없습니다. 알고리즘은 초기 CTR이 낮으면 배포를 중단합니다. 반면 '1가지'는 수량이 명확하고 궁금증을 만듭니다.</div>
+          <div class="b-quote">
+            ✓ "18년 강사가 장담하는 <strong>1등급 비결 1가지</strong>" → 수치+선언형 → 성공<br>
+            ✗ "문법이 아니라 <strong>'이것'이</strong> 문제입니다" → 모호성 → 배포 실패
+          </div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#E6FAF6;">📤</div>
+        <div class="b-text">
+          <div class="b-title">저장(322) > 좋아요(195) — 정보성 포지셔닝 성공</div>
+          <div class="b-desc">0516 영상에서 저장이 좋아요의 1.65배입니다. "나중에 쓸 정보"로 인식되고 있다는 뜻입니다. 공유(561)도 높아 팔로워 외부로 확산이 지속되고 있습니다.</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF3F4;">⚠️</div>
+        <div class="b-text">
+          <div class="b-title">0523 단어 다의성 주제 — 콘텐츠는 좋지만 제목이 문제</div>
+          <div class="b-desc">전사 내용("단어의 다른 뜻을 모르는 게 성적 발목을 잡는다")은 강력합니다. YT 시청 지속률 57.1%로 콘텐츠 품질은 합격선입니다. 제목만 바꿔서 IG 재업로드할 가치가 있습니다.</div>
+        </div>
+      </div>
+      <div class="b-footer">
+        <p><strong>패턴 확정:</strong> 제목+썸네일 훅 → 초기 CTR → 알고리즘 배포량 → 최종 조회수. 콘텐츠 품질보다 제목이 먼저입니다.</p>
+        <p class="fn">* 비팔로워 비율 기준: 95%+ 정상 / 95% 미만 배포 부진 / 78% = 심각한 배포 실패<br>* YT 시청 지속률 57.1% = 콘텐츠 품질 OK (기준선 55%+)</p>
+      </div>
+    </div>
+
+    <div class="sec-lbl">액션 플랜</div>
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-icon" style="background:#E8EFFF;">1</div>
+        <div class="b-text">
+          <div class="b-title">0523 영상 제목 수정 후 IG 재업로드</div>
+          <div class="b-desc">콘텐츠 품질(YT 57.1%)은 문제없음. 제목을 "단어를 다 아는데 해석이 안 되는 이유"에서 구체적 수치·선언형으로 교체 후 IG 재업로드 권장.</div>
+          <div class="b-quote">
+            추천 제목안 A: "수능 영어 2만 명 상담하고 깨달은 것 — 단어의 '다른 뜻'이 발목을 잡습니다"<br>
+            추천 제목안 B: "단어를 다 알아도 해석이 안 되는 이유 1가지"
+          </div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#E6FAF6;">2</div>
+        <div class="b-text">
+          <div class="b-title">0516 성공 패턴을 다음 영상에 적용</div>
+          <div class="b-desc">"18년 + 장담하는 + 1가지" 구조가 작동했습니다. 다음 영상도 <strong>연도/경력 수치 + 결론 선언 + 수량</strong> 구조로 제목을 먼저 잡고 촬영할 것을 권장합니다.</div>
+        </div>
+      </div>
+      <div class="b-footer">
+        <p><strong>우선순위:</strong> ① 0523 제목 수정·재업로드 → ② 다음 업로드 제목 공식 적용</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB 1: 0516 분석 ========== -->
+  <div class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num blue">60,000</div>
+        <div class="metric-label">18년 영어 강사가 장담하는 1등급 비결 1가지 · IG 조회수 (10일)</div>
+        <div class="metric-badge green">평소 대비 109배 · 비팔로워 99.5%</div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-box"><div class="mb-num green">99.5%</div><div class="mb-lbl">비팔로워 유입<br>(탐색 알고리즘 최고)</div></div>
+        <div class="metric-box"><div class="mb-num blue">561</div><div class="mb-lbl">공유 수<br>(최고 확산 지표)</div></div>
+        <div class="metric-box"><div class="mb-num">322</div><div class="mb-lbl">저장 수<br>(좋아요 1.65배)</div></div>
+        <div class="metric-box"><div class="mb-num green">+66명</div><div class="mb-lbl">팔로우 전환</div></div>
+      </div>
+
+      <div class="stat-div">Instagram 세부 지표</div>
+      <div class="stat-row"><div class="sr-lbl">도달한 계정</div><div class="sr-val blue">48,000</div></div>
+      <div class="stat-row"><div class="sr-lbl">좋아요</div><div class="sr-val">195</div></div>
+      <div class="stat-row"><div class="sr-lbl">저장</div><div class="sr-val">322</div></div>
+      <div class="stat-row"><div class="sr-lbl">공유</div><div class="sr-val blue">561</div></div>
+      <div class="stat-row"><div class="sr-lbl">참여한 계정</div><div class="sr-val">915</div></div>
+      <div class="stat-row"><div class="sr-lbl">팔로우 전환</div><div class="sr-val green">+66명</div></div>
+      <div class="stat-row"><div class="sr-lbl">현재 팔로워</div><div class="sr-val">267명</div></div>
+
+      <div class="stat-div">YouTube 지표</div>
+      <div class="stat-row"><div class="sr-lbl">조회수</div><div class="sr-val blue">5,000</div></div>
+      <div class="stat-row"><div class="sr-lbl">평소 대비</div><div class="sr-val green">+2,700 (2.2배)</div></div>
+      <div class="stat-row"><div class="sr-lbl">좋아요</div><div class="sr-val">49</div></div>
+      <div class="stat-row"><div class="sr-lbl">구독자 전환</div><div class="sr-val green">+4명</div></div>
+      <div class="stat-row"><div class="sr-lbl">YT 평가</div><div class="sr-val green">다른 Shorts 대비 2.2배</div></div>
+
+      <div class="b-footer">
+        <p><strong>성공 요인 분석:</strong> "18년"이라는 경력 수치 + "장담하는"이라는 강한 선언 + "1가지"라는 명확한 수량. 세 가지 고성과 요소가 제목 안에 모두 들어있습니다.</p>
+        <p class="fn">* 비팔로워 99.5% = 탐색 탭 알고리즘이 최고 수준으로 작동 중<br>* 저장 > 좋아요 = 정보성 콘텐츠로 인식, 북마크 비율 높은 정상 패턴</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TAB 2: 0523 진단 ========== -->
+  <div class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num red">404</div>
+        <div class="metric-label">문법이 아니라 '이것'이 문제입니다 · IG 조회수 (2일)</div>
+        <div class="metric-badge red">배포 실패 — 비팔로워 78.3%</div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-box"><div class="mb-num red">78.3%</div><div class="mb-lbl">비팔로워 유입<br>(기준 95%+ 필요)</div></div>
+        <div class="metric-box"><div class="mb-num">1,814</div><div class="mb-lbl">YT 조회수<br>(평소와 비슷)</div></div>
+        <div class="metric-box"><div class="mb-num green">57.1%</div><div class="mb-lbl">YT 시청 지속률<br>(콘텐츠 품질 OK)</div></div>
+        <div class="metric-box"><div class="mb-num red">+1명</div><div class="mb-lbl">IG 팔로우 전환<br>(0516 대비 1/66)</div></div>
+      </div>
+
+      <div class="stat-div">Instagram 세부 지표</div>
+      <div class="stat-row"><div class="sr-lbl">도달한 계정</div><div class="sr-val">334</div></div>
+      <div class="stat-row"><div class="sr-lbl">좋아요</div><div class="sr-val">5</div></div>
+      <div class="stat-row"><div class="sr-lbl">저장</div><div class="sr-val">3</div></div>
+      <div class="stat-row"><div class="sr-lbl">공유</div><div class="sr-val red">0</div></div>
+      <div class="stat-row"><div class="sr-lbl">비팔로워 유입</div><div class="sr-val red">78.3%</div></div>
+      <div class="stat-row"><div class="sr-lbl">팔로우 전환</div><div class="sr-val">+1명</div></div>
+
+      <div class="stat-div">배포 실패 진단</div>
+      <div class="b-item" style="border-top: 1px solid var(--div);">
+        <div class="b-text">
+          <div class="b-title">원인 가설: 제목의 모호한 지시어</div>
+          <div class="b-desc">"'이것'이 문제입니다"는 클릭 전에 내용을 전혀 예측할 수 없습니다. 알고리즘이 초기 배포한 소규모 그룹에서 CTR이 낮으면 확산을 중단합니다. 비팔로워 78.3%는 팔로워 피드에만 주로 노출됐다는 증거입니다.</div>
+          <div class="b-quote">
+            콘텐츠 내용: "단어의 다른 뜻을 모르는 것이 해석을 막는다" → 2만 명 상담 근거 → 강력한 인사이트<br><br>
+            제목의 문제: 이 강력한 인사이트가 제목에 숨어있음 → '이것'으로 가려진 상태
+          </div>
+        </div>
+      </div>
+
+      <div class="b-footer">
+        <p><strong>권장 액션:</strong> IG 삭제 후 제목 교체 재업로드. YT는 유지(시청 지속률 57.1% 정상).</p>
+        <p><strong>재업로드 제목안:</strong> "단어를 다 알아도 해석이 안 되는 이유 1가지" 또는 "수능 영어, 문법이 문제가 아닙니다 — 2만 명 상담의 결론"</p>
+        <p class="fn">* YT 7/10위 = 최근 10개 영상 중 7번째. 평균 수준이지만 콘텐츠 자체는 시청 지속률 정상.<br>* 배포 실패 기준: IG 비팔로워 95% 미만. 78.3%는 팔로워 피드에서만 소비된 것.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      panels[i].classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
