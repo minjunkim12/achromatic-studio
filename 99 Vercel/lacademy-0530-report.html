@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라카데미 0530 주간 분석 보고서</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+:root {
+  --blue:    #0055FF;
+  --blue-bg: #E8EFFF;
+  --bg:      #F2F4F7;
+  --card:    #FFFFFF;
+  --t1:      #191919;
+  --t2:      #8B95A1;
+  --t3:      #C5CBD3;
+  --div:     #F0F2F5;
+  --green:   #00B493;
+  --red:     #FF4E4E;
+}
+
+html { overflow-x: hidden; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: 100%; max-width: 640px;
+  margin: 0 auto; min-height: 100dvh;
+  background: var(--bg); display: flex; flex-direction: column;
+}
+
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+@keyframes barRise  { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes sparkle  { 0%, 100% { opacity: 0; transform: scale(0.4); } 50% { opacity: 1; transform: scale(1); } }
+
+.hero {
+  position: relative;
+  background: linear-gradient(180deg,
+    #8BBEFF 0%, #A8CFFF 14%, #C0DFFF 28%,
+    #D8ECFF 44%, #EAF5FF 62%, #F4FBFF 80%, var(--bg) 100%
+  );
+  padding: 0 24px 36px; text-align: center; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.48) 50%, transparent 70%);
+  animation: shimmer 3.6s ease-in-out infinite; pointer-events: none;
+}
+
+.top-nav {
+  padding: max(14px, env(safe-area-inset-top)) 4px 0;
+  display: flex; align-items: center;
+  position: relative; z-index: 2;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: none; cursor: pointer; color: var(--t1);
+  background: rgba(255,255,255,0.42);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.hero-label {
+  font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.5);
+  letter-spacing: -0.1px; margin-bottom: 8px; position: relative; z-index: 1;
+}
+.hero-title {
+  font-size: 26px; font-weight: 800; color: var(--t1);
+  letter-spacing: -0.8px; line-height: 1.24;
+  position: relative; z-index: 1; margin-bottom: 20px;
+}
+.hero-title em { font-style: normal; color: var(--blue); }
+
+.hero-svg-wrap {
+  width: 160px; height: 160px;
+  margin: 0 auto 18px; position: relative; z-index: 1;
+}
+
+.hero-card {
+  background: rgba(255,255,255,0.84);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-radius: 20px; padding: 16px 20px;
+  max-width: 290px; margin: 0 auto;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.55);
+  position: relative; z-index: 1; text-align: center;
+}
+.kpi-row { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
+.kpi-num { font-size: 30px; font-weight: 800; color: var(--t1); letter-spacing: -1px; line-height: 1; }
+.kpi-num span { color: var(--blue); }
+.kpi-unit { font-size: 14px; color: var(--t2); font-weight: 500; }
+.kpi-sub  { font-size: 12px; color: var(--t2); margin-top: 4px; }
+.kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+.kpi-tag  { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-bg); border-radius: 20px; padding: 3px 9px; }
+.kpi-tag.red { color: #FF4E4E; background: #FFF0F0; }
+.kpi-tag.green { color: var(--green); background: #E6FAF7; }
+
+.hero-summary {
+  background: var(--bg); padding: 16px 20px 14px;
+  font-size: 13px; color: var(--t2); line-height: 1.72; letter-spacing: -0.2px; text-align: center;
+}
+.hero-summary strong { color: var(--t1); font-weight: 600; }
+
+.tab-bar {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg); display: flex; border-bottom: 1px solid var(--div);
+}
+.tab-btn {
+  flex: 1; padding: 12px 0 10px;
+  font-size: 13px; font-weight: 600; color: var(--t2);
+  background: none; border: none; cursor: pointer;
+  position: relative; letter-spacing: -0.2px; transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab-btn.active { color: var(--t1); }
+.tab-btn.active::after {
+  content: ''; position: absolute; bottom: -1px;
+  left: 20%; right: 20%; height: 2px; background: var(--blue); border-radius: 2px;
+}
+
+.tab-panel { display: none; padding: 12px 0 48px; }
+.tab-panel.active { display: block; }
+
+.sec-lbl {
+  font-size: 11px; font-weight: 700; color: var(--t2);
+  letter-spacing: 0.4px; text-transform: uppercase; padding: 16px 20px 8px;
+}
+
+.b-card {
+  background: var(--card); border-radius: 20px; margin: 0 16px 8px;
+  overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+}
+.b-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+.b-item + .b-item { border-top: 1px solid var(--div); }
+.b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; }
+.b-text { flex: 1; min-width: 0; }
+.b-title { font-size: 14px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; line-height: 1.4; }
+.b-desc  { font-size: 12px; color: var(--t2); line-height: 1.65; margin-top: 3px; }
+.b-footer { padding: 12px 16px; border-top: 1px solid var(--div); }
+.b-footer p { font-size: 12px; color: var(--t2); line-height: 1.7; }
+.b-footer p strong { color: var(--t1); font-weight: 600; }
+.b-footer .fn { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
+
+.plat-head { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 14px 16px 8px; gap: 4px; align-items: center; }
+.plat-head-col { font-size: 12px; font-weight: 700; color: var(--t2); text-align: center; line-height: 1.3; }
+.plat-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 10px 16px; border-top: 1px solid var(--div); gap: 4px; align-items: center; }
+.pr-lbl { font-size: 12px; color: var(--t2); }
+.pr-val { font-size: 16px; font-weight: 700; color: var(--t1); text-align: center; }
+.pr-val.blue  { color: var(--blue); }
+.pr-val.green { color: var(--green); }
+.pr-val.sm  { font-size: 13px; }
+.pr-val.dim { color: var(--t3); font-size: 13px; }
+.pr-val.red { color: var(--red); }
+
+.comb-row { display: flex; border-top: 1px solid var(--div); }
+.comb-item { flex: 1; padding: 14px 16px; text-align: center; }
+.comb-item + .comb-item { border-left: 1px solid var(--div); }
+.comb-num { font-size: 24px; font-weight: 800; color: var(--blue); letter-spacing: -0.8px; line-height: 1; }
+.comb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; }
+
+.metric-hero { padding: 20px 16px 10px; }
+.metric-num { font-size: 40px; font-weight: 800; color: var(--t1); letter-spacing: -1.5px; line-height: 1; }
+.metric-num.blue { color: var(--blue); }
+.metric-label { font-size: 13px; color: var(--t2); margin-top: 4px; }
+.metric-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; color: var(--green); background: rgba(0,180,147,0.09); border-radius: 6px; padding: 2px 8px; margin-top: 6px; }
+.metric-badge.red { color: var(--red); background: rgba(255,78,78,0.09); }
+
+.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 16px; }
+.metric-box { background: var(--bg); border-radius: 12px; padding: 12px 14px; }
+.mb-num { font-size: 20px; font-weight: 700; color: var(--t1); letter-spacing: -0.5px; }
+.mb-num.blue  { color: var(--blue); }
+.mb-num.green { color: var(--green); }
+.mb-num.red   { color: var(--red); }
+.mb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+.stat-div { padding: 8px 16px 4px; border-top: 1px solid var(--div); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.4px; }
+.stat-row { padding: 11px 16px; border-top: 1px solid var(--div); display: flex; justify-content: space-between; align-items: center; }
+.sr-lbl { font-size: 13px; color: var(--t2); }
+.sr-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+.sr-val.blue  { color: var(--blue); }
+.sr-val.green { color: var(--green); }
+.sr-val.red   { color: var(--red); }
+
+.insight-box {
+  background: var(--blue-bg); border-radius: 14px;
+  margin: 0 16px 8px; padding: 14px 16px;
+  border: 1px solid rgba(0,85,255,0.12);
+}
+.insight-box.red { background: #FFF0F0; border-color: rgba(255,78,78,0.12); }
+.insight-box.green { background: #E6FAF7; border-color: rgba(0,180,147,0.12); }
+.insight-label { font-size: 10px; font-weight: 700; color: var(--blue); letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 6px; }
+.insight-box.red .insight-label { color: var(--red); }
+.insight-box.green .insight-label { color: var(--green); }
+.insight-text { font-size: 13px; color: var(--t1); font-weight: 600; letter-spacing: -0.2px; line-height: 1.55; }
+.insight-sub { font-size: 12px; color: var(--t2); margin-top: 5px; line-height: 1.65; }
+
+@media (min-width: 680px) {
+  body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+  .page { border-radius: 20px; overflow: hidden; box-shadow: 0 16px 56px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.05); }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="top-nav">
+      <button class="back-btn" onclick="history.back()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+    </div>
+
+    <p class="hero-label">L'Academy 여의도 · 2026.05.30</p>
+    <h1 class="hero-title">0516 IG <em>6.2만</em> 터졌다<br>0524 IG는 왜 414인가</h1>
+
+    <div class="hero-svg-wrap">
+      <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="80" r="75" fill="rgba(255,255,255,0.25)" />
+        <!-- 0509 bar (159K, tallest) -->
+        <rect x="18" y="28" width="28" height="104" rx="8" fill="url(#g1)" style="transform-origin:32px 132px; animation: barRise 0.8s ease-out 0.1s both;"/>
+        <!-- 0516 bar (62K, medium) -->
+        <rect x="54" y="68" width="28" height="64" rx="8" fill="url(#g2)" style="transform-origin:68px 132px; animation: barRise 0.8s ease-out 0.3s both;"/>
+        <!-- 0524 bar (414, tiny) -->
+        <rect x="90" y="129" width="28" height="3" rx="2" fill="#FF4E4E" opacity="0.9"/>
+
+        <text x="32" y="23" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(0,85,255,0.8)" font-family="sans-serif">15.9만</text>
+        <text x="32" y="148" text-anchor="middle" font-size="8" fill="rgba(0,85,255,0.5)" font-family="sans-serif">0509</text>
+        <text x="68" y="63" text-anchor="middle" font-size="8" font-weight="700" fill="rgba(0,85,255,0.8)" font-family="sans-serif">6.2만</text>
+        <text x="68" y="148" text-anchor="middle" font-size="8" fill="rgba(0,85,255,0.5)" font-family="sans-serif">0516</text>
+        <text x="104" y="124" text-anchor="middle" font-size="7" font-weight="700" fill="#FF4E4E" font-family="sans-serif">414</text>
+        <text x="104" y="148" text-anchor="middle" font-size="8" fill="rgba(255,78,78,0.7)" font-family="sans-serif">0524</text>
+
+        <circle cx="68" cy="52" r="4" fill="#FFD700" style="animation: sparkle 1.5s 0.8s ease-in-out infinite;"/>
+        <circle cx="52" cy="44" r="2" fill="#FFD700" style="animation: sparkle 1.5s 1.1s ease-in-out infinite;"/>
+        <circle cx="78" cy="47" r="2.5" fill="#FFD700" style="animation: sparkle 1.5s 1.4s ease-in-out infinite;"/>
+
+        <circle cx="132" cy="28" r="16" fill="rgba(255,255,255,0.3)"/>
+        <rect x="124" y="20" width="16" height="16" rx="4.5" fill="none" stroke="rgba(0,45,110,0.5)" stroke-width="1.5"/>
+        <circle cx="132" cy="28" r="4" fill="none" stroke="rgba(0,45,110,0.5)" stroke-width="1.5"/>
+        <circle cx="137" cy="23" r="1" fill="rgba(0,45,110,0.5)"/>
+
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0055FF" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#6699FF" stop-opacity="0.7"/>
+          </linearGradient>
+          <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0055FF" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#6699FF" stop-opacity="0.6"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="hero-card">
+      <div class="kpi-row">
+        <span class="kpi-num">69,<span>532</span></span>
+        <span class="kpi-unit">회</span>
+      </div>
+      <p class="kpi-sub">이번 주 신규 영상 합산 (YT+IG)</p>
+      <div class="kpi-tags">
+        <span class="kpi-tag green">IG 0516 6.2만 ↑</span>
+        <span class="kpi-tag red">IG 0524 414 ↓</span>
+        <span class="kpi-tag">팔로워 267명</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-summary">
+    <strong>0516 "선생님이 시킨 건 이거 하나였다!"</strong>가 IG에서 6.2만 조회. 탐색 탭 비팔로워 유입 99.5%, 공유 591회, 팔로우 +67명. 반면 같은 주 <strong>0524 "2만 명 상담하고 내린 결론은 이겁니다"</strong>는 IG 414회에 그쳤다. 제목 한 줄의 차이가 <strong>150배 결과</strong>를 만들었다.
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('summary', this)">요약</button>
+    <button class="tab-btn" onclick="showTab('youtube', this)">유튜브</button>
+    <button class="tab-btn" onclick="showTab('instagram', this)">인스타그램</button>
+  </div>
+
+  <!-- 요약 탭 -->
+  <div id="tab-summary" class="tab-panel active">
+    <p class="sec-lbl">이번 주 플랫폼 비교</p>
+    <div class="b-card">
+      <div class="plat-head">
+        <div class="plat-head-col" style="text-align:left">영상</div>
+        <div class="plat-head-col">YouTube</div>
+        <div class="plat-head-col">Instagram</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">0524 2만명 상담</div>
+        <div class="pr-val sm">2,127</div>
+        <div class="pr-val red sm">414</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">0516 선생님이 시킨 건</div>
+        <div class="pr-val sm">4,991</div>
+        <div class="pr-val blue sm">62,000</div>
+      </div>
+      <div class="comb-row">
+        <div class="comb-item">
+          <div class="comb-num">7,118</div>
+          <div class="comb-lbl">유튜브 합산</div>
+        </div>
+        <div class="comb-item">
+          <div class="comb-num">62,414</div>
+          <div class="comb-lbl">인스타 합산</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sec-lbl">장기 성장 중인 영상</p>
+    <div class="b-card">
+      <div class="plat-row">
+        <div class="pr-lbl">0509 서울대 의대생</div>
+        <div class="pr-val sm">17,859</div>
+        <div class="pr-val green sm">15.9만</div>
+      </div>
+      <div class="b-footer">
+        <p>DB 초기값 YT 4,540 → 현재 <strong>17,859</strong> (+293%). IG 81,000 → <strong>159,000</strong>. 3주 넘게 알고리즘이 계속 배포 중.</p>
+      </div>
+    </div>
+
+    <p class="sec-lbl">핵심 인사이트</p>
+
+    <div class="insight-box red">
+      <p class="insight-label">🔴 IG 0524 처참 원인 분석</p>
+      <p class="insight-text">"내린 결론은 이겁니다" — 모호한 결말이 CTR을 죽였다</p>
+      <p class="insight-sub">비팔로워 77.6% = 탐색 탭에 배포는 됐다. 문제는 초기 CTR. "이겁니다"는 결론을 숨기지 않고 그냥 모호하게 처리해 스크롤을 멈출 이유가 없었다. '2만 명'이라는 수치가 무겁게 느껴져 친근감 저하.</p>
+    </div>
+
+    <div class="insight-box">
+      <p class="insight-label">📊 150배 격차의 구조</p>
+      <p class="insight-text">0516 vs 0524: 62,000 vs 414 — 같은 채널, 같은 주</p>
+      <p class="insight-sub">0516: "고3 절반이 2등급" 충격 훅 + "이거 하나였다!" 선언형 → CTR 높음 → 99.5% 탐색 탭 배포 → 6.2만. 0524: 수치는 있지만 결론 모호 → CTR 낮음 → 조기 배포 중단 → 414.</p>
+    </div>
+
+    <div class="insight-box green">
+      <p class="insight-label">✅ 이번 주 수확</p>
+      <p class="insight-text">팔로워 267명 — 0509부터 +187명 순성장 중</p>
+      <p class="insight-sub">0516 팔로우 +67명, 공유 591회 역대 최고. 저장 337 = 정보성 콘텐츠 포지셔닝 성공. "단어가 문제"라는 메시지가 학부모·교사에게 바이럴.</p>
+    </div>
+
+    <p class="sec-lbl">다음 주 액션</p>
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-icon" style="background:#E8EFFF">🎯</div>
+        <div class="b-text">
+          <p class="b-title">제목 공식: "이겁니다" 금지</p>
+          <p class="b-desc">"~하나였다", "~때문이었다", "~를 했더니" 선언형으로. 0524 내용은 좋으니 제목만 바꿔 재업로드 검토.</p>
+          <div class="b-quote">개선안: "2만 명 상담해서 발견한 영어 성적 안 오르는 진짜 이유" / "2만 명 중 1등급 된 애들이 공통으로 한 것"</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#E6FAF7">📈</div>
+        <div class="b-text">
+          <p class="b-title">0516 소재 파생 시리즈</p>
+          <p class="b-desc">공유 591 = 학부모/교사 바이럴. "단어 학습 방법론" 시리즈로 쪼개기. "고3 절반이 2등급인 이유" 파생편.</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF8E6">🔥</div>
+        <div class="b-text">
+          <p class="b-title">0509 파생 콘텐츠</p>
+          <p class="b-desc">17,859 YT / 159,000 IG — 아직 성장 중. "수능 3개 틀린 학생이 한 것들" 파생편으로 알고리즘 재진입.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 유튜브 탭 -->
+  <div id="tab-youtube" class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num">7,118</div>
+        <p class="metric-label">이번 주 신규 영상 YT 합산 조회수</p>
+        <span class="metric-badge">Shorts 피드 유입 주도</span>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="mb-num blue">4,991</div>
+          <div class="mb-lbl">0516<br>18년 강사 비결</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">2,127</div>
+          <div class="mb-lbl">0524<br>2만 명 상담</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num green">92.5%</div>
+          <div class="mb-lbl">0516 시청 지속률</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">95.5%</div>
+          <div class="mb-lbl">0524 시청 지속률</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sec-lbl">0516 — "18년 강사가 장담하는 1등급 비결 1가지"</p>
+    <div class="b-card">
+      <div class="stat-row"><span class="sr-lbl">YT 조회수</span><span class="sr-val blue">4,991</span></div>
+      <div class="stat-row"><span class="sr-lbl">시청 지속률</span><span class="sr-val">92.5%</span></div>
+      <div class="stat-row"><span class="sr-lbl">게시일</span><span class="sr-val">2026.05.16</span></div>
+      <div class="b-footer">
+        <p>지속률 92.5%, Shorts 피드 유입 주도. "고3 절반이 2등급"이라는 충격 수치가 초기 CTR을 끌어올렸다. IG에서 더 폭발적 반응 (6.2만).</p>
+      </div>
+    </div>
+
+    <p class="sec-lbl">0524 — "2만 명 상담하고 내린 결론은 이겁니다"</p>
+    <div class="b-card">
+      <div class="stat-row"><span class="sr-lbl">YT 조회수</span><span class="sr-val">2,127</span></div>
+      <div class="stat-row"><span class="sr-lbl">시청 지속률</span><span class="sr-val">95.5%</span></div>
+      <div class="stat-row"><span class="sr-lbl">게시일</span><span class="sr-val">2026.05.24</span></div>
+      <div class="b-footer">
+        <p>지속률 95.5% — <strong>영상 품질은 문제없다.</strong> YT도 IG도 낮은 이유는 순전히 초기 CTR. 콘텐츠 자체는 재활용 가능 — 제목만 바꿔 재업로드 전략 유효.</p>
+      </div>
+    </div>
+
+    <p class="sec-lbl">0509 — "서울대 의대 합격한 학생이 깨달은 것" (계속 성장)</p>
+    <div class="b-card">
+      <div class="stat-row"><span class="sr-lbl">YT 조회수 (현재)</span><span class="sr-val green">17,859</span></div>
+      <div class="stat-row"><span class="sr-lbl">DB 대비 증가</span><span class="sr-val green">+293%</span></div>
+      <div class="stat-row"><span class="sr-lbl">시청 지속률</span><span class="sr-val">96.0%</span></div>
+      <div class="b-footer">
+        <p>Shorts 피드 96% 유입. 지속률 96% = 채널 최고 수준. 3주 넘게 알고리즘이 배포 지속 중. "수능 3개 틀리고 서울대 의대" 조합이 탐색 피드에서 CTR 유지.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 인스타그램 탭 -->
+  <div id="tab-instagram" class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num blue">267</div>
+        <p class="metric-label">현재 팔로워 수 (2026.05.30 기준)</p>
+        <span class="metric-badge">+187명 (0509 이후 순성장)</span>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="mb-num blue">62,000</div>
+          <div class="mb-lbl">0516 IG 조회수</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num red">414</div>
+          <div class="mb-lbl">0524 IG 조회수</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">99.5%</div>
+          <div class="mb-lbl">0516 비팔로워 유입</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num red">77.6%</div>
+          <div class="mb-lbl">0524 비팔로워 유입</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sec-lbl">0516 "선생님이 시킨 건 이거 하나였다!" — 대박</p>
+    <div class="b-card">
+      <div class="stat-row"><span class="sr-lbl">IG 조회수</span><span class="sr-val blue">62,000</span></div>
+      <div class="stat-row"><span class="sr-lbl">도달한 계정</span><span class="sr-val">49,000</span></div>
+      <div class="stat-row"><span class="sr-lbl">비팔로워 유입</span><span class="sr-val green">99.5%</span></div>
+      <div class="stat-div">참여 지표</div>
+      <div class="stat-row"><span class="sr-lbl">좋아요</span><span class="sr-val">200</span></div>
+      <div class="stat-row"><span class="sr-lbl">저장</span><span class="sr-val blue">337</span></div>
+      <div class="stat-row"><span class="sr-lbl">공유</span><span class="sr-val blue">591</span></div>
+      <div class="stat-row"><span class="sr-lbl">신규 팔로우</span><span class="sr-val green">+67명</span></div>
+      <div class="b-footer">
+        <p>공유 591회 = <strong>역대 최고치.</strong> "단어만 제대로 마스터해도 영어 끝" 메시지가 학부모·교사에게 확산. 저장 337 = 정보 저장용 콘텐츠 성공. 팔로우 +67은 이 영상 하나로 팔로워 25% 증가.</p>
+        <p class="fn">YT 제목 "18년 강사가 장담하는 1등급 비결" vs IG 제목 "선생님이 시킨 건 이거 하나였다!" — IG 제목이 더 선언형·공감형이라 CTR 높았을 가능성.</p>
+      </div>
+    </div>
+
+    <p class="sec-lbl">0524 "2만 명 상담하고 내린 결론은 이겁니다" — 처참</p>
+    <div class="b-card">
+      <div class="stat-row"><span class="sr-lbl">IG 조회수</span><span class="sr-val red">414</span></div>
+      <div class="stat-row"><span class="sr-lbl">도달한 계정</span><span class="sr-val">337</span></div>
+      <div class="stat-row"><span class="sr-lbl">비팔로워 유입</span><span class="sr-val">77.6%</span></div>
+      <div class="stat-div">참여 지표</div>
+      <div class="stat-row"><span class="sr-lbl">좋아요</span><span class="sr-val">5</span></div>
+      <div class="stat-row"><span class="sr-lbl">저장</span><span class="sr-val">3</span></div>
+      <div class="stat-row"><span class="sr-lbl">공유</span><span class="sr-val red">0</span></div>
+      <div class="stat-row"><span class="sr-lbl">신규 팔로우</span><span class="sr-val">+1명</span></div>
+      <div class="b-footer">
+        <p>비팔로워 77.6% = 알고리즘이 탐색 탭에 배포는 했다. 초기 CTR이 낮아 배포 중단. 콘텐츠 품질은 YT 지속률 95.5%가 증명. <strong>제목 리셋 후 재업로드 전략이 가장 현실적.</strong></p>
+      </div>
+    </div>
+
+    <p class="sec-lbl">0509 — IG 계속 성장</p>
+    <div class="b-card">
+      <div class="stat-row"><span class="sr-lbl">IG 조회수 (현재)</span><span class="sr-val green">159,000</span></div>
+      <div class="stat-row"><span class="sr-lbl">DB 초기값 대비</span><span class="sr-val green">+96%</span></div>
+      <div class="b-footer">
+        <p>81,000 → 159,000. 3주 넘게 탐색 탭 배포 지속. "수능 3개 틀리고 서울대 의대" 조합이 탐색 피드에서 CTR 유지 중.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
