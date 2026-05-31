@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>0601 라카데미 숏폼 분석 보고서</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #E8EFFF;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+      --green:   #00B493;
+      --orange:  #FF6B00;
+    }
+
+    html { overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%; max-width: 640px;
+      margin: 0 auto; min-height: 100dvh;
+      background: var(--bg); display: flex; flex-direction: column;
+    }
+
+    /* ── HERO ── */
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%, #A8CFFF 14%, #C0DFFF 28%,
+        #D8ECFF 44%, #EAF5FF 62%, #F4FBFF 80%, var(--bg) 100%
+      );
+      padding: 0 24px 36px; text-align: center; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.48) 50%, transparent 70%);
+      animation: shimmer 3.6s ease-in-out infinite; pointer-events: none;
+    }
+
+    .top-nav {
+      padding: max(14px, env(safe-area-inset-top)) 4px 0;
+      display: flex; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .back-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; cursor: pointer; color: var(--t1);
+      background: rgba(255,255,255,0.42);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:active { background: rgba(255,255,255,0.65); }
+
+    .hero-label {
+      font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.5);
+      letter-spacing: -0.1px; margin-bottom: 8px; position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-size: 26px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.8px; line-height: 1.24;
+      position: relative; z-index: 1; margin-bottom: 20px;
+    }
+    .hero-title em { font-style: normal; color: var(--blue); }
+
+    .hero-svg-wrap {
+      width: 160px; height: 160px;
+      margin: 0 auto 18px; position: relative; z-index: 1;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 16px 20px;
+      max-width: 290px; margin: 0 auto;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.55);
+      position: relative; z-index: 1; text-align: center;
+    }
+    .kpi-row { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
+    .kpi-num { font-size: 30px; font-weight: 800; color: var(--t1); letter-spacing: -1px; line-height: 1; }
+    .kpi-num span { color: var(--blue); }
+    .kpi-unit { font-size: 14px; color: var(--t2); font-weight: 500; }
+    .kpi-sub  { font-size: 12px; color: var(--t2); margin-top: 4px; }
+    .kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+    .kpi-tag  { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-bg); border-radius: 20px; padding: 3px 9px; }
+    .kpi-tag.orange { color: var(--orange); background: #FFF0E5; }
+
+    .hero-summary {
+      background: var(--bg); padding: 16px 20px 14px;
+      font-size: 13px; color: var(--t2); line-height: 1.72; letter-spacing: -0.2px; text-align: center;
+    }
+    .hero-summary strong { color: var(--t1); font-weight: 600; }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); display: flex; border-bottom: 1px solid var(--div);
+    }
+    .tab-btn {
+      flex: 1; padding: 12px 0 10px;
+      font-size: 13px; font-weight: 600; color: var(--t2);
+      background: none; border: none; cursor: pointer;
+      position: relative; letter-spacing: -0.2px; transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-btn.active { color: var(--t1); }
+    .tab-btn.active::after {
+      content: ''; position: absolute; bottom: -1px;
+      left: 20%; right: 20%; height: 2px; background: var(--blue); border-radius: 2px;
+    }
+
+    .tab-panel { display: none; padding: 12px 0 48px; }
+    .tab-panel.active { display: block; }
+
+    .sec-lbl {
+      font-size: 11px; font-weight: 700; color: var(--t2);
+      letter-spacing: 0.4px; text-transform: uppercase; padding: 16px 20px 8px;
+    }
+
+    /* ── CARD ── */
+    .b-card {
+      background: var(--card); border-radius: 20px; margin: 0 16px 8px;
+      overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .b-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+    .b-item + .b-item { border-top: 1px solid var(--div); }
+    .b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; }
+    .b-text { flex: 1; min-width: 0; }
+    .b-title { font-size: 14px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; line-height: 1.4; }
+    .b-desc  { font-size: 12px; color: var(--t2); line-height: 1.65; margin-top: 3px; }
+    .b-quote { border-left: 2px solid var(--t3); padding: 6px 10px; margin-top: 8px; color: var(--t2); font-size: 12px; line-height: 1.65; }
+    .b-footer { padding: 12px 16px; border-top: 1px solid var(--div); }
+    .b-footer p { font-size: 12px; color: var(--t2); line-height: 1.7; }
+    .b-footer p strong { color: var(--t1); font-weight: 600; }
+    .b-footer .fn { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
+
+    /* ── PLATFORM COMPARISON ── */
+    .plat-head { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 14px 16px 8px; gap: 4px; align-items: center; }
+    .plat-head-col { font-size: 12px; font-weight: 700; color: var(--t2); text-align: center; line-height: 1.3; }
+    .plat-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 10px 16px; border-top: 1px solid var(--div); gap: 4px; align-items: center; }
+    .pr-lbl { font-size: 12px; color: var(--t2); }
+    .pr-val { font-size: 16px; font-weight: 700; color: var(--t1); text-align: center; }
+    .pr-val.blue  { color: var(--blue); }
+    .pr-val.green { color: var(--green); }
+    .pr-val.orange { color: var(--orange); }
+    .pr-val.sm  { font-size: 13px; }
+    .pr-val.dim { color: var(--t3); font-size: 13px; }
+
+    .comb-row { display: flex; border-top: 1px solid var(--div); }
+    .comb-item { flex: 1; padding: 14px 16px; text-align: center; }
+    .comb-item + .comb-item { border-left: 1px solid var(--div); }
+    .comb-num { font-size: 24px; font-weight: 800; color: var(--blue); letter-spacing: -0.8px; line-height: 1; }
+    .comb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; }
+
+    /* ── STUDIO DASHBOARD ── */
+    .metric-hero { padding: 20px 16px 10px; }
+    .metric-num { font-size: 40px; font-weight: 800; color: var(--t1); letter-spacing: -1.5px; line-height: 1; }
+    .metric-num.blue { color: var(--blue); }
+    .metric-num.orange { color: var(--orange); }
+    .metric-label { font-size: 13px; color: var(--t2); margin-top: 4px; }
+    .metric-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 8px; margin-top: 6px; }
+    .metric-badge.green { color: var(--green); background: rgba(0,180,147,0.09); }
+    .metric-badge.orange { color: var(--orange); background: rgba(255,107,0,0.09); }
+
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 16px; }
+    .metric-box { background: var(--bg); border-radius: 12px; padding: 12px 14px; }
+    .mb-num { font-size: 20px; font-weight: 700; color: var(--t1); letter-spacing: -0.5px; }
+    .mb-num.blue  { color: var(--blue); }
+    .mb-num.green { color: var(--green); }
+    .mb-num.orange { color: var(--orange); }
+    .mb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+    .stat-div { padding: 8px 16px 4px; border-top: 1px solid var(--div); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.4px; }
+    .stat-row { padding: 11px 16px; border-top: 1px solid var(--div); display: flex; justify-content: space-between; align-items: center; }
+    .sr-lbl { font-size: 13px; color: var(--t2); }
+    .sr-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+    .sr-val.blue  { color: var(--blue); }
+    .sr-val.green { color: var(--green); }
+    .sr-val.orange { color: var(--orange); }
+
+    /* ── WAIT BADGE ── */
+    .wait-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,107,0,0.09); border-radius: 10px; padding: 8px 14px;
+      margin: 0 16px 8px; font-size: 12px; color: var(--orange); font-weight: 600;
+    }
+
+    /* ── DESKTOP ── */
+    @media (min-width: 680px) {
+      body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+      .page { border-radius: 20px; overflow: hidden; box-shadow: 0 16px 56px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.05); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="top-nav">
+      <button class="back-btn" onclick="window.location.href='./'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero SVG: YT(높은 파란 막대) vs IG(낮은 회색 막대) — YT가 압도적인 초기 구조 -->
+    <div class="hero-svg-wrap">
+      <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <!-- 배경 원 -->
+        <circle cx="80" cy="80" r="72" fill="rgba(0,85,255,0.06)"/>
+
+        <!-- YT 막대 (높고, 파란색) -->
+        <rect x="42" y="36" width="34" height="88" rx="8" fill="#0055FF" opacity="0.9"/>
+        <!-- YT 레이블 -->
+        <text x="59" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#0055FF" font-family="system-ui">YT</text>
+        <text x="59" y="138" text-anchor="middle" font-size="9" font-weight="600" fill="#0055FF" font-family="system-ui">2,224</text>
+
+        <!-- IG 막대 (낮고, 회색) -->
+        <rect x="84" y="104" width="34" height="20" rx="6" fill="#C5CBD3" opacity="0.9"/>
+        <!-- IG 레이블 -->
+        <text x="101" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#8B95A1" font-family="system-ui">IG</text>
+        <text x="101" y="138" text-anchor="middle" font-size="9" font-weight="600" fill="#8B95A1" font-family="system-ui">201</text>
+
+        <!-- 화살표 (IG가 성장 중) -->
+        <path d="M101 98 L101 82" stroke="#C5CBD3" stroke-width="2" stroke-dasharray="3 2" stroke-linecap="round"/>
+        <polygon points="101,76 97,84 105,84" fill="#C5CBD3" opacity="0.6"/>
+
+        <!-- 시간 뱃지 -->
+        <rect x="55" y="56" width="50" height="18" rx="9" fill="rgba(255,255,255,0.85)"/>
+        <text x="80" y="68.5" text-anchor="middle" font-size="9" font-weight="700" fill="#FF6B00" font-family="system-ui">+11% ↑</text>
+      </svg>
+    </div>
+
+    <div class="hero-label">AI로 분석한 라카데미 콘텐츠 현황 · 26.06.01</div>
+    <div class="hero-title">YT 즉시 배포 성공<br><em>IG는 배포 관찰 중</em></div>
+
+    <div class="hero-card">
+      <div class="kpi-row">
+        <div class="kpi-num">YT <span>2,224</span></div>
+        <div class="kpi-unit">뷰</div>
+      </div>
+      <div class="kpi-sub">IG 201 (게시 11시간) · 합산 2,425</div>
+      <div class="kpi-tags">
+        <span class="kpi-tag">평균 대비 +11%</span>
+        <span class="kpi-tag">Shorts 피드 97%</span>
+        <span class="kpi-tag orange">IG 배포 대기</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-summary">
+    YT는 <strong>게시 후 4시간 만에 2,200뷰 급상승</strong>으로 알고리즘 배포 성공. IG는 게시 11시간 기준 201뷰로 아직 초기 단계 — <strong>비팔로워 비율 80.2%는 배포가 본격화되기 전 신호</strong>입니다. 24~48시간 후 재측정이 필요합니다.
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="0">요약</button>
+    <button class="tab-btn" data-tab="1">유튜브</button>
+    <button class="tab-btn" data-tab="2">인스타그램</button>
+  </div>
+
+  <!-- TAB 0: 요약 -->
+  <div class="tab-panel active">
+
+    <div class="sec-lbl">플랫폼 비교 (게시 11시간)</div>
+    <div class="b-card">
+      <div class="plat-head">
+        <div class="plat-head-col" style="text-align:left;">항목</div>
+        <div class="plat-head-col">유튜브</div>
+        <div class="plat-head-col">인스타</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">조회수</div>
+        <div class="pr-val blue">2,224</div>
+        <div class="pr-val dim">201</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">알고리즘 배포</div>
+        <div class="pr-val green sm">Shorts 97%</div>
+        <div class="pr-val orange sm">대기 중</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">비팔로워 비율</div>
+        <div class="pr-val sm">—</div>
+        <div class="pr-val orange sm">80.2%</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">좋아요</div>
+        <div class="pr-val sm">5</div>
+        <div class="pr-val sm">2</div>
+      </div>
+      <div class="plat-row">
+        <div class="pr-lbl">저장</div>
+        <div class="pr-val sm">—</div>
+        <div class="pr-val sm">1</div>
+      </div>
+      <div class="comb-row">
+        <div class="comb-item"><div class="comb-num">2,425</div><div class="comb-lbl">합산 조회수</div></div>
+        <div class="comb-item"><div class="comb-num" style="color:var(--orange)">대기 중</div><div class="comb-lbl">IG 배포 상태</div></div>
+      </div>
+    </div>
+
+    <div class="sec-lbl">핵심 인사이트</div>
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-icon" style="background:#E8EFFF;">🚀</div>
+        <div class="b-text">
+          <div class="b-title">YT 알고리즘 배포 즉시 성공</div>
+          <div class="b-desc">Shorts 피드 유입 97.0%, 급상승 그래프 확인. "다른 Shorts보다 11% 증가"라는 YT Studio 평가까지 받았다. 선언형 제목 "이너서클 때문입니다"의 훅이 효과적으로 작동한 것.</div>
+          <div class="b-quote">인과 구조 확인: 제목 훅 → 높은 초기 CTR → 알고리즘 배포량 확대 → 2,224뷰</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF0E5;">⏳</div>
+        <div class="b-text">
+          <div class="b-title">IG 비팔로워 80.2% — 아직 탐색 배포 안 됐다</div>
+          <div class="b-desc">과거 최고 기록(0509 영상 99.9%, 0516 영상 99.5%)과 비교하면 80.2%는 아직 배포가 팔로워 중심에 머물러 있다는 뜻. 게시 11시간 기준이라 판단을 유보해야 한다. 보통 IG는 24~48시간 안에 탐색 배포가 폭발하거나 멈추는 패턴을 보인다.</div>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#E8FFF8;">📊</div>
+        <div class="b-text">
+          <div class="b-title">0524 패턴과 유사 — 2차 확인 필요</div>
+          <div class="b-desc">0524 보고서(IG 414뷰, 비팔로워 76%, 배포 실패)와 현재 초기 지표가 비슷하다. 그러나 이번 영상은 YT가 잘 됐고, 제목도 선언형이라 IG 배포 결과가 다를 수 있다. 6월 2일 오전 재측정 후 최종 판단.</div>
+        </div>
+      </div>
+      <div class="b-footer">
+        <p><strong>다음 액션:</strong> 6월 2일 오전 IG 인사이트 재확인. 비팔로워 95%+ 도달 시 배포 성공, 80% 이하 유지 시 IG 배포 실패로 확정.</p>
+        <p class="fn">* 비팔로워 95%+ = 탐색 탭 알고리즘 정상 배포 기준 (실측값 기반)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: 유튜브 -->
+  <div class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num blue">2,224</div>
+        <div class="metric-label">이너서클 조회수 (게시 이후 11시간)</div>
+        <div class="metric-badge green">평소보다 +224 · 채널 평균 대비 +11%</div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-box"><div class="mb-num green">급상승 ↑</div><div class="mb-lbl">조회수 그래프 패턴</div></div>
+        <div class="metric-box"><div class="mb-num blue">97.0%</div><div class="mb-lbl">Shorts 피드 유입</div></div>
+        <div class="metric-box"><div class="mb-num">100%</div><div class="mb-lbl">좋아요/싫어요 비율<br>(채널 평균 95.9%)</div></div>
+        <div class="metric-box"><div class="mb-num">5개</div><div class="mb-lbl">좋아요 수</div></div>
+      </div>
+      <div class="stat-div">트래픽 소스</div>
+      <div class="stat-row"><div class="sr-lbl">Shorts 피드</div><div class="sr-val blue">97.0%</div></div>
+      <div class="stat-row"><div class="sr-lbl">YouTube 검색</div><div class="sr-val">0.9%</div></div>
+      <div class="stat-row"><div class="sr-lbl">기타 YouTube 기능</div><div class="sr-val">0.9%</div></div>
+      <div class="stat-row"><div class="sr-lbl">탐색 기능</div><div class="sr-val">0.7%</div></div>
+      <div class="stat-row"><div class="sr-lbl">채널 페이지</div><div class="sr-val">0.5%</div></div>
+      <div class="stat-div">채널 현황 (28일)</div>
+      <div class="stat-row"><div class="sr-lbl">현재 구독자</div><div class="sr-val">396명</div></div>
+      <div class="stat-row"><div class="sr-lbl">28일 구독자 증가</div><div class="sr-val green">+38명</div></div>
+      <div class="stat-row"><div class="sr-lbl">28일 조회수</div><div class="sr-val">28,000</div></div>
+      <div class="b-footer">
+        <p><strong>진단:</strong> Shorts 피드 97%는 알고리즘이 콘텐츠를 적극 배포했다는 뜻. 그래프가 급상승 후 수평을 그리는 건 초기 CTR 성공 패턴. 시청 지속 시간 데이터는 게시 후 최대 2일 처리 시간이 필요해 아직 미확인.</p>
+        <p class="fn">* 시청 지속률은 6월 2일 이후 YT Studio에서 확인 가능</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: 인스타그램 -->
+  <div class="tab-panel">
+
+    <div class="wait-badge">
+      ⏳ 게시 11시간 기준 데이터 — 배포 진행 중
+    </div>
+
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num orange">201</div>
+        <div class="metric-label">이너서클 릴스 조회수 (게시 11시간)</div>
+        <div class="metric-badge orange">비팔로워 80.2% · 배포 초기 단계</div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-box"><div class="mb-num">168</div><div class="mb-lbl">도달한 계정</div></div>
+        <div class="metric-box"><div class="mb-num orange">80.2%</div><div class="mb-lbl">비팔로워 유입<br>(탐색 배포 기준 미달)</div></div>
+        <div class="metric-box"><div class="mb-num">1</div><div class="mb-lbl">저장</div></div>
+        <div class="metric-box"><div class="mb-num">0</div><div class="mb-lbl">공유</div></div>
+      </div>
+      <div class="stat-div">참여 지표</div>
+      <div class="stat-row"><div class="sr-lbl">좋아요</div><div class="sr-val">2</div></div>
+      <div class="stat-row"><div class="sr-lbl">저장</div><div class="sr-val">1</div></div>
+      <div class="stat-row"><div class="sr-lbl">공유</div><div class="sr-val">0</div></div>
+      <div class="stat-row"><div class="sr-lbl">댓글</div><div class="sr-val">0</div></div>
+      <div class="stat-div">전환 지표</div>
+      <div class="stat-row"><div class="sr-lbl">팔로우 전환</div><div class="sr-val">+0명</div></div>
+      <div class="stat-row"><div class="sr-lbl">현재 팔로워</div><div class="sr-val">267명</div></div>
+      <div class="b-footer">
+        <p><strong>판단 유보:</strong> 비팔로워 80.2%는 탐색 배포 기준(95%+)에 못 미치나, 게시 11시간은 너무 이르다. 0524 영상(비팔로워 76%)은 배포 실패했고, 0516 영상(비팔로워 99.5%)은 6만뷰를 달성했다. 6월 2일 수치가 95%+ 이면 성공, 80% 이하이면 배포 실패로 확정.</p>
+        <p class="fn">* IG 비팔로워 95%+ = 탐색 탭 알고리즘 정상 배포 기준</p>
+        <p class="fn">* 릴스 ID: DY_5e7sTcGG · 측정 시각: 26.06.01 기준</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      tabs.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      panels[i].classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
