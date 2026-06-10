@@ -314,8 +314,35 @@ const SVG_IG_WIN = `
   <path d="M63 12 l-4.5 6 h3.3 v0 h2.4 v0 h3.3 z" fill="#00B493" opacity="0.8"/>
 </svg>`;
 
+const SVG_DUAL_GROWTH = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (medium, muted) — 3,234뷰 -->
+  <rect x="10" y="42" width="22" height="30" rx="5" fill="#8B95A1" opacity="0.6"/>
+  <!-- IG bar (tall, blue) — 5,145뷰 -->
+  <rect x="56" y="22" width="22" height="50" rx="5" fill="#0055FF" opacity="0.88"/>
+  <!-- baseline -->
+  <line x1="6" y1="74" x2="82" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- YT up arrow -->
+  <path d="M21 36 l-4 5.5 h2.8 v0 h2.4 v0 h2.8 z" fill="#8B95A1" opacity="0.7"/>
+  <!-- IG up arrow -->
+  <path d="M67 16 l-4 5.5 h2.8 v0 h2.4 v0 h2.8 z" fill="#00B493" opacity="0.9"/>
+  <!-- 합산 뱃지 -->
+  <rect x="24" y="52" width="30" height="12" rx="6" fill="rgba(0,180,147,0.12)"/>
+  <text x="39" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#00B493" font-family="system-ui">8,379↑</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0611-report.html',
+    date: '26.06.11',
+    label: '목요일',
+    title: '배포 복귀 5일 — YT+82%·합산 8,379',
+    heroTitle: '배포 복귀 5일<br><em>두 플랫폼 모두 성장 중</em>',
+    body: '합산 8,379뷰 · YT 3,234(+82%) · IG 5,145(비팔로워 97.9%) · 저장 18 · 팔로우+6',
+    sub: '숏폼 분석 · 성장 지속 · YT 48h +1,014',
+    svg: SVG_DUAL_GROWTH,
+  },
   {
     path: 'lacademy-0608-report.html',
     date: '26.06.08',
