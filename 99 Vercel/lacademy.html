@@ -331,8 +331,35 @@ const SVG_DUAL_GROWTH = `
   <text x="39" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#00B493" font-family="system-ui">8,379↑</text>
 </svg>`;
 
+/* 0613 영상 정체 — 평탄 곡선 (0618) */
+const SVG_PLATEAU = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (short, muted) — 1,370뷰 -->
+  <rect x="14" y="48" width="22" height="24" rx="5" fill="#8B95A1" opacity="0.55"/>
+  <!-- IG bar (medium, blue) — 2,332뷰 -->
+  <rect x="52" y="32" width="22" height="40" rx="5" fill="#0055FF" opacity="0.82"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- plateau dashes -->
+  <line x1="16" y1="44" x2="34" y2="44" stroke="#8B95A1" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.6"/>
+  <line x1="54" y1="28" x2="72" y2="28" stroke="#0055FF" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.6"/>
+  <!-- 합산 뱃지 -->
+  <rect x="24" y="54" width="32" height="12" rx="6" fill="rgba(0,85,255,0.10)"/>
+  <text x="40" y="63" text-anchor="middle" font-size="7" font-weight="700" fill="#0055FF" font-family="system-ui">3,702→</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0618-report.html',
+    date: '26.06.18',
+    label: '목요일',
+    title: '5일째 새 숏폼이 없다 — 0613 영상 정체',
+    heroTitle: '5일째 새 숏폼이 없다<br><em>0613 영상은 멈췄다</em>',
+    body: '합산 3,702뷰(3일 +74) · YT 1,370(조회율 40.2%) · IG 2,332(비팔로워 97%) · 저장 10 · 팔로우 0',
+    sub: '숏폼 분석 · 업로드 공백 · 배포 종료',
+    svg: SVG_PLATEAU,
+  },
   {
     path: 'lacademy-0615-report.html',
     date: '26.06.15',
