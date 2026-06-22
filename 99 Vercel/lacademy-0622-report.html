@@ -108,14 +108,6 @@
     }
     .hero-summary strong { color: var(--t1); font-weight: 600; }
 
-    /* ── DATA NOTE ── */
-    .data-note {
-      margin: 0 16px 4px; background: #FFF8EC; border: 1px solid #FFE2B0;
-      border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #8A6A2E;
-      line-height: 1.65; letter-spacing: -0.2px;
-    }
-    .data-note strong { color: #6E5012; font-weight: 700; }
-
     /* ── TAB BAR ── */
     .tab-bar {
       position: sticky; top: 0; z-index: 100;
@@ -194,7 +186,6 @@
     .mb-num.blue  { color: var(--blue); }
     .mb-num.green { color: var(--green); }
     .mb-num.orange { color: var(--orange); }
-    .mb-num.dim { color: var(--t3); }
     .mb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
 
     .stat-div { padding: 8px 16px 4px; border-top: 1px solid var(--div); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.4px; }
@@ -204,7 +195,6 @@
     .sr-val.blue  { color: var(--blue); }
     .sr-val.green { color: var(--green); }
     .sr-val.orange { color: var(--orange); }
-    .sr-val.dim { color: var(--t3); font-weight: 600; }
 
     /* ── ALERT BADGE ── */
     .alert-badge {
@@ -241,52 +231,50 @@
       <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
         <circle cx="80" cy="80" r="72" fill="rgba(0,85,255,0.05)"/>
 
-        <!-- YT 막대 — 1,350 (작게) -->
-        <rect x="26" y="108" width="34" height="16" rx="6" fill="#8B95A1" opacity="0.55"/>
-        <text x="43" y="103" text-anchor="middle" font-size="10" font-weight="700" fill="#8B95A1" font-family="system-ui">YT</text>
-        <text x="43" y="140" text-anchor="middle" font-size="9" font-weight="600" fill="#8B95A1" font-family="system-ui">1,350</text>
+        <!-- YT 막대 — 1,360 (작게) -->
+        <rect x="26" y="110" width="34" height="14" rx="6" fill="#8B95A1" opacity="0.55"/>
+        <text x="43" y="105" text-anchor="middle" font-size="10" font-weight="700" fill="#8B95A1" font-family="system-ui">YT</text>
+        <text x="43" y="140" text-anchor="middle" font-size="9" font-weight="600" fill="#8B95A1" font-family="system-ui">1,360</text>
 
-        <!-- IG 막대 — 약 4만 (크게) -->
-        <rect x="100" y="40" width="34" height="84" rx="7" fill="#0055FF" opacity="0.9"/>
-        <text x="117" y="35" text-anchor="middle" font-size="10" font-weight="700" fill="#0055FF" font-family="system-ui">IG</text>
-        <text x="117" y="140" text-anchor="middle" font-size="9" font-weight="600" fill="#0055FF" font-family="system-ui">약 4만</text>
+        <!-- IG 막대 — 4.8만 (크게) -->
+        <rect x="100" y="38" width="34" height="86" rx="7" fill="#0055FF" opacity="0.9"/>
+        <text x="117" y="33" text-anchor="middle" font-size="10" font-weight="700" fill="#0055FF" font-family="system-ui">IG</text>
+        <text x="117" y="140" text-anchor="middle" font-size="9" font-weight="600" fill="#0055FF" font-family="system-ui">4.8만</text>
 
         <!-- IG 상승 화살표 -->
-        <path d="M111 32 l6 -8 6 8 M117 24 l0 14" stroke="#00B493" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M111 30 l6 -8 6 8 M117 22 l0 14" stroke="#00B493" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 
-        <!-- 29.6배 뱃지 -->
-        <rect x="44" y="64" width="60" height="18" rx="9" fill="rgba(0,85,255,0.12)"/>
-        <text x="74" y="76" text-anchor="middle" font-size="9" font-weight="700" fill="#0055FF" font-family="system-ui">IG 29.6배 ↑</text>
+        <!-- 비팔로워 99.4% 뱃지 -->
+        <rect x="96" y="44" width="44" height="14" rx="7" fill="rgba(255,255,255,0.9)"/>
+        <text x="118" y="54" text-anchor="middle" font-size="8" font-weight="700" fill="#00B493" font-family="system-ui">99.4%✓</text>
+
+        <!-- 35배 뱃지 -->
+        <rect x="42" y="64" width="62" height="18" rx="9" fill="rgba(0,85,255,0.12)"/>
+        <text x="73" y="76" text-anchor="middle" font-size="9" font-weight="700" fill="#0055FF" font-family="system-ui">IG 35배 ↑</text>
       </svg>
     </div>
 
-    <p class="hero-label">2026.06.22 월요일 · 0620 영상 게시 1~2일차</p>
-    <h1 class="hero-title">5일 공백을 깼다<br><em>IG 탐색에서 4만이 터졌다</em></h1>
+    <p class="hero-label">2026.06.22 월요일 · 0620 영상 게시 1~2일차 · 실측</p>
+    <h1 class="hero-title">5일 공백을 깼다<br><em>IG 탐색에서 4.8만이 터졌다</em></h1>
 
     <div class="hero-card">
       <div class="kpi-row">
-        <span class="kpi-num"><span>약 41,350</span></span>
+        <span class="kpi-num"><span>49,360</span></span>
         <span class="kpi-unit">합산 뷰</span>
       </div>
-      <p class="kpi-sub">YT 1,350 + IG 약 40,000</p>
+      <p class="kpi-sub">YT 1,360 + IG 48,000</p>
       <div class="kpi-tags">
-        <span class="kpi-tag blue">IG 1일차 약 4만</span>
-        <span class="kpi-tag green">팔로워 +47 (337명)</span>
-        <span class="kpi-tag orange">공개 데이터만 수집</span>
+        <span class="kpi-tag green">IG 비팔로워 99.4% ✅</span>
+        <span class="kpi-tag blue">저장 651 · 팔로우 +59</span>
+        <span class="kpi-tag">IG/YT 35배</span>
       </div>
     </div>
   </div>
 
   <div class="hero-summary">
     <strong>0620 신규 숏폼 "공부 하기 싫으면, 이것만 명심하세요" — 자기 몸값·책임</strong><br>
-    5일 공백을 깬 새 영상이 IG 탐색에서 게시 1일차에 약 4만뷰를 찍었다.
-    같은 영상이 YT에선 1,350. 도발적 "선언 + 손익" 훅이 IG 탐색 알고리즘에 적중했다.
-  </div>
-
-  <!-- DATA NOTE -->
-  <div class="data-note">
-    <strong>⚠️ 이번 회차 데이터 제약:</strong> 라카데미 전용 Chrome 미연결로 <strong>YT Studio·IG 소유자 인사이트 미접속</strong>.
-    공개 데이터(YT/IG 공개 조회수·좋아요·댓글·팔로워)만 실측했다. 조회율·비팔로워%·도달·저장·공유는 다음 회차 Studio 연결 후 재측정.
+    5일 공백을 깬 새 영상이 IG 탐색에서 4.8만뷰(비팔로워 99.4%)를 찍었다.
+    저장 651이 좋아요 229를 2.8배 눌렀고, 1일 만에 팔로우 59명. "선언 + 책임" 훅이 탐색에 정확히 꽂혔다.
   </div>
 
   <!-- TAB BAR -->
@@ -298,7 +286,7 @@
 
   <!-- TAB: 요약 -->
   <div id="tab-summary" class="tab-panel active">
-    <p class="sec-lbl">플랫폼 비교 (0620 영상 · 공개 데이터)</p>
+    <p class="sec-lbl">플랫폼 비교 (0620 영상 · 게시 이후 누적)</p>
     <div class="b-card">
       <div class="plat-head">
         <div class="plat-head-col" style="text-align:left;">지표</div>
@@ -307,89 +295,94 @@
       </div>
       <div class="plat-row">
         <span class="pr-lbl">조회수</span>
-        <span class="pr-val">1,350</span>
-        <span class="pr-val blue">약 4만</span>
+        <span class="pr-val">1,360</span>
+        <span class="pr-val blue">48,000</span>
       </div>
       <div class="plat-row">
-        <span class="pr-lbl">게시 경과</span>
-        <span class="pr-val sm">2일차</span>
-        <span class="pr-val sm">1일차</span>
+        <span class="pr-lbl">피드 유입 / 비팔</span>
+        <span class="pr-val sm">Shorts 94.6%</span>
+        <span class="pr-val green sm">탐색 99.4%</span>
       </div>
       <div class="plat-row">
-        <span class="pr-lbl">좋아요</span>
-        <span class="pr-val dim">숨김</span>
-        <span class="pr-val">187</span>
+        <span class="pr-lbl">조회율 / 도달</span>
+        <span class="pr-val orange sm">~50%</span>
+        <span class="pr-val sm">4만 계정</span>
       </div>
       <div class="plat-row">
-        <span class="pr-lbl">댓글</span>
-        <span class="pr-val dim">0</span>
-        <span class="pr-val green sm">다수(참여형)</span>
+        <span class="pr-lbl">저장</span>
+        <span class="pr-val dim">—</span>
+        <span class="pr-val green">651</span>
       </div>
       <div class="plat-row">
-        <span class="pr-lbl">비팔/저장/공유</span>
-        <span class="pr-val dim sm">미측정</span>
-        <span class="pr-val dim sm">미측정</span>
+        <span class="pr-lbl">공유</span>
+        <span class="pr-val dim">—</span>
+        <span class="pr-val">445</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">팔로우 전환</span>
+        <span class="pr-val dim">0명</span>
+        <span class="pr-val blue">59명</span>
       </div>
       <div class="comb-row">
         <div class="comb-item">
-          <div class="comb-num">약 41,350</div>
+          <div class="comb-num">49,360</div>
           <div class="comb-lbl">합산 조회수</div>
         </div>
         <div class="comb-item">
-          <div class="comb-num">29.6x</div>
+          <div class="comb-num">35.3x</div>
           <div class="comb-lbl">IG/YT 비율</div>
         </div>
         <div class="comb-item">
-          <div class="comb-num">337</div>
-          <div class="comb-lbl">팔로워 (+47)</div>
+          <div class="comb-num">344</div>
+          <div class="comb-lbl">팔로워 (+54)</div>
         </div>
       </div>
     </div>
 
     <p class="sec-lbl">핵심 인사이트</p>
 
-    <div class="alert-badge blue">
-      🚀 5일 공백 깸 — 0620 IG 탐색 1일차 약 4만뷰
-    </div>
     <div class="alert-badge">
-      ✅ 팔로워 +47 동반 상승 (290 → 337)
+      ✅ IG 탐색 정상 배포 — 비팔로워 99.4% (기준 95% 압도)
+    </div>
+    <div class="alert-badge blue">
+      📌 저장 651 &gt; 좋아요 229 (2.8배) — 정보성 포지셔닝 성공
     </div>
 
     <div class="b-card">
       <div class="b-item">
         <div class="b-icon" style="background:#E8EFFF;">🚀</div>
         <div class="b-text">
-          <p class="b-title">IG 탐색에서 1일차에 약 4만뷰</p>
-          <p class="b-desc">팔로워 337명으로는 절대 나올 수 없는 숫자. 탐색 알고리즘이 비팔로워에게 강하게 밀었다는 뜻이다. 좋아요 187 + 참여형 댓글까지 붙었고, 같은 날 팔로워가 290→337(+47) 동반 상승했다.</p>
+          <p class="b-title">IG 탐색에서 완전히 터졌다</p>
+          <p class="b-desc">조회수 4.8만, 비팔로워 99.4%, 도달 4만. 1일 만에 팔로우 59명 전환 — 이번 주 팔로워 +54의 거의 전부가 이 영상이다. "선언 + 손익 + 책임 전가" 훅이 탐색 알고리즘에 정확히 꽂혔다.</p>
         </div>
       </div>
       <div class="b-item">
-        <div class="b-icon" style="background:rgba(0,180,147,0.10);">🎯</div>
+        <div class="b-icon" style="background:rgba(0,180,147,0.10);">📌</div>
         <div class="b-text">
-          <p class="b-title">"선언 + 손익" 훅 권고가 적중했다</p>
-          <p class="b-desc">0613의 추상적 동기부여("엉덩이 힘")는 두 번 실패했다. 0620은 "숙제 안 해도 돼, 결과만 본인이 책임져"라는 도발적 선언형으로 회귀. 댓글이 전부 '책임'을 물고 토론했다 — 0613은 댓글 0이었다.</p>
-          <div class="b-quote">IG 댓글: "부모님도 책임 못짐" · "그게 제일 무서운 말이지. 책임" · "이런건 백날 이야기해도… 나중에 후회하는거지"</div>
+          <p class="b-title">저장 651이 좋아요 229를 2.8배 눌렀다</p>
+          <p class="b-desc">정보성 포지셔닝 성공 신호. 공유 445까지 — '책임'이라는 도발 키워드가 "이거 봐라" 식 공유와 "나중에 보자" 식 저장을 동시에 끌어냈다. 댓글 7도 전부 '책임'을 물고 토론. 0613(저장 10·댓글 0)과는 차원이 다르다.</p>
+          <div class="b-quote">IG 댓글: "부모님도 책임 못짐" · "그게 제일 무서운 말이지. 책임"</div>
         </div>
       </div>
       <div class="b-item">
         <div class="b-icon" style="background:#FFF0E5;">📺</div>
         <div class="b-text">
-          <p class="b-title">YT는 이번에도 미지근하다</p>
-          <p class="b-desc">YT 1,350(2일차)은 0613보다 출발은 낫지만 IG 4만 앞에선 미미하다. 같은 영상·같은 훅인데 플랫폼 격차 29.6배 — 이 콘텐츠 결은 YT Shorts 피드보다 IG 탐색에 맞는다.</p>
+          <p class="b-title">YT는 이번에도 약하다 (IG의 1/35)</p>
+          <p class="b-desc">YT 1,360, 평균 조회율 ~50%(평균시청 0:17/0:34), 구독 전환 0. 같은 영상·같은 훅인데 IG가 35배. 이 콘텐츠 결은 YT Shorts 피드보다 IG 탐색에 압도적으로 맞는다.</p>
         </div>
       </div>
       <div class="b-item">
         <div class="b-icon" style="background:var(--div);">⏸️</div>
         <div class="b-text">
           <p class="b-title">직전 0613은 사실상 종료</p>
-          <p class="b-desc">YT 1,383(4일간 +13), IG 2,389(+57). 배포 곡선이 완전히 평탄해졌다. 0620이 채널의 새 노출 트리거 역할을 가져갔다.</p>
+          <p class="b-desc">YT 1,383(4일 +13), IG 2,389(+57). 배포 곡선이 완전히 평탄해졌다. 0620이 채널의 새 노출 트리거를 가져갔다.</p>
         </div>
       </div>
       <div class="b-item">
-        <div class="b-icon" style="background:#FFF8EC;">🔌</div>
+        <div class="b-icon" style="background:#E8EFFF;">🎯</div>
         <div class="b-text">
-          <p class="b-title">다음 액션 — Studio 재측정 + 패턴 복제</p>
-          <p class="b-desc">라카데미 Chrome 연결 후 0620의 조회율·비팔로워%·저장·공유를 채워 "왜 IG만 터졌나"를 수치로 확정하자. 그리고 "도발적 선언 + 손익 + 책임 전가" 구조를 복제. '책임'처럼 댓글을 끌어내는 단일 키워드를 훅에 박는다.</p>
+          <p class="b-title">다음 액션 — 0620 패턴을 표준으로 고정</p>
+          <p class="b-desc">"도발적 선언(EBS 권위) + 즉각적 손익 + 책임 전가"를 표준 포맷으로. '책임'처럼 댓글·저장을 동시에 끌어내는 단일 키워드를 훅에 박는다. IG 35배가 반복되면 썸네일·1초 훅을 IG 탐색 기준으로 먼저 설계. 추상적 동기부여는 폐기.</p>
         </div>
       </div>
     </div>
@@ -399,53 +392,65 @@
   <div id="tab-youtube" class="tab-panel">
     <div class="b-card">
       <div class="metric-hero">
-        <div class="metric-num">1,350</div>
-        <div class="metric-label">유튜브 공개 조회수 · 0620 영상 (2026.06.22 · 게시 2일차)</div>
-        <span class="metric-badge neutral">→ IG(약 4만) 대비 29.6배 낮음</span>
+        <div class="metric-num">1,360</div>
+        <div class="metric-label">유튜브 조회수 · 0620 영상 (2026.06.22 실측)</div>
+        <span class="metric-badge neutral">→ IG(4.8만) 대비 35배 낮음 · 평소 대비 -240</span>
       </div>
 
       <div class="metric-grid">
         <div class="metric-box">
-          <div class="mb-num">1,350</div>
-          <div class="mb-lbl">공개 조회수<br>(게시 2일차)</div>
+          <div class="mb-num orange">~50%</div>
+          <div class="mb-lbl">평균 조회율<br>(평균시청 0:17 / 0:34)</div>
         </div>
         <div class="metric-box">
-          <div class="mb-num dim">미측정</div>
-          <div class="mb-lbl">평균 조회율<br>(Studio 미접속)</div>
+          <div class="mb-num">0:17</div>
+          <div class="mb-lbl">평균 시청 지속시간</div>
         </div>
         <div class="metric-box">
-          <div class="mb-num dim">미측정</div>
-          <div class="mb-lbl">Shorts 피드 유입%<br>(Studio 미접속)</div>
+          <div class="mb-num">94.6%</div>
+          <div class="mb-lbl">Shorts 피드 유입</div>
         </div>
         <div class="metric-box">
-          <div class="mb-num">0</div>
-          <div class="mb-lbl">댓글</div>
+          <div class="mb-num">601 / 568</div>
+          <div class="mb-lbl">유효 조회수 / 순 시청자</div>
         </div>
       </div>
 
-      <div class="stat-div">참고 — 직전 0613 영상 (공개)</div>
+      <div class="stat-div">트래픽 소스 (게시 이후)</div>
       <div class="stat-row">
-        <span class="sr-lbl">YT 조회수 (0622 / 0618)</span>
-        <span class="sr-val">1,383 / 1,370</span>
+        <span class="sr-lbl">Shorts 피드</span>
+        <span class="sr-val">94.6%</span>
       </div>
       <div class="stat-row">
-        <span class="sr-lbl">4일간 증가</span>
-        <span class="sr-val orange">+13 (정체)</span>
+        <span class="sr-lbl">YouTube 검색</span>
+        <span class="sr-val">2.1%</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">채널 페이지 / 기타·알림</span>
+        <span class="sr-val">1.1% / 1.6%</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">계속 시청 / 구독 전환</span>
+        <span class="sr-val">47.0% / 0명</span>
       </div>
 
-      <div class="stat-div">채널 현황</div>
+      <div class="stat-div">채널 전체 (지난 28일 · 5.24~6.20)</div>
+      <div class="stat-row">
+        <span class="sr-lbl">채널 조회수</span>
+        <span class="sr-val blue">13,042</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">시청 시간</span>
+        <span class="sr-val">53.7시간</span>
+      </div>
       <div class="stat-row">
         <span class="sr-lbl">구독자</span>
-        <span class="sr-val dim">395명 (마지막 측정 · 이번 회차 재측정 못 함)</span>
-      </div>
-      <div class="stat-row">
-        <span class="sr-lbl">28일 채널 지표</span>
-        <span class="sr-val dim">미측정 (Studio 미접속)</span>
+        <span class="sr-val green">395명 (+4 / 28일)</span>
       </div>
 
       <div class="b-footer">
-        <p><strong>YT 평가:</strong> 0620 영상은 게시 2일차 1,350. 0613(2일차 출발)보다는 낫지만 같은 영상의 IG 약 4만에 비하면 미미하다. 이 콘텐츠 결은 YT Shorts 피드보다 IG 탐색에 강하다. 조회율·피드 유입% 등 Studio 분석은 라카데미 Chrome 연결 후 재측정 필요.</p>
-        <p class="fn">측정: 2026-06-22 · YT 공개 채널 실측(공개 라운딩값) · YT ID: 11QtIxgTTw0</p>
+        <p><strong>YT 평가:</strong> 0620 영상은 1,360, 평균 조회율 ~50%(평균시청 0:17). 0613(40.2%)보다는 개선됐지만 구독 전환 0이고, 같은 영상의 IG 4.8만에 비하면 35배 차이. 트래픽의 94.6%가 Shorts 피드라 배포 자체는 정상이나 절대 규모가 작다. 이 콘텐츠 결은 YT보다 IG 탐색에 강하다.</p>
+        <p class="fn">측정: 2026-06-22 · YT Studio 실측값 · YT ID: 11QtIxgTTw0</p>
       </div>
     </div>
   </div>
@@ -454,53 +459,61 @@
   <div id="tab-instagram" class="tab-panel">
     <div class="b-card">
       <div class="metric-hero">
-        <div class="metric-num blue">약 4만</div>
-        <div class="metric-label">인스타그램 공개 조회수 · 0620 영상 (2026.06.22 · 게시 1일차)</div>
-        <span class="metric-badge green">→ 1일차 폭발 · 팔로워 +47 동반</span>
+        <div class="metric-num blue">48,000</div>
+        <div class="metric-label">인스타그램 조회수 · 0620 영상 (2026.06.22 실측)</div>
+        <span class="metric-badge green">→ 비팔로워 99.4% · 탐색 정상 배포 ✅</span>
       </div>
 
       <div class="metric-grid">
         <div class="metric-box">
-          <div class="mb-num blue">약 40,000</div>
-          <div class="mb-lbl">공개 조회수<br>(만 단위 라운딩)</div>
+          <div class="mb-num green">99.4%</div>
+          <div class="mb-lbl">비팔로워 비율 ✅</div>
         </div>
         <div class="metric-box">
-          <div class="mb-num">187</div>
-          <div class="mb-lbl">좋아요</div>
+          <div class="mb-num blue">40,000</div>
+          <div class="mb-lbl">도달한 계정</div>
         </div>
         <div class="metric-box">
-          <div class="mb-num green">다수</div>
-          <div class="mb-lbl">댓글 (참여형)</div>
+          <div class="mb-num green">651</div>
+          <div class="mb-lbl">저장 (좋아요의 2.8배)</div>
         </div>
         <div class="metric-box">
-          <div class="mb-num dim">미측정</div>
-          <div class="mb-lbl">도달·저장·공유<br>(인사이트 미접속)</div>
+          <div class="mb-num orange">445</div>
+          <div class="mb-lbl">공유</div>
         </div>
       </div>
 
-      <div class="stat-div">분포 추정 (공개 수치 기반)</div>
+      <div class="stat-div">반응 상세 (총 1,371)</div>
       <div class="stat-row">
-        <span class="sr-lbl">팔로워 337명 대비 약 4만뷰</span>
-        <span class="sr-val blue">대부분 비팔·탐색 유입</span>
+        <span class="sr-lbl">좋아요</span>
+        <span class="sr-val">229개</span>
       </div>
       <div class="stat-row">
-        <span class="sr-lbl">정확한 비팔로워 비율</span>
-        <span class="sr-val dim">미측정 (소유자 인사이트 필요)</span>
+        <span class="sr-lbl">저장 / 공유</span>
+        <span class="sr-val green">651 / 445</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">댓글</span>
+        <span class="sr-val">7개</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">참여한 계정 / 비팔 반응</span>
+        <span class="sr-val">1,198 / 98.6%</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">프로필 활동 / 팔로우 전환</span>
+        <span class="sr-val blue">59 / 59명</span>
       </div>
 
-      <div class="stat-div">계정 현황 (공개)</div>
+      <div class="stat-div">계정 현황</div>
       <div class="stat-row">
         <span class="sr-lbl">현재 팔로워</span>
-        <span class="sr-val green">337명 (+47, 06.18 대비)</span>
-      </div>
-      <div class="stat-row">
-        <span class="sr-lbl">게시물 수</span>
-        <span class="sr-val orange">11개 (DB 30개와 불일치 · 확인 필요)</span>
+        <span class="sr-val green">344명 (+54, 06.18 대비)</span>
       </div>
 
       <div class="b-footer">
-        <p><strong>판정:</strong> 게시 1일차에 약 4만뷰 + 좋아요 187 + 참여형 댓글. 팔로워 337명으로는 불가능한 숫자라, 탐색 알고리즘이 비팔로워에게 강하게 밀었다는 게 기계적으로 확실하다(정확한 %는 미측정). 같은 1일에 팔로워가 +47 — 바이럴이 팔로우로도 일부 전환됐다. 도발적 "선언 + 책임" 훅이 IG 탐색에 적중한 사례.</p>
-        <p class="fn">측정: 2026-06-22 · IG 공개 프로필 실측(공개 라운딩값) · IG ID: DZzVyHkzZv_</p>
+        <p><strong>판정:</strong> 비팔로워 99.4%로 탐색 탭 배포 완벽 정상 ✅ (기준 95% 압도). 도달 4만에서 조회 4.8만, 저장 651이 좋아요 229를 2.8배 눌러 정보성 포지셔닝 성공. 공유 445로 확산도 강했다. 무엇보다 1일 만에 팔로우 59명 전환 — 바이럴이 팔로워 성장으로 직결됐다. 도발적 "선언 + 책임" 훅이 IG 탐색에 적중한 모범 사례.</p>
+        <p class="fn">측정: 2026-06-22 · IG 인사이트 실측값 · IG ID: DZzVyHkzZv_</p>
       </div>
     </div>
   </div>
