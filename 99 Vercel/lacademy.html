@@ -364,8 +364,34 @@ const SVG_IG_BREAKOUT = `
   <text x="35" y="59" text-anchor="middle" font-size="7" font-weight="700" fill="#0055FF" font-family="system-ui">35x↑</text>
 </svg>`;
 
+/* 신규 없이 0620 릴스가 계정 견인 — 저장·공유·팔로우 복리 (0702) */
+const SVG_ENGINE = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- 0620 릴스 bar (tall, blue) — 75,000 -->
+  <rect x="14" y="14" width="22" height="58" rx="5" fill="#0055FF" opacity="0.88"/>
+  <!-- 0627 bar (short, muted) — 11,619 -->
+  <rect x="52" y="52" width="22" height="20" rx="5" fill="#8B95A1" opacity="0.5"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- up arrow above 0620 bar -->
+  <path d="M25 8 l-4.5 6 h3.3 v0 h2.4 v0 h3.3 z" fill="#00B493" opacity="0.85"/>
+  <!-- 팔로우 +103 뱃지 -->
+  <rect x="18" y="50" width="34" height="12" rx="6" fill="rgba(0,180,147,0.14)"/>
+  <text x="35" y="59" text-anchor="middle" font-size="7" font-weight="700" fill="#00B493" font-family="system-ui">+103↑</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0702-report.html',
+    date: '26.07.02',
+    label: '목요일',
+    title: '신규 숏폼 없는 주 — 0620 릴스가 계정을 끌고 간다',
+    heroTitle: '신규 숏폼 없는 주<br><em>0620 릴스가 계정을 끌고 간다</em>',
+    body: '0620 릴스 누적 75,000(저장 1,082·공유 923·팔로우 +103) · 0627 합산 11,619(YT 11,000·IG 619 정체) · 여름방학 멘토링 영상 79뷰·CTR 1.1% · 팔로워 387(정체)',
+    sub: '숏폼 분석 · 신규 6일 공백 · 0620 릴스 실동력',
+    svg: SVG_ENGINE,
+  },
   {
     path: 'lacademy-0701-report.html',
     date: '26.07.01',
