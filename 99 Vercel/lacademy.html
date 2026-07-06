@@ -380,20 +380,18 @@ const SVG_ENGINE = `
   <text x="35" y="59" text-anchor="middle" font-size="7" font-weight="700" fill="#00B493" font-family="system-ui">+103↑</text>
 </svg>`;
 
-/* 8일 공백 깨고 신규 게시 — IG가 YT 앞섬 (0706) */
+/* 8일 공백 깨고 신규 게시 — 배포는 정상, 완주율 미달 (0706) */
 const SVG_COMEBACK = `
 <svg width="88" height="88" viewBox="0 0 88 88" fill="none">
-  <!-- IG bar (tall, blue) — 3,080 -->
+  <!-- IG bar (tall, blue) — 3,152 -->
   <rect x="14" y="16" width="22" height="56" rx="5" fill="#0055FF" opacity="0.88"/>
-  <!-- YT bar (medium, muted) — 2,000 -->
+  <!-- YT bar (medium, muted) — 2,099 -->
   <rect x="52" y="36" width="22" height="36" rx="5" fill="#8B95A1" opacity="0.55"/>
   <!-- baseline -->
   <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
-  <!-- up arrow above IG bar -->
-  <path d="M25 10 l-4.5 6 h3.3 v0 h2.4 v0 h3.3 z" fill="#00B493" opacity="0.85"/>
-  <!-- 8일 공백 뱃지 -->
-  <rect x="16" y="52" width="34" height="12" rx="6" fill="rgba(0,85,255,0.12)"/>
-  <text x="33" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#0055FF" font-family="system-ui">8일만↑</text>
+  <!-- 지속률 경고 뱃지 -->
+  <rect x="12" y="52" width="64" height="12" rx="6" fill="rgba(255,107,0,0.14)"/>
+  <text x="44" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#FF6B00" font-family="system-ui">지속률27.7%⚠</text>
 </svg>`;
 
 /* ── REPORT DATA ── */
@@ -402,10 +400,10 @@ const REPORTS = [
     path: 'lacademy-0706-report.html',
     date: '26.07.06',
     label: '월요일',
-    title: '8일 공백 깨고 복귀 — 사중주 실화 훅 신규 게시',
-    heroTitle: '8일 만에 숏폼 복귀<br><em>사중주 실화로 환경론 훅</em>',
-    body: '신규 숏폼 합산 5,080(YT 2,000·IG 3,080, 게시 1일차) · 0620 릴스 공개 재생 77,000·0627 635 계속 상승 · YT 구독 399(+1)·IG 팔로워 397(+10) · Studio/IG 미접속(공개 데이터만)',
-    sub: '숏폼 분석 · 8일 공백 종료 · 원장 실화 훅',
+    title: '8일 공백 깨고 복귀 — 배포는 정상, 완주율 27.7%',
+    heroTitle: '배포는 됐다<br><em>그런데 완주율이 27.7%다</em>',
+    body: '신규 숏폼 합산 5,251(YT 2,099·IG 3,152, 게시 1일차) · YT 지속률 27.7%(기준55% 미달)·Shorts피드95.7% · IG 비팔로워97.7%·도달2,507·저장5<좋아요12 · YT 구독399(+3/28일)·IG팔로워398 · Studio+IG 실측',
+    sub: '숏폼 분석 · 8일 공백 종료 · 완주율 경고',
     svg: SVG_COMEBACK,
   },
   {
