@@ -394,8 +394,35 @@ const SVG_COMEBACK = `
   <text x="44" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#FF6B00" font-family="system-ui">지속률27.7%⚠</text>
 </svg>`;
 
+/* 자사고 숏폼 5일차 배포 종료 + IG 팔로워 첫 역전 (0709) */
+const SVG_CYCLE_END = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- IG bar (tall, blue) — 3,369 -->
+  <rect x="14" y="18" width="22" height="54" rx="5" fill="#0055FF" opacity="0.88"/>
+  <!-- YT bar (medium, muted) — 2,113 -->
+  <rect x="52" y="38" width="22" height="34" rx="5" fill="#8B95A1" opacity="0.55"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 배포 종료 뱃지 -->
+  <rect x="12" y="52" width="64" height="12" rx="6" fill="rgba(255,107,0,0.14)"/>
+  <text x="44" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#FF6B00" font-family="system-ui">배포 종료 48h 8회</text>
+  <!-- IG 역전 뱃지 -->
+  <rect x="12" y="8" width="40" height="11" rx="5.5" fill="rgba(0,180,147,0.14)"/>
+  <text x="32" y="16" text-anchor="middle" font-size="6.5" font-weight="700" fill="#00B493" font-family="system-ui">IG 401★역전</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0709-report.html',
+    date: '26.07.09',
+    label: '목요일',
+    title: '자사고 숏폼 5일 합산 5,482로 마감 — IG 팔로워 첫 역전',
+    heroTitle: '배포 사이클 종료<br><em>5일 합산 5,482로 마감</em>',
+    body: '자사고 숏폼 5일차 합산 5,482(YT 2,113·IG 3,369) · 48h 조회 8회 배포 종료 · 지속률 28.2%❌가 수명 결정 재검증 · IG 팔로워 401★YT 구독(398) 첫 역전 · 0620 릴스 7.8만 복리 지속 · Studio+IG 실측',
+    sub: '숏폼 분석 · 배포 종료 · IG 역전',
+    svg: SVG_CYCLE_END,
+  },
   {
     path: 'lacademy-0706-report.html',
     date: '26.07.06',
