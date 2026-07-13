@@ -411,8 +411,32 @@ const SVG_CYCLE_END = `
   <text x="32" y="16" text-anchor="middle" font-size="6.5" font-weight="700" fill="#00B493" font-family="system-ui">IG 401★역전</text>
 </svg>`;
 
+/* 신규 숏폼 배포 약세 — YT 우위·IG 붕괴, 완주율 28%대 2편 연속 (0713) */
+const SVG_WEAK = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (tall, muted) — 1,906 -->
+  <rect x="14" y="22" width="22" height="50" rx="5" fill="#8B95A1" opacity="0.55"/>
+  <!-- IG bar (tiny, blue) — 521 붕괴 -->
+  <rect x="52" y="58" width="22" height="14" rx="5" fill="#0055FF" opacity="0.8"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 완주율 경고 뱃지 -->
+  <rect x="12" y="52" width="64" height="12" rx="6" fill="rgba(255,107,0,0.14)"/>
+  <text x="44" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#FF6B00" font-family="system-ui">지속률28.4%⚠2편</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0713-report.html',
+    date: '26.07.13',
+    label: '월요일',
+    title: '신규 숏폼 배포 약세 — 완주율 28%대 2편 연속, IG 붕괴',
+    heroTitle: '신규 숏폼 배포 약세<br><em>완주율 28%대 2편 연속</em>',
+    body: '신규 "숫자=세부내용일치" 숏폼 합산 2,427(YT 1,906·IG 521, 게시 2일차) · YT 지속률 28.4%❌ 자사고(28.2%)와 판박이 · IG 도달 443·비팔92.4%(자사고 1/6로 붕괴)·저장4<좋아요6 · YT 구독399(+3)·IG팔로워402 역전유지 · Studio+IG 실측',
+    sub: '숏폼 분석 · 완주율 미달 · IG 배포 붕괴',
+    svg: SVG_WEAK,
+  },
   {
     path: 'lacademy-0709-report.html',
     date: '26.07.09',
