@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>0716 라카데미 숏폼 분석 보고서</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #E8EFFF;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+      --green:   #00B493;
+      --orange:  #FF6B00;
+    }
+
+    html { overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%; max-width: 640px;
+      margin: 0 auto; min-height: 100dvh;
+      background: var(--bg); display: flex; flex-direction: column;
+    }
+
+    /* ── HERO ── */
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%, #A8CFFF 14%, #C0DFFF 28%,
+        #D8ECFF 44%, #EAF5FF 62%, #F4FBFF 80%, var(--bg) 100%
+      );
+      padding: 0 24px 36px; text-align: center; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.48) 50%, transparent 70%);
+      animation: shimmer 3.6s ease-in-out infinite; pointer-events: none;
+    }
+
+    .top-nav {
+      padding: max(14px, env(safe-area-inset-top)) 4px 0;
+      display: flex; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .back-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; cursor: pointer; color: var(--t1);
+      background: rgba(255,255,255,0.42);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:active { background: rgba(255,255,255,0.65); }
+
+    .hero-label {
+      font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.5);
+      letter-spacing: -0.1px; margin-bottom: 8px; position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-size: 26px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.8px; line-height: 1.24;
+      position: relative; z-index: 1; margin-bottom: 20px;
+    }
+    .hero-title em { font-style: normal; color: var(--blue); }
+
+    .hero-svg-wrap {
+      width: 160px; height: 160px;
+      margin: 0 auto 18px; position: relative; z-index: 1;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 16px 20px;
+      max-width: 300px; margin: 0 auto;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.55);
+      position: relative; z-index: 1; text-align: center;
+    }
+    .kpi-row { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
+    .kpi-num { font-size: 30px; font-weight: 800; color: var(--t1); letter-spacing: -1px; line-height: 1; }
+    .kpi-num span { color: var(--blue); }
+    .kpi-unit { font-size: 14px; color: var(--t2); font-weight: 500; }
+    .kpi-sub  { font-size: 12px; color: var(--t2); margin-top: 4px; }
+    .kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+    .kpi-tag  { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-bg); border-radius: 20px; padding: 3px 9px; }
+    .kpi-tag.orange { color: var(--orange); background: #FFF0E5; }
+    .kpi-tag.green  { color: var(--green);  background: rgba(0,180,147,0.10); }
+
+    .hero-summary {
+      background: var(--bg); padding: 16px 20px 14px;
+      font-size: 13px; color: var(--t2); line-height: 1.72; letter-spacing: -0.2px; text-align: center;
+    }
+    .hero-summary strong { color: var(--t1); font-weight: 600; }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); display: flex; border-bottom: 1px solid var(--div);
+    }
+    .tab-btn {
+      flex: 1; padding: 12px 0 10px;
+      font-size: 13px; font-weight: 600; color: var(--t2);
+      background: none; border: none; cursor: pointer;
+      position: relative; letter-spacing: -0.2px; transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-btn.active { color: var(--t1); }
+    .tab-btn.active::after {
+      content: ''; position: absolute; bottom: -1px;
+      left: 20%; right: 20%; height: 2px; background: var(--blue); border-radius: 2px;
+    }
+
+    .tab-panel { display: none; padding: 12px 0 48px; }
+    .tab-panel.active { display: block; }
+
+    .sec-lbl {
+      font-size: 11px; font-weight: 700; color: var(--t2);
+      letter-spacing: 0.4px; text-transform: uppercase; padding: 16px 20px 8px;
+    }
+
+    /* ── CARD ── */
+    .b-card {
+      background: var(--card); border-radius: 20px; margin: 0 16px 8px;
+      overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .b-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+    .b-item + .b-item { border-top: 1px solid var(--div); }
+    .b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; }
+    .b-text { flex: 1; min-width: 0; }
+    .b-title { font-size: 14px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; line-height: 1.4; }
+    .b-desc  { font-size: 12px; color: var(--t2); line-height: 1.65; margin-top: 3px; }
+    .b-quote { border-left: 2px solid var(--t3); padding: 6px 10px; margin-top: 8px; color: var(--t2); font-size: 12px; line-height: 1.65; }
+    .b-footer { padding: 12px 16px; border-top: 1px solid var(--div); }
+    .b-footer p { font-size: 12px; color: var(--t2); line-height: 1.7; }
+    .b-footer p strong { color: var(--t1); font-weight: 600; }
+    .b-footer .fn { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
+
+    /* ── PLATFORM COMPARISON ── */
+    .plat-head { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 14px 16px 8px; gap: 4px; align-items: center; }
+    .plat-head-col { font-size: 12px; font-weight: 700; color: var(--t2); text-align: center; line-height: 1.3; }
+    .plat-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 10px 16px; border-top: 1px solid var(--div); gap: 4px; align-items: center; }
+    .pr-lbl { font-size: 12px; color: var(--t2); }
+    .pr-val { font-size: 16px; font-weight: 700; color: var(--t1); text-align: center; }
+    .pr-val.blue  { color: var(--blue); }
+    .pr-val.green { color: var(--green); }
+    .pr-val.orange { color: var(--orange); }
+    .pr-val.sm  { font-size: 13px; }
+    .pr-val.dim { color: var(--t3); font-size: 13px; }
+
+    .comb-row { display: flex; border-top: 1px solid var(--div); }
+    .comb-item { flex: 1; padding: 14px 16px; text-align: center; }
+    .comb-item + .comb-item { border-left: 1px solid var(--div); }
+    .comb-num { font-size: 24px; font-weight: 800; color: var(--blue); letter-spacing: -0.8px; line-height: 1; }
+    .comb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; }
+
+    /* ── STUDIO DASHBOARD ── */
+    .metric-hero { padding: 20px 16px 10px; }
+    .metric-num { font-size: 40px; font-weight: 800; color: var(--t1); letter-spacing: -1.5px; line-height: 1; }
+    .metric-num.blue { color: var(--blue); }
+    .metric-num.orange { color: var(--orange); }
+    .metric-label { font-size: 13px; color: var(--t2); margin-top: 4px; }
+    .metric-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 8px; margin-top: 6px; }
+    .metric-badge.green { color: var(--green); background: rgba(0,180,147,0.09); }
+    .metric-badge.orange { color: var(--orange); background: rgba(255,107,0,0.09); }
+    .metric-badge.neutral { color: var(--t2); background: var(--div); }
+
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 16px; }
+    .metric-box { background: var(--bg); border-radius: 12px; padding: 12px 14px; }
+    .mb-num { font-size: 20px; font-weight: 700; color: var(--t1); letter-spacing: -0.5px; }
+    .mb-num.blue  { color: var(--blue); }
+    .mb-num.green { color: var(--green); }
+    .mb-num.orange { color: var(--orange); }
+    .mb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+    .stat-div { padding: 8px 16px 4px; border-top: 1px solid var(--div); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.4px; }
+    .stat-row { padding: 11px 16px; border-top: 1px solid var(--div); display: flex; justify-content: space-between; align-items: center; }
+    .sr-lbl { font-size: 13px; color: var(--t2); }
+    .sr-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+    .sr-val.blue  { color: var(--blue); }
+    .sr-val.green { color: var(--green); }
+    .sr-val.orange { color: var(--orange); }
+
+    /* ── ALERT BADGE ── */
+    .alert-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(0,180,147,0.09); border-radius: 10px; padding: 8px 14px;
+      margin: 0 16px 8px; font-size: 12px; color: var(--green); font-weight: 600;
+    }
+    .alert-badge.orange { color: var(--orange); background: rgba(255,107,0,0.09); }
+    .alert-badge.blue { color: var(--blue); background: var(--blue-bg); }
+
+    /* ── DESKTOP ── */
+    @media (min-width: 680px) {
+      body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+      .page { border-radius: 20px; overflow: hidden; box-shadow: 0 16px 56px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.05); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="top-nav">
+      <button class="back-btn" onclick="window.location.href='./'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero SVG: 숫자 숏폼 5일차 마감 YT 1,920 vs IG 538 + 사이클 종료 뱃지 -->
+    <div class="hero-svg-wrap">
+      <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="80" r="72" fill="rgba(0,85,255,0.05)"/>
+
+        <!-- YT 막대 — 1,920 -->
+        <rect x="30" y="24" width="38" height="100" rx="7" fill="#8B95A1" opacity="0.55"/>
+        <text x="49" y="17" text-anchor="middle" font-size="9" font-weight="700" fill="#8B95A1" font-family="system-ui">YT 1,920</text>
+
+        <!-- IG 막대 — 538 -->
+        <rect x="98" y="96" width="36" height="28" rx="6" fill="#0055FF" opacity="0.9"/>
+        <text x="116" y="89" text-anchor="middle" font-size="9" font-weight="700" fill="#0055FF" font-family="system-ui">IG 538</text>
+
+        <!-- 사이클 종료 뱃지 -->
+        <rect x="14" y="130" width="132" height="18" rx="9" fill="rgba(255,107,0,0.12)"/>
+        <text x="80" y="142" text-anchor="middle" font-size="9" font-weight="700" fill="#FF6B00" font-family="system-ui">48h 조회 10회 — 사이클 종료</text>
+      </svg>
+    </div>
+
+    <p class="hero-label">2026.07.16 목요일 · 신규 없음 — "숫자" 숏폼 5일차 마감 · YT Studio + IG 실측</p>
+    <h1 class="hero-title">숫자 숏폼 5일차 마감<br><em>합산 2,458 — 자사고의 45%</em></h1>
+
+    <div class="hero-card">
+      <div class="kpi-row">
+        <span class="kpi-num"><span>2,458</span></span>
+        <span class="kpi-unit">합산 조회수 (마감)</span>
+      </div>
+      <p class="kpi-sub">48h 조회 10회 · 배포 사이클 종료 (5일차)</p>
+      <div class="kpi-tags">
+        <span class="kpi-tag">YT 1,920</span>
+        <span class="kpi-tag">IG 538</span>
+        <span class="kpi-tag orange">팔로워 첫 동반 감소</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-summary">
+    <strong>완주율 28%대 → 5일 마감, 규칙 3번째 확인</strong><br>
+    "숫자=세부내용일치" 숏폼이 48h 조회 10회로 사이클을 마감했다(자사고는 8회). 합산 2,458 — 자사고 5일차(5,482)의 45%인데, 격차는 전부 IG에서 났다(538 vs 3,369). 비팔로워는 91%로 더 내려갔고 저장(4)&lt;좋아요(6) 그대로. 팔로워는 IG 401·YT 398로 측정 이래 처음 동반 감소했다.
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('summary')">요약</button>
+    <button class="tab-btn" onclick="switchTab('youtube')">유튜브</button>
+    <button class="tab-btn" onclick="switchTab('instagram')">인스타그램</button>
+  </div>
+
+  <!-- TAB: 요약 -->
+  <div id="tab-summary" class="tab-panel active">
+    <p class="sec-lbl">"숫자 세부내용일치" 숏폼 · 플랫폼 비교 (5일차 최종, 실측)</p>
+    <div class="b-card">
+      <div class="plat-head">
+        <div class="plat-head-col" style="text-align:left;">지표</div>
+        <div class="plat-head-col">유튜브</div>
+        <div class="plat-head-col">인스타그램</div>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">조회수 (0713比)</span>
+        <span class="pr-val blue">1,920 <span style="font-size:11px;color:var(--t3);font-weight:600;">+14</span></span>
+        <span class="pr-val">538 <span style="font-size:11px;color:var(--t3);font-weight:600;">+17</span></span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">피드 유입 / 비팔</span>
+        <span class="pr-val green sm">Shorts 97.2%</span>
+        <span class="pr-val orange sm">비팔 91%</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">지속률 / 도달</span>
+        <span class="pr-val orange sm">28.9% ❌</span>
+        <span class="pr-val sm">456 계정</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">좋아요 / 저장</span>
+        <span class="pr-val sm">11 / —</span>
+        <span class="pr-val orange sm">6 / 4</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">공유 / 팔로우전환</span>
+        <span class="pr-val dim sm">— / +2</span>
+        <span class="pr-val sm">1 / +1</span>
+      </div>
+      <div class="comb-row">
+        <div class="comb-item">
+          <div class="comb-num">2,458</div>
+          <div class="comb-lbl">합산 조회수 (마감)</div>
+        </div>
+        <div class="comb-item">
+          <div class="comb-num">398</div>
+          <div class="comb-lbl">YT 구독 (-1)</div>
+        </div>
+        <div class="comb-item">
+          <div class="comb-num">401</div>
+          <div class="comb-lbl">IG 팔로워 (-1)</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sec-lbl">핵심 인사이트</p>
+
+    <div class="alert-badge orange">
+      ⛔ 48h 조회 10회 — 완주율 28%대의 5일 마감, 3번째 확인
+    </div>
+    <div class="alert-badge orange">
+      📉 팔로워 첫 동반 감소 — IG 402→401 · YT 399→398
+    </div>
+    <div class="alert-badge blue">
+      📭 소재 파이프라인 5일째 공백 — 0707·0709 시트 선택 대기
+    </div>
+
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF0E5;">⏱️</div>
+        <div class="b-text">
+          <p class="b-title">완주율 28%대 → 5일 마감, 규칙이 3번째로 재현됐다</p>
+          <p class="b-desc">숫자 숏폼이 48h 조회 10회로 배포 사이클을 마감했다(자사고는 8회로 마감). 지속률 28.9%·합산 2,458. 배포(Shorts피드 97.2%)는 정상이었지만 완주율이 수명을 결정한다는 규칙이 자사고(5,482)·숫자(2,458)에서 똑같이 재현. 지속률 56.8%로 1.2만 + 꼬리까지 간 0627 EBS와 계속 대비된다.</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF0E5;">📉</div>
+        <div class="b-text">
+          <p class="b-title">자사고와의 격차는 전부 IG에서 났다</p>
+          <p class="b-desc">YT는 1,920 vs 2,113으로 비슷한데 IG가 538 vs 3,369로 6.3배 차이. 비팔로워 92.4%→91%로 추가 하락, 도달 456에서 정지. 정보성 훅인데 저장(4)&lt;좋아요(6) 그대로 — 정보성 소재의 IG 약세가 2편 연속으로 확정 방향이다. 스토리텔링(사중주)·도발 선언(0620)이 IG에서 강한 것과 대비.</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF0E5;">👥</div>
+        <div class="b-text">
+          <p class="b-title">팔로워가 측정 이래 처음으로 동반 감소했다</p>
+          <p class="b-desc">IG 402→401, YT 399→398. 신규 게시 5일 공백 + 저완주 숏폼 2편 연속의 여파다. 0620 릴스는 8.0만까지 복리 중이지만 팔로우 전환 동력은 소진 조짐(이번 주 신규 팔로우 IG +1뿐). 신규 콘텐츠 없이는 구작 복리만으로 팔로워가 유지되지 않는다는 첫 신호.</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:rgba(0,180,147,0.10);">🎯</div>
+        <div class="b-text">
+          <p class="b-title">다음 액션</p>
+          <p class="b-desc">주 1회 리듬 복구가 최우선 — Slack 0711 이후 신규 전사 없음, 0707·0709 숏폼 시트의 선택 대기 후보에서 바로 제작 들어갈 것. 다음 후보는 IG결(도발 선언+손익) 우선 — YT결(출제검토위원)은 방금 소진했고 IG 도달 붕괴를 끊어야 한다. 편집은 완주율 타깃 유지: 후반 컷 속도 ↑ + 마지막 3초 요약+CTA(엔딩 클릭률 0.0% vs 채널평균 3.7%).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: 유튜브 -->
+  <div id="tab-youtube" class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num blue">1,920</div>
+        <div class="metric-label">유튜브 조회수 · 숫자 숏폼 5일차 최종 (2026.07.16 실측)</div>
+        <span class="metric-badge orange">48h 조회 10회 — 배포 사이클 종료</span>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="mb-num orange">28.9%</div>
+          <div class="mb-lbl">계속 시청함<br>(기준 55% 미달 ❌)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">0:15</div>
+          <div class="mb-lbl">평균 시청 지속시간<br>(전체 0:24 · 평균 조회율 65.6%)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num green">97.2%</div>
+          <div class="mb-lbl">Shorts 피드 유입<br>(1,867회)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">545</div>
+          <div class="mb-lbl">유효 조회수<br>(순시청자 526)</div>
+        </div>
+      </div>
+
+      <div class="stat-div">트래픽 소스 (게시 이후, 고급 모드 실측)</div>
+      <div class="stat-row">
+        <span class="sr-lbl">Shorts 피드</span>
+        <span class="sr-val green">97.2% (1,867)</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">기타 YouTube 기능 / 탐색 / 채널페이지</span>
+        <span class="sr-val">17 / 11 / 11</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">YouTube 검색 / 알림</span>
+        <span class="sr-val">10 / 4</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">노출수 / 노출 클릭률</span>
+        <span class="sr-val">110 / 10.9%</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">좋아요 / 댓글 / 구독 전환</span>
+        <span class="sr-val">11 / 0 / +2</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">시청 시간 / 엔딩화면 클릭률</span>
+        <span class="sr-val orange">3.0h / 0.0%(채널평균3.7%)</span>
+      </div>
+
+      <div class="stat-div">채널 전체 (지난 28일)</div>
+      <div class="stat-row">
+        <span class="sr-lbl">채널 조회수</span>
+        <span class="sr-val blue">2.0만</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">시청 시간</span>
+        <span class="sr-val">74.9시간</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">구독자</span>
+        <span class="sr-val orange">398명 (0713比 -1)</span>
+      </div>
+
+      <div class="b-footer">
+        <p><strong>YT 평가:</strong> 5일차 1,920으로 마감 — 0713比 +14는 자사고 5일차(+14)와 똑같은 정체 폭이다. 48h 조회 10회로 사이클 종료. 완주율 28%대(28.9%)가 배포 수명을 결정한다는 규칙이 3번째로 재현됐다. 유효 조회 545·순시청 526으로 미세 증가, 좋아요 10→11. 엔딩화면 클릭률 0.0%(채널평균 3.7%)는 여전히 방치 상태 — 다음 초안부터 마지막 3초 요약+CTA를 넣는다.</p>
+        <p class="fn">측정: 2026-07-16 · YT Studio 실측값 · YT ID: OGWbUnj8o-Q</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: 인스타그램 -->
+  <div id="tab-instagram" class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num orange">538</div>
+        <div class="metric-label">인스타그램 조회수 · 숫자 릴스 4일차 최종 (2026.07.16 실측)</div>
+        <span class="metric-badge orange">도달 456 · 비팔로워 91% (92.4→91 하락) · 저장&lt;좋아요</span>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="mb-num">6</div>
+          <div class="mb-lbl">좋아요</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num orange">4</div>
+          <div class="mb-lbl">저장<br>(좋아요보다 적음)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">1</div>
+          <div class="mb-lbl">공유</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">+1</div>
+          <div class="mb-lbl">팔로우 전환</div>
+        </div>
+      </div>
+
+      <div class="stat-div">도달 · 반응 상세</div>
+      <div class="stat-row">
+        <span class="sr-lbl">도달 계정 (비팔로워 91%)</span>
+        <span class="sr-val orange">456</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">총 반응 (팔로워 54.5%/비팔 45.5%)</span>
+        <span class="sr-val">11</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">참여 계정 / 프로필 활동</span>
+        <span class="sr-val">8 / 1</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">댓글</span>
+        <span class="sr-val">0</span>
+      </div>
+
+      <div class="stat-div">계정 현황</div>
+      <div class="stat-row">
+        <span class="sr-lbl">현재 팔로워</span>
+        <span class="sr-val orange">401명 (-1 · YT 398 역전 유지)</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">0620 릴스 "공부 하기 싫으면"</span>
+        <span class="sr-val blue">8.0만 (복리 성장 지속)</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">0705 자사고 릴스</span>
+        <span class="sr-val">3,382 (+13)</span>
+      </div>
+
+      <div class="b-footer">
+        <p><strong>판정:</strong> IG는 538에서 사실상 정지(0713比 +17) — 도달 456으로 자사고 5일차(2,678)의 1/6, 비팔로워는 92.4%→91%로 오히려 내려갔다. 반응의 절반 이상(54.5%)이 기존 팔로워, 저장(4)&lt;좋아요(6) 그대로 — 정보성 소재의 IG 약세가 2편 연속 확정 방향. 팔로워도 402→401로 첫 감소. 계정을 지키는 건 여전히 0620 릴스(8.0만 복리)지만 전환 동력은 소진 조짐이다.</p>
+        <p class="fn">측정: 2026-07-16 · IG 소유자 인사이트 실측값 · 릴스 ID: DapYm_aTBPC</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      const names = ['summary','youtube','instagram'];
+      b.classList.toggle('active', names[i] === name);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === 'tab-' + name);
+    });
+  }
+</script>
+</body>
+</html>

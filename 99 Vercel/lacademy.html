@@ -425,8 +425,35 @@ const SVG_WEAK = `
   <text x="44" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#FF6B00" font-family="system-ui">지속률28.4%⚠2편</text>
 </svg>`;
 
+/* 숫자 숏폼 5일차 마감 — 합산 2,458, 48h 10회 사이클 종료 + 팔로워 첫 동반 감소 (0716) */
+const SVG_CLOSE_0716 = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (tall, muted) — 1,920 -->
+  <rect x="14" y="22" width="22" height="50" rx="5" fill="#8B95A1" opacity="0.55"/>
+  <!-- IG bar (tiny, blue) — 538 -->
+  <rect x="52" y="58" width="22" height="14" rx="5" fill="#0055FF" opacity="0.8"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 사이클 종료 뱃지 -->
+  <rect x="12" y="52" width="64" height="12" rx="6" fill="rgba(255,107,0,0.14)"/>
+  <text x="44" y="61" text-anchor="middle" font-size="7" font-weight="700" fill="#FF6B00" font-family="system-ui">마감 48h 10회</text>
+  <!-- 팔로워 감소 뱃지 -->
+  <rect x="12" y="8" width="52" height="11" rx="5.5" fill="rgba(255,107,0,0.14)"/>
+  <text x="38" y="16" text-anchor="middle" font-size="6.5" font-weight="700" fill="#FF6B00" font-family="system-ui">팔로워 첫 동반↓</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0716-report.html',
+    date: '26.07.16',
+    label: '목요일',
+    title: '숫자 숏폼 5일차 마감 2,458 — 완주율 28%대 규칙 3번째 확인',
+    heroTitle: '숫자 숏폼 5일차 마감<br><em>합산 2,458 — 자사고의 45%</em>',
+    body: '숫자 숏폼 5일차 마감 합산 2,458(YT 1,920·IG 538) · 48h 조회 10회 사이클 종료 — 완주율 28%대(28.9%)의 5일 마감 규칙 3번째 확인 · 격차는 전부 IG(538 vs 자사고 3,369, 비팔 91%로 하락) · 팔로워 첫 동반 감소(IG 401·YT 398) · Studio+IG 실측',
+    sub: '숏폼 분석 · 사이클 종료 · 팔로워 첫 감소',
+    svg: SVG_CLOSE_0716,
+  },
   {
     path: 'lacademy-0713-report.html',
     date: '26.07.13',
