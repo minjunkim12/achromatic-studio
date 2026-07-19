@@ -442,8 +442,32 @@ const SVG_CLOSE_0716 = `
   <text x="38" y="16" text-anchor="middle" font-size="6.5" font-weight="700" fill="#FF6B00" font-family="system-ui">팔로워 첫 동반↓</text>
 </svg>`;
 
+/* 신규 인테리어 숏폼 D+3 — YT 1,169(공개) vs IG 미측정, 공개 데이터 폴백 (0720) */
+const SVG_PUBLIC_0720 = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (blue) — 1,169 -->
+  <rect x="14" y="30" width="22" height="42" rx="5" fill="#0055FF" opacity="0.85"/>
+  <!-- IG bar (dashed, 미측정) -->
+  <rect x="52" y="48" width="22" height="24" rx="5" fill="none" stroke="#C5CBD3" stroke-width="2" stroke-dasharray="3.5 2.5"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 공개 데이터 뱃지 -->
+  <rect x="10" y="10" width="68" height="12" rx="6" fill="rgba(255,107,0,0.14)"/>
+  <text x="44" y="19" text-anchor="middle" font-size="6.5" font-weight="700" fill="#FF6B00" font-family="system-ui">공개데이터·Studio미접속</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0720-report.html',
+    date: '26.07.20',
+    label: '월요일',
+    title: '신규 인테리어 숏폼 D+3 YT 1,169 — 페이스 저조 (공개 데이터)',
+    heroTitle: '신규 인테리어 숏폼 D+3<br><em>YT 1,169 · 페이스 저조</em>',
+    body: '신규 "학원 인테리어" 숏폼(07.17 게시) D+3 · YT 1,169(공개)·좋아요10 — 숫자(D+2 1,906)·자사고(D+1 2,099)보다 낮은 페이스 · IG 좋아요4·댓글1로 정보성/공간 소재 약세 3편 연속 방향 · 주1회 리듬은 복구(Slack 0718=이 영상) · 라카데미 Chrome 미연결로 지속률·도달·비팔·저장·공유 미측정',
+    sub: '숏폼 분석 · 공개 데이터만 · 리듬 복구',
+    svg: SVG_PUBLIC_0720,
+  },
   {
     path: 'lacademy-0716-report.html',
     date: '26.07.16',

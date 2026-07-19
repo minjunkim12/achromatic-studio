@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>0720 라카데미 숏폼 분석 보고서</title>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+    :root {
+      --blue:    #0055FF;
+      --blue-bg: #E8EFFF;
+      --bg:      #F2F4F7;
+      --card:    #FFFFFF;
+      --t1:      #191919;
+      --t2:      #8B95A1;
+      --t3:      #C5CBD3;
+      --div:     #F0F2F5;
+      --green:   #00B493;
+      --orange:  #FF6B00;
+    }
+
+    html { overflow-x: hidden; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%; max-width: 640px;
+      margin: 0 auto; min-height: 100dvh;
+      background: var(--bg); display: flex; flex-direction: column;
+    }
+
+    /* ── HERO ── */
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(180deg,
+        #8BBEFF 0%, #A8CFFF 14%, #C0DFFF 28%,
+        #D8ECFF 44%, #EAF5FF 62%, #F4FBFF 80%, var(--bg) 100%
+      );
+      padding: 0 24px 36px; text-align: center; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.48) 50%, transparent 70%);
+      animation: shimmer 3.6s ease-in-out infinite; pointer-events: none;
+    }
+
+    .top-nav {
+      padding: max(14px, env(safe-area-inset-top)) 4px 0;
+      display: flex; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .back-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; cursor: pointer; color: var(--t1);
+      background: rgba(255,255,255,0.42);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .back-btn:active { background: rgba(255,255,255,0.65); }
+
+    .hero-label {
+      font-size: 12px; font-weight: 600; color: rgba(0,45,110,0.5);
+      letter-spacing: -0.1px; margin-bottom: 8px; position: relative; z-index: 1;
+    }
+    .hero-title {
+      font-size: 26px; font-weight: 800; color: var(--t1);
+      letter-spacing: -0.8px; line-height: 1.24;
+      position: relative; z-index: 1; margin-bottom: 20px;
+    }
+    .hero-title em { font-style: normal; color: var(--blue); }
+
+    .hero-svg-wrap {
+      width: 160px; height: 160px;
+      margin: 0 auto 18px; position: relative; z-index: 1;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px; padding: 16px 20px;
+      max-width: 300px; margin: 0 auto;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.55);
+      position: relative; z-index: 1; text-align: center;
+    }
+    .kpi-row { display: flex; align-items: baseline; gap: 6px; justify-content: center; }
+    .kpi-num { font-size: 30px; font-weight: 800; color: var(--t1); letter-spacing: -1px; line-height: 1; }
+    .kpi-num span { color: var(--blue); }
+    .kpi-unit { font-size: 14px; color: var(--t2); font-weight: 500; }
+    .kpi-sub  { font-size: 12px; color: var(--t2); margin-top: 4px; }
+    .kpi-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+    .kpi-tag  { font-size: 11px; font-weight: 600; color: var(--blue); background: var(--blue-bg); border-radius: 20px; padding: 3px 9px; }
+    .kpi-tag.orange { color: var(--orange); background: #FFF0E5; }
+    .kpi-tag.green  { color: var(--green);  background: rgba(0,180,147,0.10); }
+    .kpi-tag.gray   { color: var(--t2);     background: var(--div); }
+
+    .hero-summary {
+      background: var(--bg); padding: 16px 20px 14px;
+      font-size: 13px; color: var(--t2); line-height: 1.72; letter-spacing: -0.2px; text-align: center;
+    }
+    .hero-summary strong { color: var(--t1); font-weight: 600; }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); display: flex; border-bottom: 1px solid var(--div);
+    }
+    .tab-btn {
+      flex: 1; padding: 12px 0 10px;
+      font-size: 13px; font-weight: 600; color: var(--t2);
+      background: none; border: none; cursor: pointer;
+      position: relative; letter-spacing: -0.2px; transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tab-btn.active { color: var(--t1); }
+    .tab-btn.active::after {
+      content: ''; position: absolute; bottom: -1px;
+      left: 20%; right: 20%; height: 2px; background: var(--blue); border-radius: 2px;
+    }
+
+    .tab-panel { display: none; padding: 12px 0 48px; }
+    .tab-panel.active { display: block; }
+
+    .sec-lbl {
+      font-size: 11px; font-weight: 700; color: var(--t2);
+      letter-spacing: 0.4px; text-transform: uppercase; padding: 16px 20px 8px;
+    }
+
+    /* ── CARD ── */
+    .b-card {
+      background: var(--card); border-radius: 20px; margin: 0 16px 8px;
+      overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+    }
+    .b-item { padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; }
+    .b-item + .b-item { border-top: 1px solid var(--div); }
+    .b-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; }
+    .b-text { flex: 1; min-width: 0; }
+    .b-title { font-size: 14px; font-weight: 700; color: var(--t1); letter-spacing: -0.3px; line-height: 1.4; }
+    .b-desc  { font-size: 12px; color: var(--t2); line-height: 1.65; margin-top: 3px; }
+    .b-quote { border-left: 2px solid var(--t3); padding: 6px 10px; margin-top: 8px; color: var(--t2); font-size: 12px; line-height: 1.65; }
+    .b-footer { padding: 12px 16px; border-top: 1px solid var(--div); }
+    .b-footer p { font-size: 12px; color: var(--t2); line-height: 1.7; }
+    .b-footer p strong { color: var(--t1); font-weight: 600; }
+    .b-footer .fn { font-size: 11px; color: var(--t3); margin-top: 6px; line-height: 1.6; }
+
+    /* ── PLATFORM COMPARISON ── */
+    .plat-head { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 14px 16px 8px; gap: 4px; align-items: center; }
+    .plat-head-col { font-size: 12px; font-weight: 700; color: var(--t2); text-align: center; line-height: 1.3; }
+    .plat-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; padding: 10px 16px; border-top: 1px solid var(--div); gap: 4px; align-items: center; }
+    .pr-lbl { font-size: 12px; color: var(--t2); }
+    .pr-val { font-size: 16px; font-weight: 700; color: var(--t1); text-align: center; }
+    .pr-val.blue  { color: var(--blue); }
+    .pr-val.green { color: var(--green); }
+    .pr-val.orange { color: var(--orange); }
+    .pr-val.sm  { font-size: 13px; }
+    .pr-val.dim { color: var(--t3); font-size: 13px; }
+
+    .comb-row { display: flex; border-top: 1px solid var(--div); }
+    .comb-item { flex: 1; padding: 14px 16px; text-align: center; }
+    .comb-item + .comb-item { border-left: 1px solid var(--div); }
+    .comb-num { font-size: 24px; font-weight: 800; color: var(--blue); letter-spacing: -0.8px; line-height: 1; }
+    .comb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; }
+
+    /* ── STUDIO DASHBOARD ── */
+    .metric-hero { padding: 20px 16px 10px; }
+    .metric-num { font-size: 40px; font-weight: 800; color: var(--t1); letter-spacing: -1.5px; line-height: 1; }
+    .metric-num.blue { color: var(--blue); }
+    .metric-num.orange { color: var(--orange); }
+    .metric-label { font-size: 13px; color: var(--t2); margin-top: 4px; }
+    .metric-badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 2px 8px; margin-top: 6px; }
+    .metric-badge.green { color: var(--green); background: rgba(0,180,147,0.09); }
+    .metric-badge.orange { color: var(--orange); background: rgba(255,107,0,0.09); }
+    .metric-badge.neutral { color: var(--t2); background: var(--div); }
+
+    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 16px; }
+    .metric-box { background: var(--bg); border-radius: 12px; padding: 12px 14px; }
+    .mb-num { font-size: 20px; font-weight: 700; color: var(--t1); letter-spacing: -0.5px; }
+    .mb-num.blue  { color: var(--blue); }
+    .mb-num.green { color: var(--green); }
+    .mb-num.orange { color: var(--orange); }
+    .mb-num.dim { color: var(--t3); }
+    .mb-lbl { font-size: 11px; color: var(--t2); margin-top: 3px; line-height: 1.4; }
+
+    .stat-div { padding: 8px 16px 4px; border-top: 1px solid var(--div); font-size: 10px; font-weight: 700; color: var(--t3); text-transform: uppercase; letter-spacing: 0.4px; }
+    .stat-row { padding: 11px 16px; border-top: 1px solid var(--div); display: flex; justify-content: space-between; align-items: center; }
+    .sr-lbl { font-size: 13px; color: var(--t2); }
+    .sr-val { font-size: 14px; font-weight: 700; color: var(--t1); }
+    .sr-val.blue  { color: var(--blue); }
+    .sr-val.green { color: var(--green); }
+    .sr-val.orange { color: var(--orange); }
+    .sr-val.dim { color: var(--t3); }
+
+    /* ── ALERT BADGE ── */
+    .alert-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(0,180,147,0.09); border-radius: 10px; padding: 8px 14px;
+      margin: 0 16px 8px; font-size: 12px; color: var(--green); font-weight: 600;
+    }
+    .alert-badge.orange { color: var(--orange); background: rgba(255,107,0,0.09); }
+    .alert-badge.blue { color: var(--blue); background: var(--blue-bg); }
+    .alert-badge.gray { color: var(--t2); background: var(--div); }
+
+    /* ── FALLBACK NOTICE ── */
+    .fallback-notice {
+      margin: 0 16px 10px; padding: 11px 14px;
+      background: #FFF0E5; border-radius: 12px;
+      font-size: 12px; color: var(--orange); font-weight: 600; line-height: 1.6;
+      text-align: center; word-break: keep-all;
+    }
+
+    /* ── DESKTOP ── */
+    @media (min-width: 680px) {
+      body { background: #D8DCE2; display: flex; justify-content: center; padding: 24px 0; min-height: 100vh; }
+      .page { border-radius: 20px; overflow: hidden; box-shadow: 0 16px 56px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.05); }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="top-nav">
+      <button class="back-btn" onclick="window.location.href='./'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hero SVG: 신규 인테리어 숏폼 D+3 — YT 1,169(공개) vs IG 미측정 + 공개데이터 뱃지 -->
+    <div class="hero-svg-wrap">
+      <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="80" cy="80" r="72" fill="rgba(0,85,255,0.05)"/>
+
+        <!-- YT 막대 — 1,169 (공개) -->
+        <rect x="30" y="44" width="38" height="80" rx="7" fill="#0055FF" opacity="0.9"/>
+        <text x="49" y="37" text-anchor="middle" font-size="9" font-weight="700" fill="#0055FF" font-family="system-ui">YT 1,169</text>
+
+        <!-- IG 막대 — 미측정 (점선 플레이스홀더) -->
+        <rect x="98" y="86" width="36" height="38" rx="6" fill="none" stroke="#C5CBD3" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="116" y="79" text-anchor="middle" font-size="9" font-weight="700" fill="#8B95A1" font-family="system-ui">IG 미측정</text>
+
+        <!-- 공개 데이터 뱃지 -->
+        <rect x="10" y="130" width="140" height="18" rx="9" fill="rgba(255,107,0,0.12)"/>
+        <text x="80" y="142" text-anchor="middle" font-size="8.5" font-weight="700" fill="#FF6B00" font-family="system-ui">공개 데이터만 · Studio/IG 미접속</text>
+      </svg>
+    </div>
+
+    <p class="hero-label">2026.07.20 월요일 · 신규 "학원 인테리어" 숏폼 D+3 · 공개 데이터 수집</p>
+    <h1 class="hero-title">신규 인테리어 숏폼 D+3<br><em>YT 1,169 · 페이스 저조</em></h1>
+
+    <div class="hero-card">
+      <div class="kpi-row">
+        <span class="kpi-num"><span>1,169</span></span>
+        <span class="kpi-unit">YT 조회수 (공개·D+3)</span>
+      </div>
+      <p class="kpi-sub">게시 2026.07.17 · 37초 · IG 조회수 미측정</p>
+      <div class="kpi-tags">
+        <span class="kpi-tag">YT 좋아요 10</span>
+        <span class="kpi-tag gray">IG 좋아요 4 · 댓글 1</span>
+        <span class="kpi-tag orange">주1회 리듬 복구</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-summary">
+    <strong>주간 리듬은 복구, 성과는 여전히 저조</strong><br>
+    신규 "학원 인테리어" 숏폼이 5일 공백을 깨고 게시됐다(Slack 0718 스크립트 = 이 영상). D+3에 YT 1,169회로, 숫자 숏폼(D+2 1,906)·자사고보다 낮은 페이스다. IG는 좋아요 4·댓글 1로 숫자(좋아요 6)보다 더 저조 — 공간/정보성 소재의 약세가 3편 연속 이어지는 방향. 라카데미 Chrome 미연결로 지속률·도달·비팔·저장·공유는 <strong>미측정</strong>이다.
+  </div>
+
+  <!-- FALLBACK NOTICE -->
+  <div class="fallback-notice">
+    ⚠️ 이 보고서는 <b>공개 데이터만</b> 수집했습니다.<br>
+    라카데미 전용 Chrome 미연결 → YT Studio · IG 소유자 인사이트 미접속.<br>
+    지속률 · 피드유입% · 도달 · 비팔로워% · 저장 · 공유는 다음 실측에서 확인.
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('summary')">요약</button>
+    <button class="tab-btn" onclick="switchTab('youtube')">유튜브</button>
+    <button class="tab-btn" onclick="switchTab('instagram')">인스타그램</button>
+  </div>
+
+  <!-- TAB: 요약 -->
+  <div id="tab-summary" class="tab-panel active">
+    <p class="sec-lbl">"학원 인테리어" 숏폼 · 플랫폼 비교 (D+3, 공개 데이터)</p>
+    <div class="b-card">
+      <div class="plat-head">
+        <div class="plat-head-col" style="text-align:left;">지표</div>
+        <div class="plat-head-col">유튜브</div>
+        <div class="plat-head-col">인스타그램</div>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">조회수 (공개)</span>
+        <span class="pr-val blue">1,169</span>
+        <span class="pr-val dim sm">미측정</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">좋아요</span>
+        <span class="pr-val sm">10</span>
+        <span class="pr-val sm">4</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">댓글</span>
+        <span class="pr-val dim sm">—</span>
+        <span class="pr-val sm">1</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">지속률 / 도달</span>
+        <span class="pr-val dim sm">미측정</span>
+        <span class="pr-val dim sm">미측정</span>
+      </div>
+      <div class="plat-row">
+        <span class="pr-lbl">비팔 / 저장·공유</span>
+        <span class="pr-val dim sm">미측정</span>
+        <span class="pr-val dim sm">미측정</span>
+      </div>
+      <div class="comb-row">
+        <div class="comb-item">
+          <div class="comb-num">1,169</div>
+          <div class="comb-lbl">YT 조회 (공개)</div>
+        </div>
+        <div class="comb-item">
+          <div class="comb-num">396</div>
+          <div class="comb-lbl">YT 구독 (공개표시)</div>
+        </div>
+        <div class="comb-item">
+          <div class="comb-num">402</div>
+          <div class="comb-lbl">IG 팔로워 (+1)</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="sec-lbl">핵심 인사이트</p>
+
+    <div class="alert-badge blue">
+      🔁 주1회 리듬 복구 — 5일 공백 깨고 신규 게시 (Slack 0718 = 이 영상)
+    </div>
+    <div class="alert-badge orange">
+      📉 인테리어 D+3 YT 1,169 — 숫자(D+2 1,906)보다 낮은 페이스
+    </div>
+    <div class="alert-badge orange">
+      🔖 IG 좋아요 4·댓글 1 — 정보성/공간 소재 약세 3편 연속 방향
+    </div>
+
+    <div class="b-card">
+      <div class="b-item">
+        <div class="b-icon" style="background:var(--blue-bg);">🔁</div>
+        <div class="b-text">
+          <p class="b-title">주 1회 리듬이 복구됐다 — 파이프라인 재가동</p>
+          <p class="b-desc">숫자 숏폼(0711) 이후 5일 공백을 깨고 인테리어 숏폼이 07.17 게시됐다. Slack 0718 스크립트("학원이 다 하얀색… 밝은 느낌… 홍보용 필름 걷어냄")가 이 영상의 대본과 일치 — 대본→영상 파이프라인이 정상 작동. 지난 보고서의 최우선 액션(주 1회 리듬 복구)을 이행한 셈이다.</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF0E5;">📉</div>
+        <div class="b-text">
+          <p class="b-title">초기 페이스는 숫자·자사고보다 낮다</p>
+          <p class="b-desc">인테리어 숏폼은 D+3에 YT 1,169회. 숫자 숏폼은 D+2에 이미 1,906, 자사고는 D+1에 2,099였다. 같은 시점 대비 확실히 느린 출발이다. 공개 데이터라 완주율은 못 봤지만, 자사고·숫자 2편이 완주율 28%대로 조기 마감했던 패턴이 반복될 위험이 크다. 소재 결(공간/시설 자랑)이 훅 약한 정보성에 가깝다.</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:#FFF0E5;">🔖</div>
+        <div class="b-text">
+          <p class="b-title">IG 반응이 특히 약하다 — 저장 유도 실패 3편째 방향</p>
+          <p class="b-desc">IG 인테리어 릴스는 좋아요 4·댓글 1(공개). 숫자(좋아요 6·저장 4)·자사고보다 낮다. 캡션은 "저장하고 나중에 봐요 🔖"로 저장을 유도했지만 초기 반응은 미미. 도발 선언(0620)·스토리텔링(자사고 사중주)이 IG에서 강했던 것과 대비되며, 정보성/공간 소재의 IG 약세가 자사고→숫자→인테리어로 이어지는 방향이다. (도달·비팔·저장은 미측정)</p>
+        </div>
+      </div>
+      <div class="b-item">
+        <div class="b-icon" style="background:rgba(0,180,147,0.10);">🎯</div>
+        <div class="b-text">
+          <p class="b-title">다음 액션</p>
+          <p class="b-desc">① 라카데미 Chrome 재연결 후 이 영상 실측 재측정(지속률·도달·비팔·저장·공유) — 공개 데이터로는 수명 예측만 가능. ② 다음 소재는 IG결(도발 선언+손익 또는 인물 스토리텔링) 우선 — 공간/정보성 소재가 3편 연속 약했다. ③ 편집은 완주율 타깃: 후반 컷 속도 ↑ + 마지막 3초 요약+CTA(직전 EBS 대비 엔딩 방치 상태 지속).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: 유튜브 -->
+  <div id="tab-youtube" class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num blue">1,169</div>
+        <div class="metric-label">유튜브 조회수 · 인테리어 숏폼 D+3 (2026.07.20 공개 데이터)</div>
+        <span class="metric-badge orange">숫자(D+2 1,906) 대비 낮은 페이스 · 완주율 미측정</span>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="mb-num">10</div>
+          <div class="mb-lbl">좋아요<br>(공개)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">0:37</div>
+          <div class="mb-lbl">영상 길이<br>(37초)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num dim">미측정</div>
+          <div class="mb-lbl">계속 시청함<br>(Studio 미접속)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num dim">미측정</div>
+          <div class="mb-lbl">Shorts 피드 유입<br>(Studio 미접속)</div>
+        </div>
+      </div>
+
+      <div class="stat-div">공개 데이터</div>
+      <div class="stat-row">
+        <span class="sr-lbl">영상 제목</span>
+        <span class="sr-val">인테리어의 비밀 🏢</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">게시일 / video_id</span>
+        <span class="sr-val">07.17 / z9lFdEdliaM</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">조회수 / 좋아요</span>
+        <span class="sr-val blue">1,169 / 10</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">직전 "숫자" 숏폼 (0711)</span>
+        <span class="sr-val">1,918 (0716比 -2 정체·마감)</span>
+      </div>
+
+      <div class="stat-div">채널 (공개 표시)</div>
+      <div class="stat-row">
+        <span class="sr-lbl">구독자</span>
+        <span class="sr-val orange">396명 (0716比 -2)</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">동영상 수</span>
+        <span class="sr-val">87개</span>
+      </div>
+
+      <div class="b-footer">
+        <p><strong>YT 평가:</strong> D+3에 1,169회로 숫자(D+2 1,906)·자사고(D+1 2,099)보다 느린 출발. 완주율은 미측정이지만, 저완주 조기 마감 2편(자사고·숫자)의 패턴을 답습할 위험이 큰 페이스다. 좋아요 10, 37초. 구독자는 공개 표시 기준 396으로 0716(398) 대비 -2 — YT 정체·소폭 하락 추세 지속.</p>
+        <p class="fn">측정: 2026-07-20 · YT 공개 채널 데이터 (Studio 미접속) · YT ID: z9lFdEdliaM</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: 인스타그램 -->
+  <div id="tab-instagram" class="tab-panel">
+    <div class="b-card">
+      <div class="metric-hero">
+        <div class="metric-num orange">미측정</div>
+        <div class="metric-label">인스타그램 조회수 · 인테리어 릴스 D+3 (소유자 인사이트 미접속)</div>
+        <span class="metric-badge orange">공개 데이터: 좋아요 4 · 댓글 1</span>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-box">
+          <div class="mb-num">4</div>
+          <div class="mb-lbl">좋아요<br>(공개)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num">1</div>
+          <div class="mb-lbl">댓글<br>(공개)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num dim">미측정</div>
+          <div class="mb-lbl">도달 / 비팔로워%<br>(인사이트 미접속)</div>
+        </div>
+        <div class="metric-box">
+          <div class="mb-num dim">미측정</div>
+          <div class="mb-lbl">저장 / 공유<br>(인사이트 미접속)</div>
+        </div>
+      </div>
+
+      <div class="stat-div">공개 데이터</div>
+      <div class="stat-row">
+        <span class="sr-lbl">릴스 ID / 게시일</span>
+        <span class="sr-val">Da49HdqTjEo / 07.17</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">좋아요 / 댓글</span>
+        <span class="sr-val">4 / 1</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">캡션 첫 줄</span>
+        <span class="sr-val" style="font-size:12px;">여의도 상위권의 '한 끗'</span>
+      </div>
+
+      <div class="stat-div">계정 현황 (공개 표시)</div>
+      <div class="stat-row">
+        <span class="sr-lbl">현재 팔로워</span>
+        <span class="sr-val blue">402명 (0716比 +1 · YT 396 역전 유지)</span>
+      </div>
+      <div class="stat-row">
+        <span class="sr-lbl">게시물 수</span>
+        <span class="sr-val">15개</span>
+      </div>
+
+      <div class="b-footer">
+        <p><strong>판정:</strong> IG 인테리어 릴스는 좋아요 4·댓글 1(공개)로 숫자(좋아요 6)·자사고보다 낮은 초기 반응. 캡션이 "저장하고 나중에 봐요 🔖"로 저장을 유도했지만 반응이 미미해, 공간/정보성 소재의 IG 약세가 3편 연속 이어질 조짐이다. 도달·비팔로워·저장·공유는 소유자 인사이트 미접속으로 미측정. 팔로워는 402로 IG 역전 유지 중.</p>
+        <p class="fn">측정: 2026-07-20 · IG 공개 프로필 데이터 (소유자 인사이트 미접속) · 릴스 ID: Da49HdqTjEo</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      const names = ['summary','youtube','instagram'];
+      b.classList.toggle('active', names[i] === name);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === 'tab-' + name);
+    });
+  }
+</script>
+</body>
+</html>
