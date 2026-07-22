@@ -456,8 +456,31 @@ const SVG_PUBLIC_0720 = `
   <text x="44" y="19" text-anchor="middle" font-size="6.5" font-weight="700" fill="#FF6B00" font-family="system-ui">공개데이터·Studio미접속</text>
 </svg>`;
 
+const SVG_REBOUND_0723 = `
+<svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+  <!-- YT bar (blue) — 1,201 -->
+  <rect x="16" y="40" width="22" height="32" rx="5" fill="#0055FF" opacity="0.9"/>
+  <!-- IG bar (gray) — 1,849 -->
+  <rect x="50" y="26" width="22" height="46" rx="5" fill="#8B95A1" opacity="0.85"/>
+  <!-- baseline -->
+  <line x1="10" y1="74" x2="78" y2="74" stroke="#E2E6EC" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- 완주율 반등 뱃지 -->
+  <rect x="12" y="10" width="64" height="12" rx="6" fill="rgba(0,180,147,0.16)"/>
+  <text x="44" y="19" text-anchor="middle" font-size="6.5" font-weight="700" fill="#00B493" font-family="system-ui">완주율 57.8% ✅</text>
+</svg>`;
+
 /* ── REPORT DATA ── */
 const REPORTS = [
+  {
+    path: 'lacademy-0723-report.html',
+    date: '26.07.23',
+    label: '목요일',
+    title: '인테리어 숏폼 완주율 57.8% 반등 — 노출이 캡됐다 (실측)',
+    heroTitle: '완주율은 반등, 노출이 캡됐다<br><em>합산 3,050 · 완주 57.8%</em>',
+    body: '인테리어 숏폼 D+6 실측 합산 3,050(YT 1,201·IG 1,849) · YT 완주율 57.8%✅로 자사고(27.7%)·숫자(28.4%) 대비 반등 — 저완주 조기마감 아님 · 대신 조회 평소比 -699·Shorts피드 90%로 초기 노출 캡(반대 실패모드) · IG 도달 1,615로 회복했지만 저장3<좋아요4·공유0 저장·확산 3편째 실패 · YT구독395(28일+1)·IG팔로워400 · Studio+IG 실측',
+    sub: '숏폼 분석 · 완주율 반등 · 노출 캡',
+    svg: SVG_REBOUND_0723,
+  },
   {
     path: 'lacademy-0720-report.html',
     date: '26.07.20',
