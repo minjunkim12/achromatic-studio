@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KMU · GPA</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+:root {
+  --blue-45: oklch(0.624 0.176 254);
+  --blue-95: oklch(0.965 0.020 250);
+  --tx-900: oklch(15% 0.015 254);
+  --tx-700: oklch(30% 0.018 254);
+  --tx-500: oklch(50% 0.015 254);
+  --tx-400: oklch(65% 0.010 254);
+  --bg: oklch(100% 0 0);
+  --bg-sub: oklch(98% 0.005 254);
+  --line: oklch(92% 0.010 254);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background: var(--bg); color: var(--tx-700); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; padding: 6px 2px; }
+.section-label { font-size: 12px; font-weight: 600; color: var(--tx-400); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
+.hero-row { display: flex; align-items: baseline; gap: 10px; }
+.hero-now { font-size: 40px; font-weight: 800; color: var(--tx-900); letter-spacing: -1.5px; line-height: 1; font-variant-numeric: tabular-nums; }
+.hero-arrow { font-size: 18px; color: var(--tx-400); }
+.hero-goal { font-size: 26px; font-weight: 800; color: var(--blue-45); letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.hero-caption { font-size: 13px; color: var(--tx-500); margin-top: 8px; }
+.hero-bar { height: 8px; background: var(--blue-95); border-radius: 999px; margin-top: 12px; overflow: hidden; }
+.hero-bar-fill { height: 100%; width: 87.3%; background: var(--blue-45); border-radius: 999px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+.stat { background: var(--bg-sub); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.stat-value { font-size: 20px; font-weight: 800; color: var(--tx-900); letter-spacing: -0.5px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat-sub { font-size: 13px; color: var(--tx-400); font-weight: 600; }
+.stat-label { font-size: 12px; color: var(--tx-500); margin-top: 2px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 18px; }
+th { text-align: left; font-size: 12px; font-weight: 600; color: var(--tx-400); padding: 5px 4px; border-bottom: 1px solid var(--line); }
+th:last-child, td:last-child { text-align: right; }
+td { padding: 8px 4px; border-bottom: 1px solid var(--line); color: var(--tx-700); font-variant-numeric: tabular-nums; }
+tr:last-child td { border-bottom: none; }
+.td-strong { font-weight: 700; color: var(--tx-900); }
+.td-x { color: var(--tx-400); }
+</style>
+</head>
+<body>
+  <div class="section-label">총평점 · 2026-07-22 포털 실측</div>
+  <div class="hero-row">
+    <span class="hero-now">3.93</span>
+    <span class="hero-arrow">→</span>
+    <span class="hero-goal">4.00</span>
+  </div>
+  <div class="hero-bar"><div class="hero-bar-fill"></div></div>
+  <div class="hero-caption">평점계 408.5 ÷ 평점대상 104학점. 빅데이터·소프트웨어 2과목 빼면 정확히 4.00 — 재수강이 열쇠예요.</div>
+
+  <div class="grid">
+    <div class="stat"><div class="stat-value">4.04</div><div class="stat-label">전공평점</div></div>
+    <div class="stat"><div class="stat-value">116<span class="stat-sub">/120</span></div><div class="stat-label">총이수학점</div></div>
+    <div class="stat"><div class="stat-value">9</div><div class="stat-label">남은 신규학점</div></div>
+    <div class="stat"><div class="stat-value">0<span class="stat-sub">→2회</span></div><div class="stat-label">재수강 계획</div></div>
+  </div>
+
+  <table>
+    <thead><tr><th>4.0 시나리오 (검증값)</th><th>결과 GPA</th></tr></thead>
+    <tbody>
+      <tr><td>재수강 없이 신규 전부 A+</td><td class="td-x">3.97 ✕</td></tr>
+      <tr><td>재수강 2과목 A0</td><td class="td-strong">4.00</td></tr>
+      <tr><td>재수강 2과목 A+</td><td class="td-strong">4.03</td></tr>
+      <tr><td>전부 A+ (최대)</td><td class="td-strong">4.07</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

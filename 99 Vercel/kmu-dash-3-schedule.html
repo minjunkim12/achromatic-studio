@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KMU · 일정</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+:root {
+  --blue-45: oklch(0.624 0.176 254);
+  --blue-95: oklch(0.965 0.020 250);
+  --tx-900: oklch(15% 0.015 254);
+  --tx-700: oklch(30% 0.018 254);
+  --tx-500: oklch(50% 0.015 254);
+  --tx-400: oklch(65% 0.010 254);
+  --bg: oklch(100% 0 0);
+  --line: oklch(92% 0.010 254);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background: var(--bg); color: var(--tx-700); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; padding: 6px 2px; }
+.section-label { font-size: 12px; font-weight: 600; color: var(--tx-400); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+.sch { display: flex; align-items: center; justify-content: space-between; padding: 9px 2px; border-bottom: 1px solid var(--line); }
+.sch:last-of-type { border-bottom: none; }
+.sch-name { font-size: 14px; color: var(--tx-700); }
+.sch-name strong { color: var(--tx-900); font-weight: 700; }
+.sch-date { font-size: 13px; color: var(--tx-500); font-variant-numeric: tabular-nums; text-align: right; }
+.sch-date strong { color: var(--tx-900); }
+.dday { font-size: 12px; font-weight: 700; color: var(--blue-45); margin-left: 6px; }
+.divider { height: 1px; background: var(--line); margin: 14px 0 12px; }
+.todo { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; font-size: 14px; }
+.todo::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-45); margin-top: 8px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+  <div class="section-label">수강신청 일정</div>
+  <div class="sch"><span class="sch-name">장바구니 1차</span><span class="sch-date">8/5(수) 10:00 ~ 8/7(금) 16:00<span class="dday" data-date="2026-08-05"></span></span></div>
+  <div class="sch"><span class="sch-name"><strong>본신청 · 4학년</strong></span><span class="sch-date"><strong>8/12(수) 10:00~16:00</strong><span class="dday" data-date="2026-08-12"></span></span></div>
+  <div class="sch"><span class="sch-name">전체학년</span><span class="sch-date">8/20(목)~8/21(금)<span class="dday" data-date="2026-08-20"></span></span></div>
+  <div class="sch"><span class="sch-name">수강정정</span><span class="sch-date">9/1(화)~9/7(월)<span class="dday" data-date="2026-09-01"></span></span></div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">대기 중</div>
+  <div class="todo">교무팀 회신 — 재수강 가능여부·최고등급·성적포기 + 명칭변경(CB&amp;E→Principles of Mgmt) 재수강 인정</div>
+  <div class="todo">인문II 과목 선정 — 핵심교양 유일 부족분</div>
+  <div class="todo">전공 신규 2과목 확정 — 미이수 개설 후보 11+ (막학기계획 DB)</div>
+<script>
+document.querySelectorAll('.dday').forEach(function (el) {
+  var target = new Date(el.getAttribute('data-date') + 'T00:00:00+09:00');
+  var now = new Date();
+  var kst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  var diff = Math.ceil((target - new Date(kst.getFullYear(), kst.getMonth(), kst.getDate())) / 86400000);
+  el.textContent = diff > 0 ? 'D-' + diff : diff === 0 ? 'D-day' : '';
+});
+</script>
+</body>
+</html>
