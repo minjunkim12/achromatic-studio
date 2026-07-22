@@ -1,172 +1,229 @@
 {
   "files": [
     {
+      "title": "국민대 막학기 대시보드",
+      "path": "kmu-dashboard.html",
+      "date": "2026-07-22",
+      "description": "총평점 3.93→4.0 트래커 · 졸업요건 영역별 진행률 · 4.0 시나리오(검증값) · 재수강 2과목 2026-2 개설 정보 · 수강신청 D-day(자동 계산) — 포털 실측 기준, 노션 KMU 페이지 임베드용",
+      "tags": [
+        "report"
+      ]
+    },
+    {
       "title": "라카데미 0720 분석 보고서",
       "path": "lacademy-0720-report.html",
       "date": "2026-07-20",
       "description": "신규 '학원 인테리어' 숏폼(07.17) D+3 · YT 1,169(공개)·좋아요10 — 숫자(D+2 1,906)보다 낮은 페이스 · IG 좋아요4·댓글1 정보성/공간 소재 약세 3편 연속 방향 · 주1회 리듬 복구(Slack 0718=이 영상) · 라카데미 Chrome 미연결 공개 데이터만(지속률·도달·비팔·저장·공유 미측정)",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0716 분석 보고서",
       "path": "lacademy-0716-report.html",
       "date": "2026-07-16",
       "description": "숫자 숏폼 5일차 마감 합산 2,458(YT 1,920·IG 538) · 48h 조회 10회 사이클 종료 — 완주율 28%대(28.9%) 5일 마감 규칙 3번째 확인 · IG 도달 456·비팔 91% 하락 · 팔로워 첫 동반 감소(IG 401·YT 398) · Studio+IG 실측",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0713 분석 보고서",
       "path": "lacademy-0713-report.html",
       "date": "2026-07-13",
       "description": "신규 숫자=세부내용일치 숏폼 합산 2,427(YT 1,906·IG 521, 2일차) · YT 지속률 28.4%❌ 자사고(28.2%)와 판박이 완주율 28%대 2편 연속 · IG 도달 443·비팔92.4%(자사고 1/6로 붕괴)·저장4<좋아요6 · YT 구독399(+3)·IG팔로워402 역전유지 · Studio+IG 실측",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0709 분석 보고서",
       "path": "lacademy-0709-report.html",
       "date": "2026-07-09",
       "description": "자사고 숏폼 5일차 마감 · 합산 5,482(YT 2,113·IG 3,369) · 48h 조회 8회 배포 종료·지속률 28.2%❌ · IG 팔로워 401★YT 구독(398) 첫 역전 · 0620 릴스 7.8만 복리 지속 · Studio+IG 실측",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0706 분석 보고서",
       "path": "lacademy-0706-report.html",
       "date": "2026-07-06",
       "description": "8일 공백 깨고 신규 숏폼 게시(사중주 실화 훅) · 합산 5,251(YT 2,099·IG 3,152, 1일차) · YT 지속률 27.7%(기준55% 미달)·Shorts피드95.7% · IG 비팔로워97.7%·도달2,507·저장5<좋아요12 · YT 399명(28일+3)·IG 398명 · Studio+IG 실측",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0702 분석 보고서",
       "path": "lacademy-0702-report.html",
       "date": "2026-07-02",
       "description": "신규 숏폼 6일 공백 · 0620 릴스 누적 75,000(저장 1,082·공유 923·팔로우 +103)이 계정 견인 · 0627 합산 11,619(YT 11,000·IG 619 정체) · 여름방학 멘토링 홍보영상 79뷰·CTR 1.1% · 팔로워 387",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0701 분석 보고서",
       "path": "lacademy-0701-report.html",
       "date": "2026-07-01",
       "description": "합산 11,438뷰 · YT 10,821(평소 4.2배·지속률 56.8%·Shorts피드 95.7%·2026 채널 2위) · IG 617(비팔로워 87.8%·도달 480·저장 2) · 팔로워 +11(387명) · 신규 숏폼 YT 바이럴, 플랫폼 반응 지난주와 역전",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0625 분석 보고서",
       "path": "lacademy-0625-report.html",
       "date": "2026-06-25",
       "description": "합산 68,792뷰 · IG 67,000(비팔로워 99.5%·도달 5.7만·저장 932·공유 698·팔로우+93) · YT 1,792(조회율 61.1% 기준 통과) · 팔로워 +32(376명) · 신규 없이 0620이 62,000 추월 IG 2위·저장>좋아요 3.0배",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0622 분석 보고서",
       "path": "lacademy-0622-report.html",
       "date": "2026-06-22",
       "description": "합산 49,360뷰 · IG 48,000(비팔로워 99.4%·도달 4만·저장 651·공유 445·팔로우+59) · YT 1,360(조회율~50%) · 팔로워 +54(344명) · 5일 공백 깸·IG 35배·저장>좋아요 2.8배",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0618 분석 보고서",
       "path": "lacademy-0618-report.html",
       "date": "2026-06-18",
       "description": "합산 3,702뷰(3일 +74·정체) · YT 1,370(조회율 40.2%) · IG 2,332(비팔로워 97%) · 저장 10 · 팔로우 0 · 새 업로드 5일 공백",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0615 분석 보고서",
       "path": "lacademy-0615-report.html",
       "date": "2026-06-15",
       "description": "합산 3,628뷰(-56%) · YT 1,341(Shorts 95.7%) · IG 2,287(비팔로워 97.5%) · 저장 10 · 팔로우 0 · 배포 정상·후킹 하락",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0611 분석 보고서",
       "path": "lacademy-0611-report.html",
       "date": "2026-06-11",
       "description": "합산 8,379뷰 · YT 3,234(+82%) · IG 5,145(비팔로워 97.9%) · 저장 18 · 팔로우+6",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "라카데미 0608 분석 보고서",
       "path": "lacademy-0608-report.html",
       "date": "2026-06-08",
       "description": "IG 4,275(비팔로워 98% 배포 복귀) · YT 1,780 · 합산 6,055 · IG가 YT 2.4배",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "YT 채널 평균 · IG 배포 실패 확정",
       "path": "lacademy-0604-report.html",
       "date": "2026-06-04",
       "description": "YT 2,281뷰 · Shorts 피드 25% · IG 227(4일) · 비팔로워 80.2% · 배포 실패 확정 · 합산 2,508",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "YT +11% 즉시 배포 성공 · IG 배포 관찰 중",
       "path": "lacademy-0601-report.html",
       "date": "2026-06-01",
       "description": "YT 2,226뷰 · Shorts 97% · IG 203(게시 12시간) · 비팔로워 80.2% · 합산 2,429",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "0516 IG 6.2만 vs 0524 IG 414 — 150배 격차",
       "path": "lacademy-0530-report.html",
       "date": "2026-05-30",
       "description": "0516 IG 6.2만·비팔로워 99.5%·공유 591·팔로우 +67 / 0524 IG 414 처참 · 팔로워 267명",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "제목 하나가 148배 차이를 만들었습니다",
       "path": "lacademy-0526-report.html",
       "date": "2026-05-26",
       "description": "0516 IG 6만뷰·공유 561·팔로우 +66 / 0523 IG 404뷰 배포실패 · 제목 패턴 분석",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "IG 알고리즘이 배포를 멈췄어요",
       "path": "lacademy-0524-report.html",
       "date": "2026-05-24",
       "description": "합산 1,656뷰 · IG 비팔로워 76% · YT 평균 범위 · 알고리즘 배포 실패",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "우피 코드블록 아카이브",
       "path": "oopy-blocks.html",
       "date": "2026-05-23",
       "description": "Notion/Oopy용 HTML 코드블록 33종 — 복사해서 바로 붙여넣기",
-      "tags": ["landing"]
+      "tags": [
+        "landing"
+      ]
     },
     {
       "title": "공유가 저장의 1.7배예요",
       "path": "lacademy-0521-report.html",
       "date": "2026-05-21",
       "description": "합산 59,933뷰 · IG 공유 474건 · 팔로우 +60명 · 비팔로워 99.6%",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "공유가 좋아요의 두 배를 넘었어요",
       "path": "lacademy-0518-report.html",
       "date": "2026-05-18",
       "description": "합산 44,800뷰 · IG 공유 297회 · 팔로우 +46명 · 비팔로워 99.7%",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "공유가 저장을 넘어섰어요",
       "path": "lacademy-0516-report.html",
       "date": "2026-05-16",
       "description": "합산 17,328뷰 · IG 공유 96회 · 팔로우 +20명",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "유튜브에서 역대 최고를 찍었어요",
       "path": "lacademy-0514-report.html",
       "date": "2026-05-14",
       "description": "서울대 의대생 · YT 13,458 · IG 12.2만 동반",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     },
     {
       "title": "Accountex 2026 브리핑",
       "path": "accountex-2026-briefing.html",
       "date": "2026-05-12",
       "description": "런던 핀테크 탐방",
-      "tags": ["report"]
+      "tags": [
+        "report"
+      ]
     }
   ]
 }

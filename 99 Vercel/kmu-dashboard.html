@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>국민대 막학기 대시보드</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+:root {
+  --blue-45: oklch(0.624 0.176 254);
+  --blue-35: oklch(0.522 0.176 257);
+  --blue-80: oklch(80% 0.10 254);
+  --blue-90: oklch(90% 0.05 254);
+  --blue-95: oklch(0.965 0.020 250);
+  --tx-900: oklch(15% 0.015 254);
+  --tx-700: oklch(30% 0.018 254);
+  --tx-500: oklch(50% 0.015 254);
+  --tx-400: oklch(65% 0.010 254);
+  --bg-page: oklch(98% 0.005 254);
+  --bg-surface: oklch(100% 0 254);
+  --bg-raised: oklch(99.5% 0.008 254);
+  --line: oklch(92% 0.010 254);
+  --green: oklch(55% 0.20 145);
+  --green-weak: oklch(95% 0.04 145);
+  --red: oklch(55% 0.22 25);
+  --red-weak: oklch(97% 0.04 25);
+  --yellow-weak: oklch(97% 0.04 85);
+  --yellow-tx: oklch(45% 0.12 85);
+  --shadow-1: 0 1px 2px oklch(30% 0.12 264 / 0.05), 0 3px 10px oklch(30% 0.12 264 / 0.04);
+  --shadow-2: 0 2px 6px oklch(30% 0.12 264 / 0.08), 0 8px 24px oklch(30% 0.12 264 / 0.07);
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tx-900: oklch(95% 0.008 254);
+    --tx-700: oklch(80% 0.010 254);
+    --tx-500: oklch(60% 0.012 254);
+    --tx-400: oklch(45% 0.012 254);
+    --bg-page: oklch(12% 0.020 254);
+    --bg-surface: oklch(18% 0.022 254);
+    --bg-raised: oklch(22% 0.022 254);
+    --line: oklch(25% 0.020 254);
+    --blue-95: oklch(25% 0.05 254);
+    --blue-90: oklch(30% 0.06 254);
+    --green-weak: oklch(25% 0.05 145);
+    --red-weak: oklch(25% 0.05 25);
+    --yellow-weak: oklch(25% 0.04 85);
+    --yellow-tx: oklch(75% 0.12 85);
+    --shadow-1: 0 1px 2px oklch(5% 0.05 264 / 0.20), 0 3px 10px oklch(5% 0.05 264 / 0.15);
+    --shadow-2: 0 2px 6px oklch(5% 0.05 264 / 0.30), 0 8px 24px oklch(5% 0.05 264 / 0.25);
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Pretendard Variable', -apple-system, sans-serif;
+  background: var(--bg-page);
+  color: var(--tx-700);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 640px; margin: 0 auto; padding: 24px 16px 48px; }
+
+.page-top { padding: 8px 4px 20px; }
+.page-top-sub { font-size: 13px; font-weight: 600; color: var(--tx-400); letter-spacing: 0.3px; }
+.page-top-title { font-size: 26px; font-weight: 800; color: var(--tx-900); letter-spacing: -0.5px; line-height: 1.3; margin-top: 4px; }
+.page-top-meta { font-size: 12px; color: var(--tx-400); margin-top: 6px; }
+
+.card {
+  background: var(--bg-surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-1);
+  padding: 20px;
+  margin-bottom: 12px;
+  animation: fadeUp 0.3s ease both;
+}
+.card:nth-of-type(1) { animation-delay: 0.03s; }
+.card:nth-of-type(2) { animation-delay: 0.08s; }
+.card:nth-of-type(3) { animation-delay: 0.13s; }
+.card:nth-of-type(4) { animation-delay: 0.18s; }
+.card:nth-of-type(5) { animation-delay: 0.23s; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-label { font-size: 12px; font-weight: 600; color: var(--tx-400); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; }
+
+/* Hero */
+.hero { background: var(--bg-raised); border-color: var(--blue-80); }
+.hero-row { display: flex; align-items: baseline; gap: 10px; }
+.hero-now { font-size: 44px; font-weight: 800; color: var(--tx-900); letter-spacing: -1.5px; line-height: 1; font-variant-numeric: tabular-nums; }
+.hero-arrow { font-size: 20px; color: var(--tx-400); }
+.hero-goal { font-size: 28px; font-weight: 800; color: var(--blue-45); letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.hero-caption { font-size: 13px; color: var(--tx-500); margin-top: 8px; }
+.hero-bar { height: 8px; background: var(--blue-95); border-radius: 999px; margin-top: 14px; overflow: hidden; }
+.hero-bar-fill { height: 100%; width: 87.3%; background: var(--blue-45); border-radius: 999px; }
+
+/* Stat grid */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.stat { background: var(--bg-surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1); padding: 16px; }
+.stat-value { font-size: 24px; font-weight: 800; color: var(--tx-900); letter-spacing: -0.5px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 12px; color: var(--tx-500); margin-top: 3px; }
+
+/* Requirement rows */
+.req { margin-bottom: 14px; }
+.req:last-child { margin-bottom: 0; }
+.req-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.req-name { font-size: 14px; font-weight: 600; color: var(--tx-900); }
+.req-num { font-size: 13px; color: var(--tx-500); font-variant-numeric: tabular-nums; }
+.req-bar { height: 6px; background: var(--bg-page); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.req-fill { height: 100%; border-radius: 999px; background: var(--blue-45); }
+.req-fill.done { background: var(--green); }
+
+.badge { display: inline-flex; align-items: center; font-weight: 600; border-radius: 20px; font-size: 12px; padding: 3px 9px; white-space: nowrap; }
+.badge-green { background: var(--green-weak); color: var(--green); }
+.badge-red { background: var(--red-weak); color: var(--red); }
+.badge-blue { background: var(--blue-95); color: var(--blue-45); }
+.badge-yellow { background: var(--yellow-weak); color: var(--yellow-tx); }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-size: 12px; font-weight: 600; color: var(--tx-400); padding: 6px 4px; border-bottom: 1px solid var(--line); }
+td { padding: 9px 4px; border-bottom: 1px solid var(--line); color: var(--tx-700); font-variant-numeric: tabular-nums; }
+tr:last-child td { border-bottom: none; }
+.td-strong { font-weight: 700; color: var(--tx-900); }
+
+/* Schedule rows */
+.sch { display: flex; align-items: center; justify-content: space-between; padding: 11px 2px; border-bottom: 1px solid var(--line); }
+.sch:last-child { border-bottom: none; }
+.sch-name { font-size: 14px; color: var(--tx-700); }
+.sch-name strong { color: var(--tx-900); font-weight: 700; }
+.sch-date { font-size: 13px; color: var(--tx-500); font-variant-numeric: tabular-nums; text-align: right; }
+.dday { font-size: 12px; font-weight: 700; color: var(--blue-45); margin-left: 6px; }
+
+/* Retake cards */
+.retake { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.retake:last-child { border-bottom: none; padding-bottom: 0; }
+.retake:first-child { padding-top: 0; }
+.retake-name { font-size: 15px; font-weight: 600; color: var(--tx-900); }
+.retake-sub { font-size: 13px; color: var(--tx-500); margin-top: 2px; }
+
+.todo { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; font-size: 14px; }
+.todo::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-45); margin-top: 8px; flex-shrink: 0; }
+
+.footnote { font-size: 12px; color: var(--tx-400); text-align: center; margin-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="page-top">
+    <div class="page-top-sub">국민대 막학기 · 2026-2</div>
+    <h1 class="page-top-title">총평점 4.0까지<br />재수강 2과목 남았어요</h1>
+    <div class="page-top-meta">기준: 2026-07-22 포털 실측 · 파이썬 검증 완료</div>
+  </div>
+
+  <div class="card hero">
+    <div class="section-label">총평점평균</div>
+    <div class="hero-row">
+      <span class="hero-now">3.93</span>
+      <span class="hero-arrow">→</span>
+      <span class="hero-goal">4.00</span>
+    </div>
+    <div class="hero-bar"><div class="hero-bar-fill"></div></div>
+    <div class="hero-caption">평점계 408.5 ÷ 평점대상 104학점. 빅데이터·소프트웨어 2과목을 빼면 정확히 4.00 — 재수강이 열쇠예요.</div>
+  </div>
+
+  <div class="grid">
+    <div class="stat"><div class="stat-value">4.04</div><div class="stat-label">전공평점 (70학점)</div></div>
+    <div class="stat"><div class="stat-value">116<span style="font-size:15px;color:var(--tx-400)"> /120</span></div><div class="stat-label">총이수학점</div></div>
+    <div class="stat"><div class="stat-value">9</div><div class="stat-label">남은 신규학점 (전공6+인문II3)</div></div>
+    <div class="stat"><div class="stat-value">0<span style="font-size:15px;color:var(--tx-400)"> → 2회</span></div><div class="stat-label">재수강 (누적 → 계획)</div></div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">졸업요건 · 영역별</div>
+    <div class="req">
+      <div class="req-head"><span class="req-name">기초교양</span><span class="req-num">8 / 7 <span class="badge badge-green">충족</span></span></div>
+      <div class="req-bar"><div class="req-fill done" style="width:100%"></div></div>
+    </div>
+    <div class="req">
+      <div class="req-head"><span class="req-name">핵심교양</span><span class="req-num">12 / 15 <span class="badge badge-red">인문II 3 부족</span></span></div>
+      <div class="req-bar"><div class="req-fill" style="width:80%"></div></div>
+    </div>
+    <div class="req">
+      <div class="req-head"><span class="req-name">자유교양</span><span class="req-num">7 / 2 <span class="badge badge-green">충족</span></span></div>
+      <div class="req-bar"><div class="req-fill done" style="width:100%"></div></div>
+    </div>
+    <div class="req">
+      <div class="req-head"><span class="req-name">전공</span><span class="req-num">70 / 76 <span class="badge badge-red">6 부족</span></span></div>
+      <div class="req-bar"><div class="req-fill" style="width:92.1%"></div></div>
+    </div>
+    <div class="req">
+      <div class="req-head"><span class="req-name">일반선택</span><span class="req-num">19 / 20 <span class="badge badge-yellow">초과분으로 충당</span></span></div>
+      <div class="req-bar"><div class="req-fill" style="width:95%"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">4.0 시나리오 (검증값)</div>
+    <table>
+      <thead><tr><th>시나리오</th><th style="text-align:right">결과 GPA</th></tr></thead>
+      <tbody>
+        <tr><td>재수강 없이 신규 전부 A+</td><td style="text-align:right">3.97 ✕</td></tr>
+        <tr><td>재수강 2과목 A0</td><td style="text-align:right" class="td-strong">4.00</td></tr>
+        <tr><td>재수강 2과목 A+</td><td style="text-align:right" class="td-strong">4.03</td></tr>
+        <tr><td>전부 A+ (최대)</td><td style="text-align:right" class="td-strong">4.07</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="section-label">재수강 2과목 · 2026-2 개설 확인</div>
+    <div class="retake">
+      <div>
+        <div class="retake-name">빅데이터처리와시각화 <span class="badge badge-red">C+</span></div>
+        <div class="retake-sub">01 금 09:00~12:00 심지환 · 02 월 15:00~18:00 문현실</div>
+      </div>
+      <span class="badge badge-blue">2분반</span>
+    </div>
+    <div class="retake">
+      <div>
+        <div class="retake-name">소프트웨어적사고 <span class="badge badge-red">B0</span></div>
+        <div class="retake-sub">01 월·수 12:00~13:30 박수현 · 작년 2분반 → 올해 1분반</div>
+      </div>
+      <span class="badge badge-yellow">단일 분반</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">수강신청 일정</div>
+    <div class="sch"><span class="sch-name">장바구니 1차</span><span class="sch-date">8/5(수) 10:00 ~ 8/7(금) 16:00<span class="dday" data-date="2026-08-05"></span></span></div>
+    <div class="sch"><span class="sch-name"><strong>본신청 · 4학년</strong></span><span class="sch-date"><strong>8/12(수) 10:00~16:00</strong><span class="dday" data-date="2026-08-12"></span></span></div>
+    <div class="sch"><span class="sch-name">전체학년</span><span class="sch-date">8/20(목)~8/21(금)<span class="dday" data-date="2026-08-20"></span></span></div>
+    <div class="sch"><span class="sch-name">수강정정</span><span class="sch-date">9/1(화)~9/7(월)<span class="dday" data-date="2026-09-01"></span></span></div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">대기 중</div>
+    <div class="todo">교무팀 회신 — 재수강 가능여부·최고등급·성적포기 + 명칭변경(CB&amp;E→Principles of Mgmt) 재수강 인정</div>
+    <div class="todo">인문II 과목 선정 — 핵심교양 유일 부족분</div>
+    <div class="todo">전공 신규 2과목 확정 — 미이수 개설 후보 11+ (막학기계획 DB)</div>
+  </div>
+
+  <div class="footnote">Achromatic. · 데이터 정본은 노션 KMU DB 3종 · 갱신 시 이 페이지 재배포</div>
+</main>
+<script>
+document.querySelectorAll('.dday').forEach(function (el) {
+  var target = new Date(el.getAttribute('data-date') + 'T00:00:00+09:00');
+  var now = new Date();
+  var kst = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
+  var diff = Math.ceil((target - new Date(kst.getFullYear(), kst.getMonth(), kst.getDate())) / 86400000);
+  el.textContent = diff > 0 ? 'D-' + diff : diff === 0 ? 'D-day' : '';
+});
+</script>
+</body>
+</html>
