@@ -25,7 +25,8 @@
   --yellow-tx: oklch(45% 0.12 85);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background: var(--bg); color: var(--tx-700); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; padding: 6px 2px; }
+body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background: var(--bg); color: var(--tx-700); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; padding: 8px 6px 16px; }
+.wrap { background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: 0 2px 6px oklch(30% 0.12 264 / 0.07), 0 10px 28px oklch(30% 0.12 264 / 0.08); }
 .section-label { font-size: 12px; font-weight: 600; color: var(--tx-400); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px; }
 .badge { display: inline-flex; align-items: center; font-weight: 600; border-radius: 20px; font-size: 12px; padding: 2px 8px; white-space: nowrap; }
 .badge-green { background: var(--green-weak); color: var(--green); }
@@ -47,6 +48,7 @@ body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background
 </style>
 </head>
 <body>
+<div class="wrap">
   <div class="section-label">졸업요건 · 영역별 (이수 / 요구)</div>
   <div class="req">
     <div class="req-head"><span class="req-name">기초교양</span><span class="req-num">8 / 7 <span class="badge badge-green">충족</span></span></div>
@@ -86,5 +88,6 @@ body { font-family: 'Pretendard Variable', -apple-system, sans-serif; background
     </div>
     <span class="badge badge-yellow">단일 분반</span>
   </div>
+</div>
 </body>
 </html>
